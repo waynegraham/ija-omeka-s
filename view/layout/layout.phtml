@@ -2,11 +2,11 @@
 $translate = $this->plugin('translate');
 $this->headMeta()->setCharset('utf-8');
 $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1');
-$this->headLink()->prependStylesheet('//fonts.googleapis.com/css?family=Source+Code+Pro|Lato:400,400italic,700,700italic');
+// $this->headLink()->prependStylesheet('//fonts.googleapis.com/css?family=Source+Code+Pro|Lato:400,400italic,700,700italic');
 $this->headTitle($this->setting('installation_title', 'Omeka S'))->setSeparator(' · ');
 // $this->headLink()->appendStylesheet($this->assetUrl('css/iconfonts.css', 'Omeka'));
 // $this->headLink()->appendStylesheet($this->assetUrl('css/style.css', 'Omeka'));
-$this->headLink()->appendStylesheet($this->assetUrl('css/main.css', 'Omeka'));
+$this->headLink()->appendStylesheet($this->assetUrl('css/main.css'));
 $this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
   '',
   [
@@ -24,6 +24,12 @@ $this->headScript()->appendFile(
     'crossorigin' => 'anonymous'
   ]
 );
+$this->headScript()->appendFile('https://use.fontawesome.com/c1ca2c16bc.js');
+
+$logo = $this->themeSettingAssetUrl('logo');
+if($logo):
+  $title = '<img src="' . $this->escapeHtml($logo) . '" />';
+endif;
 
 $this->trigger('view.layout');
 $userBar = $this->userBar();
@@ -37,16 +43,55 @@ $userBar = $this->userBar();
         <?php echo $this->headStyle(); ?>
         <?php echo $this->headScript(); ?>
     </head>
-    <?php echo $this->htmlElement('body')->appendAttribute('class', 'minimal'); ?>
+
+    <?php echo $this->htmlElement('body'); ?>
         <?php echo $userBar; ?>
+        <div class="container py-3">
+          <header>
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="Navigation">
+              <div class="container-fluid">
+                <a class="navbar-brand" href="#">Foo</a>
+                <div id="navbar" class="collapse navbar-collapse">
+                  <?php echo $site->publicNav()->menu()->setUlClass('navbar-nav me-auto mb-2 mb-md-0')->setPartial('common/bootstrap-navigation.phtml'); ?>
+                </div>
+              </div>
+            </nav>
+          </header>
+        </div>
+
         <main>
           <div id="content" class="container" role="main">
               <?php echo $this->messages(); ?>
               <?php echo $this->content; ?>
           </div>
         </main>
-        <footer>
-            <span class="powered-by"><?php echo $translate('Powered by Omeka S'); ?></span>
+
+        <footer class="mb-footer py-5 mt-5 bg-light">
+
+          <div class="container py-5">
+            <div class="row">
+              <div class="col-lg-3">
+                <span class="fs-5">Iraqi Jewish Archive</span>
+                <ul class="list-unstyled small text-muted">
+                  <li class="mb-2"><a href="https://www.clir.org/about/privacy/">Privacy Policy</a></li>
+                  <li class="mb-2"><a href="https://www.clir.org">CLIR</a></li>
+                  <li class="mb-2">
+                    <?php if ($footerContent = $this->themeSetting('footer')): ?>
+                      <?php echo $footerContent; ?>
+                    <?php else: ?>
+                      <?php echo $this->translate('Powered by Omeka S'); ?>
+                    <?php endif; ?>
+                  </li>
+                </ul>
+                <div class="social-links mt-3">
+                    <a class="twitter" href="#"><i class="fa fa-twitter"></i></a>
+                    <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
+                    <a class="instagram" href="#"><i class="fa fa-instagram"></i></a>
+                    <a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
         </footer>
     </body>
 </html>

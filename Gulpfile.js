@@ -23,14 +23,17 @@ function sass() {
 
 function serve() {
   browserSync.init({
-    server: "./",
-    watch: true
+    // server: "./",
+    watch: true,
+    proxy: "localhost:8888/omeka-s/"
   });
 
-  gulp.watch("asset/scss/*.scss", sass);
-  gulp.watch("*.phtml").on('change', browserSync.reload);
-  gulp.watch("*.php").on('change', browserSync.reload);
+  gulp.watch("asset/scss/**/*.scss", sass);
+  gulp.watch("**/*.phtml").on('change', browserSync.reload);
+  gulp.watch("**/*.php").on('change', browserSync.reload);
 }
+
+exports.default = gulp.series(sass, serve);
 
 gulp.task('sass', sass);
 gulp.task('serve', gulp.series('sass', serve));
