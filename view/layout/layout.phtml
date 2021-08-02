@@ -24,7 +24,8 @@ $this->headScript()->appendFile(
     'crossorigin' => 'anonymous'
   ]
 );
-$this->headScript()->appendFile('https://use.fontawesome.com/c1ca2c16bc.js');
+
+$this->headScript()->appendFile('https://kit.fontawesome.com/ca0736de6c.js', 'text/javascript', ['crossorigin' => "anonymous"]);
 
 $this->trigger('view.layout');
 $userBar = $this->userBar();
