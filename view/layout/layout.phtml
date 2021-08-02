@@ -26,13 +26,13 @@ $this->headScript()->appendFile(
 );
 $this->headScript()->appendFile('https://use.fontawesome.com/c1ca2c16bc.js');
 
-$logo = $this->themeSettingAssetUrl('logo');
-if($logo):
-  $title = '<img src="' . $this->escapeHtml($logo) . '" />';
-endif;
-
 $this->trigger('view.layout');
 $userBar = $this->userBar();
+
+// $favicon = array(
+//   'rel' => 'shortcut',
+//   'href' => $this->assetUrl('favicon.ico')
+// );
 ?>
 <?php echo $this->doctype(); ?>
 <?php echo $this->htmlElement('html')->setAttribute('lang', $this->lang()); ?>
@@ -46,11 +46,19 @@ $userBar = $this->userBar();
 
     <?php echo $this->htmlElement('body'); ?>
         <?php echo $userBar; ?>
-        <div class="container py-3">
+        <div class="py-3">
           <header>
-            <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="Navigation">
-              <div class="container-fluid">
-                <a class="navbar-brand" href="#">Foo</a>
+            <nav class="navbar navbar-expand-md navbar-light bg-light" aria-label="Navigation">
+              <div class="container">
+                <a class="navbar-brand" href="#">
+                  <a href="<?php echo $site->url(); ?>" class="navbar-brand">
+                    <?php if ($logoContent = $this->themeSettingAssetUrl('logo')): ?>
+                    <img class="dlme-logo" alt="dlme-logo" role="presentation" src="<?php echo $logoContent; ?>" />
+                    <?php else: ?>
+                      <?php echo $this->pageTitle($site->title()); ?>
+                    <?php endif; ?>
+                  </a>
+                </a>
                 <div id="navbar" class="collapse navbar-collapse">
                   <?php echo $site->publicNav()->menu()->setUlClass('navbar-nav me-auto mb-2 mb-md-0')->setPartial('common/bootstrap-navigation.phtml'); ?>
                 </div>
@@ -89,6 +97,12 @@ $userBar = $this->userBar();
                     <a class="instagram" href="#"><i class="fa fa-instagram"></i></a>
                     <a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
                 </div>
+              </div>
+              <div class="col-lg-3">
+                <span class="fs-5">Sponsors</span>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2"><a href="https://www.clir.org/about/privacy/">Privacy Policy</a></li>
+                </ul>
               </div>
             </div>
           </div>
