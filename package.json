@@ -1,0 +1,20 @@
+{
+  "name": "ija-omeka-s-theme",
+  "version": "0.0.1",
+  "description": "Iraqi Jewish Archive Omeka S Theme",
+  "main": "gulpfile.js",
+  "author": "Iraqi Jewish Archive",
+  "license": "Apache2",
+  "private": true,
+  "dependencies": {
+    "autoprefixer": "^10.2.6",
+    "browser-sync": "^2.26.14",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.3.0",
+    "gulp-livereload": "^4.0.2",
+    "gulp-load-plugins": "^2.0.7",
+    "gulp-postcss": "^9.0.0",
+    "gulp-sass": "^4.1.0",
+    "postcss": "^8.3.0"
+  }
+}

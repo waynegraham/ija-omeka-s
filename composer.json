@@ -1,0 +1,7 @@
+{
+    "name": "ija/omeke-s-theme",
+    "type": "ija-omeka-s-theme",
+    "require": {
+        "omeka/omeka-s": "*"
+    }
+}

@@ -1,0 +1,52 @@
+<?php
+$translate = $this->plugin('translate');
+$this->headMeta()->setCharset('utf-8');
+$this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1');
+$this->headLink()->prependStylesheet('//fonts.googleapis.com/css?family=Source+Code+Pro|Lato:400,400italic,700,700italic');
+$this->headTitle($this->setting('installation_title', 'Omeka S'))->setSeparator(' · ');
+// $this->headLink()->appendStylesheet($this->assetUrl('css/iconfonts.css', 'Omeka'));
+// $this->headLink()->appendStylesheet($this->assetUrl('css/style.css', 'Omeka'));
+$this->headLink()->appendStylesheet($this->assetUrl('css/main.css', 'Omeka'));
+$this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
+  '',
+  [
+    'integrity' => 'sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC',
+    'crossorigin' => 'anonymous'
+  ]
+);
+$this->headScript()->prependFile($this->assetUrl('vendor/jquery/jquery.min.js', 'Omeka'));
+$this->headScript()->appendFile($this->assetUrl('js/global.js', 'Omeka'));
+$this->headScript()->appendFile(
+  'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js',
+  'text/javascript',
+  [
+    'integrity' => "sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM",
+    'crossorigin' => 'anonymous'
+  ]
+);
+
+$this->trigger('view.layout');
+$userBar = $this->userBar();
+?>
+<?php echo $this->doctype(); ?>
+<?php echo $this->htmlElement('html')->setAttribute('lang', $this->lang()); ?>
+    <head>
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink(); ?>
+        <?php echo $this->headStyle(); ?>
+        <?php echo $this->headScript(); ?>
+    </head>
+    <?php echo $this->htmlElement('body')->appendAttribute('class', 'minimal'); ?>
+        <?php echo $userBar; ?>
+        <main>
+          <div id="content" class="container" role="main">
+              <?php echo $this->messages(); ?>
+              <?php echo $this->content; ?>
+          </div>
+        </main>
+        <footer>
+            <span class="powered-by"><?php echo $translate('Powered by Omeka S'); ?></span>
+        </footer>
+    </body>
+</html>
