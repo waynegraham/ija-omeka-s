@@ -44,36 +44,33 @@ $sortHeadings = [
 
 <?php $this->trigger('view.browse.before'); ?>
 
-<div class="album py-5">
-  <div class="container">
-    <div class="row row-cols-1 ro-cols-sm-2 row-cols-md-3 g-3">
-      <?php foreach ($items as $item):?>
-        <?php
-          $heading = $headingTerm ? $item->value($headingTerm, ['default' => $translate('[Untitled]')]) : $item->displayTitle();
-          $body = $bodyTerm ? $item->value($bodyTerm) : $item->displayDescription();
-        ?>
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <?php if ($thumbnail = $this->thumbnail($item, 'medium')): ?>
-              <?php echo $item->linkRaw($thumbnail, null, ['class' => 'bd-placeholder-img card-img-top']); ?>
-            <?php endif; ?>
-            <div class="card-body">
-              <p class="card-text">
-                <?php echo nl2br($escape($body)); ?>
-              </p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <!-- TODO: link to item or remove -->
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="row mb-2">
+  <?php foreach ($items as $item):?>
+    <?php
+      $heading = $headingTerm ? $item->value($headingTerm, ['default' => $translate('[Untitled]')]) : $item->displayTitle();
+      $body = $bodyTerm ? $item->value($bodyTerm) : $item->displayDescription();
+      $recordType = $item->value('ija:record_type');
+    ?>
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary"><?php echo $recordType; ?></strong>
+          <h3 class="mb-0"><?php echo $heading; ?></h3>
+          <div class="mb-1 text-muted"><?php echo $item->value('dcterms:date'); ?></div>
+          <p class="card-text mb-auto">
+            <?php echo nl2br($escape($body)); ?>
+          </p>
+          <?php echo $item->link('View Item', null, ['class' => 'streched-link']); ?>
         </div>
-
-      <?php endforeach; ?>
+        <div class="col-auto d-none d-lg-block">
+          <?php if ($thumbnail = $this->thumbnail($item, 'square')): ?>
+            <?php echo $item->linkRaw($thumbnail, null, ['class' => '', 'width' => 200, 'height' => 250]); ?>
+          <?php endif; ?>
+        </div>
+      </div>
     </div>
-  </div>
+
+  <?php endforeach; ?>
 
   <?php echo $this->pagination(); ?>
 

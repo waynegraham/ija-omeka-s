@@ -1,0 +1,108 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+$this->htmlElement('body')->appendAttribute('class', 'item resource show');
+$embedMedia = $this->siteSetting('item_media_embed', false);
+$itemMedia = $item->media();
+?>
+
+<div class="display_values">
+  <?php echo $item->displayValues(); ?>
+  <hr/>
+</div>
+
+<div id="ija_metadata" class="col-md-9">
+  <span class="small text-muted">IJA Number: <?php $item->value('dcterms:identifier'); ?></span>
+  <?php echo $this->pageTitle($item->displayTitle(), 1); ?>
+
+  <?php echo $item->value('dcterms:description'); ?>
+
+  <h2>Bibliographic Information</h2>
+  <dl class="row">
+    <dt class="col-sm-3">Record Type:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:record_type'); ?>
+    </dd>
+    <dt class="col-sm-3">Language:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('dcterms:language'); ?>
+    </dd>
+    <dt class="col-sm-3">Annotations:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:annotations'); ?>
+    </dd>
+  </dl>
+
+  <h2>Format</h2>
+  <dl class="row">
+    <dt class="col-sm-3">Binding Format:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:binding_format'); ?>
+    </dd>
+    <dt class="col-sm-3">Cover Material:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:cover_material'); ?>
+    </dd>
+    <dt class="col-sm-3">Height:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:height'); ?>
+    </dd>
+    <dt class="col-sm-3">Width:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:width'); ?>
+    </dd>
+    <dt class="col-sm-3">Depth:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:depth'); ?>
+    </dd>
+  </dl>
+
+  <h2>Preservation</h2>
+  <dl class="row">
+    <dt class="col-sm-3">Mold Remediation:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:mold_remediation'); ?>
+    </dd>
+    <dt class="col-sm-3">Flattening:</dt>
+    <dd class="col-sm-9">
+      missing
+      <?php echo $item->value('ija:flattening'); ?>
+    </dd>
+    <dt class="col-sm-3">Disbound/Disassembed:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:disbound'); ?>
+    </dd>
+    <dt class="col-sm-3">Mended:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:mended'); ?>
+    </dd>
+    <dt class="col-sm-3">Rehoused:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:rehoused'); ?>
+    </dd>
+  </dl>
+
+  <h2>Metadata</h2>
+  <dl class="row">
+    <dt class="col-sm-3">Last Updated:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:updated'); ?>
+    </dd>
+    <dt class="col-sm-3">Keywords:</dt>
+    <dd class="col-sm-9">
+      <?php echo $item->value('ija:metadata'); ?>
+      <ul>
+        <?php foreach($item->value('ija:metadata') as $keyword): ?>
+          <li><?php echo $keyword; ?></li>
+        <?php endforeach; ?>
+      </ul>
+
+    </dd>
+
+  </dl>
+
+</div>
+
+<div class="col-md-3">
+  <?php $this->trigger('view.show.after'); ?>
+</div>
