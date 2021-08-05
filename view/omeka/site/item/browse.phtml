@@ -29,18 +29,33 @@ $sortHeadings = [
         'value' => 'dcterms:identifier'
     ],
     [
-        'label' => $translate('Class'),
-        'value' => 'resource_class_label'
+        'label' => $translate('Record Type'),
+        'value' => 'ija:record_type'
     ],
     [
-        'label' => $translate('Created'),
-        'value' => 'created'
+        'label' => $translate('Date'),
+        'value' => 'dctersm:date'
+    ],
+    [
+        'label' => $translate('Language'),
+        'value' => 'dcterms:language'
     ],
 ];
 ?>
 
 <?php echo $this->searchFilters(); ?>
-<?php echo $this->pagination(); ?>
+
+<div class="row">
+  <div class="col-md-3 col-sm-6">
+    <?php echo $this->pagination(); ?>
+  </div>
+  <div class="col-md-3 col-sm-6">
+    <?php echo $this->hyperlink($translate('Advanced search'), $this->url('site/resource', ['controller' => 'item', 'action' => 'search'], ['query' => $query], true), ['class' => 'advanced-search']); ?>
+  </div>
+  <div class="col-md-3 col-sm-6">
+    <?php echo $this->sortSelector($sortHeadings); ?>
+  </div>
+</div>
 
 <?php $this->trigger('view.browse.before'); ?>
 
@@ -54,9 +69,17 @@ $sortHeadings = [
     <div class="col-md-6">
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-primary"><?php echo $recordType; ?></strong>
+          <strong class="d-inline-block mb-2 text-primary">
+            <?php echo $recordType; ?>
+          </strong>
           <h3 class="mb-0"><?php echo $heading; ?></h3>
-          <div class="mb-1 text-muted"><?php echo $item->value('dcterms:date'); ?></div>
+          <div class="mb-1 text-muted">
+            <?php if($item->value('dcterms:date')): ?>
+            Date: <?php echo $item->value('dcterms:date'); ?>
+            &middot;
+          <?php endif; ?>
+            Language: <?php echo $item->value('dcterms:language'); ?>
+          </div>
           <p class="card-text mb-auto">
             <?php echo nl2br($escape($body)); ?>
           </p>
