@@ -27,7 +27,7 @@ $queryOption = function($value, array $search, $key, $text) {
 };
 $queryText = function(array $search, $index) {
     $text = isset($search['text']) ? $search['text'] : null;
-    return sprintf('<input type="text" class="query-text" name="%s" value="%s" aria-label="%s">',
+    return sprintf('<input type="text" class="query-text form-control" name="%s" value="%s" aria-label="%s">',
         $this->escapeHtml("property[$index][text]"),
         $this->escapeHtml($text),
         $this->escapeHtml($this->translate('Query text')));
@@ -36,6 +36,9 @@ $queryText = function(array $search, $index) {
 <!-- view/common/advanced-search/properties.phtml -->
 
 <div id="property-queries" class="field removable multi-value" role="group" aria-labelledby="by-value-label">
+  <div class="row">
+
+
     <div class="field-meta">
         <span id="by-value-label" class="label"><?php echo $translate('Search by value'); ?></span>
         <button type="button" class="btn add-value o-icon-add button" aria-label="<?php echo $translate('Add new value'); ?>" title="<?php echo $translate('Add new value'); ?>">
@@ -50,7 +53,7 @@ $queryText = function(array $search, $index) {
         ?>
         <div class="value mb-2">
 
-              <select class="joiner form-select" name="<?php echo $this->escapeHtml($stem . '[joiner]'); ?>">
+              <select class="joiner form-select form-control" name="<?php echo $this->escapeHtml($stem . '[joiner]'); ?>">
                   <?php echo $queryOption('and', $property, 'joiner', $translate('AND')); ?>
                   <?php echo $queryOption('or', $property, 'joiner', $translate('OR')); ?>
               </select>
@@ -67,7 +70,7 @@ $queryText = function(array $search, $index) {
                     'apply_templates' => $this->status()->isSiteRequest() ? $this->siteSetting('search_apply_templates') : false,
                 ]
             ]); ?>
-            <select class="form-select query-type" name="<?php echo $this->escapeHtml($stem . '[type]'); ?>" aria-label="<?php echo $translate('Query type'); ?>">
+            <select class="form-select query-type form-control" name="<?php echo $this->escapeHtml($stem . '[type]'); ?>" aria-label="<?php echo $translate('Query type'); ?>">
                 <?php echo $queryOption('eq', $property, 'type', $translate('is exactly')); ?>
                 <?php echo $queryOption('neq', $property, 'type', $translate('is not exactly')); ?>
                 <?php echo $queryOption('in', $property, 'type', $translate('contains')); ?>
@@ -86,5 +89,6 @@ $queryText = function(array $search, $index) {
         $index++;
         endforeach;
         ?>
+    </div>
     </div>
 </div>

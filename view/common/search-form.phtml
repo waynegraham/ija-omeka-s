@@ -15,11 +15,11 @@ $searchValue = $this->escapeHtml($this->params()->fromQuery('fulltext_search', '
 ?>
 
 <!-- view/common/search-form.phtml -->
-<form action="<?php echo $search ?>" id="search-form" class="input-group">
-    <input class="form-control" type="text" name="fulltext_search" value="<?php echo $searchValue; ?>"
+<form action="<?php echo $search ?>" id="search-form" class="d-flex">
+    <input class="form-control me-2" type="text" name="fulltext_search" value="<?php echo $searchValue; ?>"
         placeholder="<?php echo $translate('Search'); ?>"
         aria-label="<?php echo $translate('Search'); ?>" class="form-text input-group-field">
     <div class="input-group-button">
-    <button type="submit" class="btn btn-primary"><?php echo $translate('Search'); ?></button>
+    <button type="submit" class="btn btn-outline-success"><?php echo $translate('Search'); ?></button>
     </div>
 </form>
