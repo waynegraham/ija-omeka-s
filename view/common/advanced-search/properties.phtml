@@ -33,6 +33,7 @@ $queryText = function(array $search, $index) {
         $this->escapeHtml($this->translate('Query text')));
 }
 ?>
+<!-- view/common/advanced-search/properties.phtml -->
 
 <div id="property-queries" class="field removable multi-value" role="group" aria-labelledby="by-value-label">
     <div class="field-meta">
@@ -47,11 +48,13 @@ $queryText = function(array $search, $index) {
         foreach ($properties as $property):
         $stem = "property[$index]";
         ?>
-        <div class="value">
-            <select class="joiner" name="<?php echo $this->escapeHtml($stem . '[joiner]'); ?>">
-                <?php echo $queryOption('and', $property, 'joiner', $translate('AND')); ?>
-                <?php echo $queryOption('or', $property, 'joiner', $translate('OR')); ?>
-            </select>
+        <div class="value mb-2">
+
+              <select class="joiner form-select" name="<?php echo $this->escapeHtml($stem . '[joiner]'); ?>">
+                  <?php echo $queryOption('and', $property, 'joiner', $translate('AND')); ?>
+                  <?php echo $queryOption('or', $property, 'joiner', $translate('OR')); ?>
+              </select>
+
             <?php echo $this->propertySelect([
                 'name' => $stem . '[property]',
                 'attributes' => [

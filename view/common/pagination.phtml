@@ -1,17 +1,19 @@
-
 <?php
 $translate = $this->plugin('translate');
 ?>
-
-<div class="container" style="">
+<!-- view/common/pagination.phtml -->
+<div class="" style="">
   <!-- <nav class="pagination" role="navigation" aria-label="Item Navigation"> -->
     <?php if ($totalCount): ?>
       <ul class="nav">
         <li class="nav-item">
-          <form method="GET" action="">
+          <form class="form-row" method="GET" action="">
+            <div class="col">
               <?php echo $this->queryToHiddenInputs(['page']); ?>
               <input type="text" name="page" class="form-control" value="<?php echo $currentPage; ?>" size="4" <?php echo ($pageCount == 1) ? 'readonly' : ''; ?> aria-label="<?php echo $translate('Page'); ?>">
-              <span class="mr-5"><?php echo sprintf($translate('of %s'), $pageCount); ?></span>
+              <small id="searchInfo" class="form-text text-muted"><?php echo sprintf($translate('of %s'), $pageCount); ?></small>
+              <span class="mr-5"></span>
+            </div>
           </form>
         </li>
         <?php if ($currentPage != 1): ?>
@@ -32,16 +34,17 @@ $translate = $this->plugin('translate');
           <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
         <?php endif; ?>
 
-        <li class="nav-item">
-          <?php
-          $from = $offset + 1;
-          $to = ($currentPage < $pageCount) ? $offset + $perPage : $totalCount;
-          ?>
-          <span class="row-count mt-2 mb-5">
-            <?php echo sprintf($translate('%1$s–%2$s of %3$s'), $from, $to, $totalCount); ?>
-          </span>
-        </li>
+        <!-- <li class="nav-item"> -->
+                <!-- </li> -->
       </ul>
+      <?php
+      $from = $offset + 1;
+      $to = ($currentPage < $pageCount) ? $offset + $perPage : $totalCount;
+      ?>
+      <span class="row-count mt-2 mb-5">
+        <?php echo sprintf($translate('%1$s–%2$s of %3$s'), $from, $to, $totalCount); ?>
+      </span>
+
 
     <?php else: ?>
         <?php echo $translate('0 results'); ?>
