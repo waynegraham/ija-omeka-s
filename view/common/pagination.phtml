@@ -1,53 +1,37 @@
 <?php
 $translate = $this->plugin('translate');
 ?>
+
 <!-- view/common/pagination.phtml -->
-<div class="" style="">
-  <!-- <nav class="pagination" role="navigation" aria-label="Item Navigation"> -->
-    <?php if ($totalCount): ?>
-      <ul class="nav">
-        <li class="nav-item">
-          <form class="form-row" method="GET" action="">
-            <div class="col">
-              <?php echo $this->queryToHiddenInputs(['page']); ?>
-              <input type="text" name="page" class="form-control" value="<?php echo $currentPage; ?>" size="4" <?php echo ($pageCount == 1) ? 'readonly' : ''; ?> aria-label="<?php echo $translate('Page'); ?>">
-              <small id="searchInfo" class="form-text text-muted"><?php echo sprintf($translate('of %s'), $pageCount); ?></small>
-              <span class="mr-5"></span>
-            </div>
-          </form>
-        </li>
-        <?php if ($currentPage != 1): ?>
-          <li class="nav-item">
-            <?php echo $this->hyperlink('Previous', $previousPageUrl, ['class' => 'page-link', 'title' => $translate('Previous'), 'aria-label' => $translate('Previous')]); ?>
-          </li>
-        <?php else: ?>
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-            </li>
-        <?php endif; ?>
-
-        <?php if ($currentPage < $pageCount): ?>
-          <li class="page-item">
-            <?php echo $this->hyperlink('Next', $nextPageUrl, ['class' => 'page-link', 'title' => $translate('Next'), 'aria-label' => $translate('Next')]); ?>
-          </li>
-        <?php else: ?>
-          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
-        <?php endif; ?>
-
-        <!-- <li class="nav-item"> -->
-                <!-- </li> -->
-      </ul>
+<div class="container">
+<?php if ($totalCount): ?>
+  <nav class="pagination nav">
+    <div class="page-links">
+      <?php if ($currentPage != 1): ?>
+          <?php echo $this->hyperlink('Previous', $previousPageUrl, ['class' => '', 'title' => $translate('Previous'), 'aria-label' => $translate('Previous'), 'rel' => 'previous']); ?>
+      <?php else: ?>
+        Previous
+            <a class="" disabled rel="previous" href="#" tabindex="-1" aria-disabled="true"></a>
+      <?php endif; ?>
+      |
       <?php
-      $from = $offset + 1;
-      $to = ($currentPage < $pageCount) ? $offset + $perPage : $totalCount;
+        $from = $offset + 1;
+        $to = ($currentPage < $pageCount) ? $offset + $perPage : $totalCount;
       ?>
-      <span class="row-count mt-2 mb-5">
-        <?php echo sprintf($translate('%1$s–%2$s of %3$s'), $from, $to, $totalCount); ?>
-      </span>
+        <span class="page-entries">
+          <?php echo sprintf($translate('%1$s–%2$s of %3$s'), $from, $to, $totalCount); ?>
+        </span>
+        |
+        <?php if ($currentPage < $pageCount): ?>
+            <?php echo $this->hyperlink('Next', $nextPageUrl, ['class' => '', 'title' => $translate('Next'), 'aria-label' => $translate('Next'), 'rel' => 'next']); ?>
+        <?php else: ?>
+          Next
+          <a rel="next" href="#" disabled tabindex="-1" aria-disabled="true"></a>
+        <?php endif; ?>
+    </div>
+  </nav>
 
-
-    <?php else: ?>
-        <?php echo $translate('0 results'); ?>
-    <?php endif; ?>
-  <!-- </nav> -->
-</div>
+<?php else: ?>
+    <?php echo $translate('0 results'); ?>
+<?php endif; ?>
+  </div>

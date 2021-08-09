@@ -47,13 +47,13 @@ $sortHeadings = [
 <?php echo $this->searchFilters(); ?>
 
 <div class="row">
-  <div class="col-md-3 col-sm-6">
+  <div class="col-md-4 col-sm-6">
     <?php echo $this->pagination(); ?>
   </div>
-  <div class="col-md-3 col-sm-6">
+  <div class="col-md-4 col-sm-6 text-center">
     <?php echo $this->hyperlink($translate('Advanced search'), $this->url('site/resource', ['controller' => 'item', 'action' => 'search'], ['query' => $query], true), ['class' => 'advanced-search']); ?>
   </div>
-  <div class="col-md-3 col-sm-6">
+  <div class="col-md-4 col-sm-6">
     <?php echo $this->sortSelector($sortHeadings); ?>
   </div>
 </div>
