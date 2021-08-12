@@ -28,12 +28,9 @@ function icon_map($record_type)
 ?>
 <!-- view/omeka/site/item/show.phtml -->
 <!-- this should probably be in view/common/resource-values.phtml -->
-
-
-
 <!-- <div class="container mt-4">
   <h1><i class="fas fa-book-open"></i> Object Details</h1>
-  <?php //echo $item->displayValues(); ?>
+
 </div> -->
 
 
@@ -41,24 +38,25 @@ function icon_map($record_type)
   <div class="col-1">
     <i class="<?php echo icon_map($item->value('ija:record_type'));?> fa-5x"></i>
   </div>
-  <div class="col">
+  <div class="col px-4">
     <?php if($item->value('ija:ija_number')): ?>
     <span class="small text-muted">IJA Number: <?php echo $item->value('ija:ija_number'); ?></span>
     <?php endif; ?>
     <?php echo $this->pageTitle($item->displayTitle(), 1); ?>
   </div>
 
-  <p class="lead mb-4">
+  <p class="lead mb-4 mt-4">
     <?php echo $item->value('dcterms:description'); ?>
   </p>
 </div>
 
 <?php $this->trigger('view.show.after'); ?>
 
-<div id="ija_metadata" class="row">
+<?php echo $item->displayValues(); ?>
+<!-- <div id="ija_metadata" class="row">
   <div  class="col-md-8 mt-4">
 
-    <h2>Bibliographic Information</h2>
+    <h2><?php echo $translate('Bibliographic Information'); ?></h2>
     <dl class="row dl-invert">
       <?php if($item->value('ija:author_personal')): ?>
       <dt class="col-sm-4">Author (Personal):</dt>
@@ -160,7 +158,7 @@ function icon_map($record_type)
       <?php endif; ?>
     </dl>
 
-    <h2>Format</h2>
+    <h2><?php echo $translate('Format'); ?></h2>
     <dl class="row dl-invert">
       <?php if( $item->value('ija:binding_format') ): ?>
       <dt class="col-sm-4">Binding Format:</dt>
@@ -198,7 +196,7 @@ function icon_map($record_type)
       <?php endif; ?>
     </dl>
 
-    <h2>Preservation</h2>
+    <h2><?php echo $translate('Preservation'); ?></h2>
     <dl class="row dl-invert">
       <?php if( $item->value('ija:mold_remediation') ): ?>
       <dt class="col-sm-4">Mold Remediation:</dt>
@@ -236,7 +234,7 @@ function icon_map($record_type)
       <?php endif; ?>
     </dl>
 
-    <h2>Metadata</h2>
+    <h2><?php echo $translate('Metadata'); ?></h2>
     <dl class="row dl-invert">
       <?php if( $item->value('ija:rehoused') ): ?>
       <dt class="col-sm-4">Last Updated:</dt>
@@ -250,6 +248,7 @@ function icon_map($record_type)
         size of keywords:
         <?php
           $keywords = $item->value('ija:metadata');
+          // $metadata = $values['ija:metadata'];
           echo $keywords->asHtml();
         ?>
         <?php echo $keywords; ?>
@@ -263,12 +262,7 @@ function icon_map($record_type)
     </dl>
   </div>
 </div>
-
-<div class="display_values">
-  <?php //echo $item->displayValues(); ?>
-
-</div>
-
+ -->
 
 <?php
    $page = $this->params()->fromQuery('page', 1);

@@ -8,9 +8,9 @@ $translate = $this->plugin('translate');
   <nav class="pagination nav">
     <div class="page-links">
       <?php if ($currentPage != 1): ?>
-          <?php echo $this->hyperlink('Previous', $previousPageUrl, ['class' => '', 'title' => $translate('Previous'), 'aria-label' => $translate('Previous'), 'rel' => 'previous']); ?>
+          <?php echo $this->hyperlink('« Previous', $previousPageUrl, ['class' => '', 'title' => $translate('Previous'), 'aria-label' => $translate('Previous'), 'rel' => 'previous']); ?>
       <?php else: ?>
-        Previous
+        « Previous
             <a class="" disabled rel="previous" href="#" tabindex="-1" aria-disabled="true"></a>
       <?php endif; ?>
       |
@@ -23,10 +23,10 @@ $translate = $this->plugin('translate');
         </span>
         |
         <?php if ($currentPage < $pageCount): ?>
-            <?php echo $this->hyperlink('Next', $nextPageUrl, ['class' => '', 'title' => $translate('Next'), 'aria-label' => $translate('Next'), 'rel' => 'next']); ?>
+            <?php echo $this->hyperlink('Next »', $nextPageUrl, ['class' => '', 'title' => $translate('Next'), 'aria-label' => $translate('Next'), 'rel' => 'next']); ?>
         <?php else: ?>
-          Next
-          <a rel="next" href="#" disabled tabindex="-1" aria-disabled="true"></a>
+          Next »
+
         <?php endif; ?>
     </div>
   </nav>
