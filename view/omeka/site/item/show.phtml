@@ -5,6 +5,26 @@ $labelInfo = $this->setting('property_label_information');
 $this->htmlElement('body')->appendAttribute('class', 'item resource show');
 $embedMedia = $this->siteSetting('item_media_embed', false);
 $itemMedia = $item->media();
+// TODO refactor into shared functions
+function icon_map($record_type)
+{
+  switch($record_type) {
+    case 'Books':
+      echo 'fas fa-book-open';
+      break;
+    case 'Fragments':
+      echo 'far fa-images';
+      break;
+    case 'Archival Materials':
+      echo('fas fa-archive');
+      break;
+    case 'Other':
+      echo('far fa-folder');
+      break;
+    default:
+      echo('far fa-file');
+  }
+}
 ?>
 <!-- view/omeka/site/item/show.phtml -->
 <!-- this should probably be in view/common/resource-values.phtml -->
@@ -19,7 +39,7 @@ $itemMedia = $item->media();
 
 <div class="row title-bar">
   <div class="col-1">
-    <i class="fas fa-book-open fa-5x"></i>
+    <i class="<?php echo icon_map($item->value('ija:record_type'));?> fa-5x"></i>
   </div>
   <div class="col">
     <?php if($item->value('ija:ija_number')): ?>

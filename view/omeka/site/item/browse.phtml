@@ -41,12 +41,32 @@ $sortHeadings = [
         'value' => 'dcterms:language'
     ],
 ];
+
+function icon_map($record_type)
+{
+  switch($record_type) {
+    case 'Books':
+      echo 'fas fa-book-open';
+      break;
+    case 'Fragments':
+      echo 'far fa-images';
+      break;
+    case 'Archival Materials':
+      echo('fas fa-archive');
+      break;
+    case 'Other':
+      echo('far fa-folder');
+      break;
+    default:
+      echo('far fa-file');
+  }
+}
 ?>
 <!-- view/omeka/site/item/browse.phtml -->
 
 <?php echo $this->searchFilters(); ?>
 
-<div class="row">
+<div class="row mt-5 mb-5">
   <div class="col-md-4 col-sm-6">
     <?php echo $this->pagination(); ?>
   </div>
@@ -71,6 +91,7 @@ $sortHeadings = [
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary">
+            <i class="<?php echo icon_map($recordType); ?>"></i>
             <?php echo $recordType; ?>
           </strong>
           <h3 class="mb-0"><?php echo $heading; ?></h3>
@@ -83,7 +104,9 @@ $sortHeadings = [
               IJA Number: <?php echo $item->value('ija:ija_number'); ?>
               &middot;
             <?php endif; ?>
+            <?php if($item->value('dcterms:language')): ?>
             Language: <?php echo $item->value('dcterms:language'); ?>
+            <?php endif; ?>
           </div>
           <p class="card-text mb-auto">
             <?php echo nl2br($escape($body)); ?>
