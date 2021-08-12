@@ -14,9 +14,9 @@ $labelInfo = $this->setting('property_label_information');
       one
     <?php else: ?>
       <?php echo $escape($translate($propertyData['property']->label())); ?>
-      <code>
-          <?php var_dump($term); ?>
-      </code>
+      <!-- <code>
+          <?php //var_dump($term); ?>
+      </code> -->
     <?php endif; ?>
     <?php if ('term' === $labelInfo): ?>
       (<?php echo $escape($propertyData['property']->term()); ?>)

@@ -1,8 +1,20 @@
 // Main scss file
 //
+//
+@import 'https://fonts.googleapis.com/css2?family=Merriweather&family=Source+Sans+Pro&display=swap';
 
 $social-link-color: rgba(1, 41, 112, 0.5);
 $social-link-hover: rgba(1, 41, 112, 1.0);
+
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+@for $i from  1 through 6 {
+  h#{$i} {
+    font-family: 'Merriweather', serif;
+  }
+}
 
 .social-links {
   a {
@@ -19,11 +31,29 @@ $social-link-hover: rgba(1, 41, 112, 1.0);
   }
 }
 
+// Item view
 #ija_metadata {
-  background-image: url('../images/mandala.png') no-repeat bottom center;
-  margin-bottom: 20px;
   margin-top: 15px;
   padding-bottom: 110px;
+  margin-bottom: 20px;
+  background-image: url('../images/mandala.png');
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
+
+.record_head {
+  margin-bottom: 30px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.dl-invert {
+  & dt {
+    color: #585754;
+    text-align: right;
+  }
 }
 
 /* MARKETING CONTENT

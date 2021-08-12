@@ -76,9 +76,13 @@ $sortHeadings = [
           <h3 class="mb-0"><?php echo $heading; ?></h3>
           <div class="mb-1 text-muted">
             <?php if($item->value('dcterms:date')): ?>
-            Date: <?php echo $item->value('dcterms:date'); ?>
-            &middot;
-          <?php endif; ?>
+              Date: <?php echo $item->value('dcterms:date'); ?>
+              &middot;
+            <?php endif; ?>
+            <?php if($item->value('ija:ija_number')): ?>
+              IJA Number: <?php echo $item->value('ija:ija_number'); ?>
+              &middot;
+            <?php endif; ?>
             Language: <?php echo $item->value('dcterms:language'); ?>
           </div>
           <p class="card-text mb-auto">

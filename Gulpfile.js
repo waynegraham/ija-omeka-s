@@ -28,7 +28,7 @@ function serve() {
     proxy: "localhost:8888/omeka-s/"
   });
 
-  gulp.watch("asset/scss/**/*.scss", sass);
+  gulp.watch("**/*.scss", sass);
   gulp.watch("**/*.phtml").on('change', browserSync.reload);
   gulp.watch("**/*.php").on('change', browserSync.reload);
 }
