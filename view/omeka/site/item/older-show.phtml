@@ -1,0 +1,210 @@
+<!-- <div id="ija_metadata" class="row">
+  <div  class="col-md-8 mt-4">
+
+    <h2><?php echo $translate('Bibliographic Information'); ?></h2>
+    <dl class="row dl-invert">
+      <?php if($item->value('ija:author_personal')): ?>
+      <dt class="col-sm-4">Author (Personal):</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:author_personal'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if($item->value('ija:author_corporate')): ?>
+      <dt class="col-sm-4">Author (Corporate):</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:author_corporate'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if($item->value('dcterms:publisher')): ?>
+      <dt class="col-sm-4">Publisher:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('dcterms:publisher'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if($item->value('ija:date_of_publication')): ?>
+      <dt class="col-sm-4">Date of Publication:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:date_of_publication'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if($item->value('ija:date_of_publication_hebrew')): ?>
+      <dt class="col-sm-4">Hebrew Date of Publication:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:date_of_publication_hebrew'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if($item->value('ija:place_of_publication')): ?>
+      <dt class="col-sm-4">Place of Publication:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:place_of_publication'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if($item->value('bibo:oclcnum')): ?>
+        <?php
+          $oclcnum = $item->value('bibo:oclcnum');
+          $oclclink = "https://www.worldcat.org/oclc/" . $oclcnum;
+        ?>
+
+      <dt class="col-sm-4">OCLC Number:</dt>
+      <dd class="col-sm-8">
+        <a href="<?php echo $oclclink; ?>" target="_blank">
+          <?php echo $oclcnum; ?>
+        </a>
+      </dd>
+      <?php endif; ?>
+
+      <?php if($item->value('ija:inclusive_start_date')): ?>
+      <dt class="col-sm-4">Inclusive Start Date:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:inclusive_start_date'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if($item->value('ija:inclusive_end_date')): ?>
+      <dt class="col-sm-4">Inclusive End Date:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:inclusive_end_date'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if($item->value('ija:archival_materials_type')): ?>
+      <dt class="col-sm-4">Archival Materials Type:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:archival_materials_type'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if($item->value('ija:archival_materials_format')): ?>
+      <dt class="col-sm-4">Archival Materials Format:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:archival_materials_format'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <dt class="col-sm-4">Record Type:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:record_type'); ?>
+      </dd>
+      <dt class="col-sm-4">Language:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('dcterms:language'); ?>
+      </dd>
+      <?php if( $item->value('ija:annotations') ): ?>
+      <dt class="col-sm-4">Annotations:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:annotations'); ?>
+      </dd>
+      <?php endif; ?>
+    </dl>
+
+    <h2><?php echo $translate('Format'); ?></h2>
+    <dl class="row dl-invert">
+      <?php if( $item->value('ija:binding_format') ): ?>
+      <dt class="col-sm-4">Binding Format:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:binding_format'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if( $item->value('ija:cover_material') ): ?>
+      <dt class="col-sm-4">Cover Material:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:cover_material'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if( $item->value('ija:height') ): ?>
+      <dt class="col-sm-4">Height:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:height'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if( $item->value('ija:height') ): ?>
+      <dt class="col-sm-4">Width:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:width'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if( $item->value('ija:height') ): ?>
+      <dt class="col-sm-4">Depth:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:depth'); ?>
+      </dd>
+      <?php endif; ?>
+    </dl>
+
+    <h2><?php echo $translate('Preservation'); ?></h2>
+    <dl class="row dl-invert">
+      <?php if( $item->value('ija:mold_remediation') ): ?>
+      <dt class="col-sm-4">Mold Remediation:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:mold_remediation'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if( $item->value('ija:flattening') ): ?>
+      <dt class="col-sm-4">Flattening:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:flattening'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if( $item->value('ija:disbound') ): ?>
+      <dt class="col-sm-4">Disbound/Disassembed:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:disbound'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if( $item->value('ija:mended') ): ?>
+      <dt class="col-sm-4">Mended:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:mended'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <?php if( $item->value('ija:rehoused') ): ?>
+      <dt class="col-sm-4">Rehoused:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:rehoused'); ?>
+      </dd>
+      <?php endif; ?>
+    </dl>
+
+    <h2><?php echo $translate('Metadata'); ?></h2>
+    <dl class="row dl-invert">
+      <?php if( $item->value('ija:rehoused') ): ?>
+      <dt class="col-sm-4">Last Updated:</dt>
+      <dd class="col-sm-8">
+        <?php echo $item->value('ija:updated_date'); ?>
+      </dd>
+      <?php endif; ?>
+
+      <dt class="col-sm-4">Keywords:</dt>
+      <dd class="col-sm-8">
+        size of keywords:
+        <?php
+          $keywords = $item->value('ija:metadata');
+          // $metadata = $values['ija:metadata'];
+          echo $keywords->asHtml();
+        ?>
+        <?php echo $keywords; ?>
+        <hr>
+        <ul>
+          <?php foreach($item->value('ija:metadata') as $keyword): ?>
+            <li><?php echo $keyword; ?></li>
+          <?php endforeach; ?>
+        </ul>
+      </dd>
+    </dl>
+  </div>
+</div>
+ -->
