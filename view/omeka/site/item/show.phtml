@@ -49,7 +49,10 @@ function icon_map($record_type)
 
 <?php $this->trigger('view.show.after'); ?>
 
-<?php echo $item->displayValues(); ?>
+<div id="ija_metadata">
+  <?php echo $item->displayValues(); ?>
+</div>
+
 
 <?php
    $page = $this->params()->fromQuery('page', 1);
