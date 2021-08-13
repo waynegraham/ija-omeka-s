@@ -8,7 +8,7 @@ $labelInfo = $this->setting('property_label_information');
 
 <dl class="row dl-invert mt-5">
 <?php foreach($values as $term => $propertyData): ?>
-  <dt class="col-sm-3 term">
+  <dt class="col-sm-4 term">
     <?php if($propertyData['alternate_label']): ?>
       <?php echo $escape($propertyData['alternate_label']); ?>
     <?php else: ?>
@@ -23,7 +23,7 @@ $labelInfo = $this->setting('property_label_information');
       (<?php echo $escape($propertyData['property']->vocabulary()->label()); ?>)
     <?php endif; ?>
   </dt>
-  <dd class="col-sm-9">
+  <dd class="col-sm-8">
      <?php foreach ($propertyData['values'] as $value): ?>
        <?php
         $valueType = $value->type();
