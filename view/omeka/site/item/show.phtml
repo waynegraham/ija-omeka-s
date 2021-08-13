@@ -37,6 +37,9 @@ function icon_map($record_type)
     <span class="small text-muted">IJA Number: <?php echo $item->value('ija:ija_number'); ?></span>
     <?php endif; ?>
     <?php echo $this->pageTitle($item->displayTitle(), 1); ?>
+    <?php if($item->value('dcterms:alternative')): ?>
+      <h2 class="transliteration"><?php echo $item->value('dcterms:alternative'); ?></h2>
+    <?php endif; ?>
   </div>
 
   <p class="lead mb-4 mt-4">
