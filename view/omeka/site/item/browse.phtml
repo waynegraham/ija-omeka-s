@@ -109,7 +109,11 @@ function icon_map($record_type)
             <?php endif; ?>
           </div>
           <p class="card-text mb-auto">
-            <?php echo nl2br($escape($body)); ?>
+            <?php if($body): ?>
+              <div class="description <?php echo ($bodyTruncate) ? $bodyTruncate : ''; ?>">
+                <?php echo nl2br($escape($body)); ?>
+              </div>
+            <?php endif; ?>
           </p>
           <?php echo $item->link('View Item', null, ['class' => 'streched-link']); ?>
         </div>
