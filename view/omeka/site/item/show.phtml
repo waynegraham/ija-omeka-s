@@ -51,15 +51,15 @@ function icon_map($record_type)
 </div>
 
 <div class="row">
-  <h2>Preview</h2>
-
     <?php if($item->value('ija:record_type') == 'Video'): ?>
+      <h2>View</h2>
       <?php foreach ($itemMedia as $media): ?>
         <div class="ratio ratio-16x9">
           <?php echo $media->render(['width' => '100%', 'height' => '100%']); ?>
         </div>
       <?php endforeach; ?>
     <?php else: ?>
+      <h2>Preview</h2>
       <div class="col-md-10 col-sm-12">
       <?php $this->trigger('view.show.after'); ?>
       </div>
