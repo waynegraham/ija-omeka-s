@@ -52,27 +52,37 @@ function icon_map($record_type)
 
 <div class="row">
   <h2>Preview</h2>
-  <div class="col-md-10 col-sm-12">
-    <?php $this->trigger('view.show.after'); ?>
-  </div>
-  <div class="col-md-2 col-sm-12">
-    <?php if (!$embedMedia && $itemMedia): ?>
-    <div class="media-list">
-        <?php foreach ($itemMedia as $media): ?>
-            <?php
-              // TODO: see if there's an 'official' wayn to filter media files
-              if( mb_strpos($media->linkPretty(), '.pdf') ) {
-                // echo image_decorator($media, 'Download Full Text');
-                $thumb = $media->thumbnailUrl('medium');
-                echo '<a href="' . $media->originalUrl() . '">
-                  <img class="img-thumbnail" src="' . $thumb . '" alt="' . $media->displayTitle() . '" /> <span  class="btn btn-outline-secondary">Download Full Text</span>
-                </a>';
-              }
-            ?>
-        <?php endforeach; ?>
-    </div>
+
+    <?php if($item->value('ija:record_type') == 'Video'): ?>
+      <?php foreach ($itemMedia as $media): ?>
+        <div class="ratio ratio-16x9">
+          <?php echo $media->render(['width' => '100%', 'height' => '100%']); ?>
+        </div>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <div class="col-md-10 col-sm-12">
+      <?php $this->trigger('view.show.after'); ?>
+      </div>
+      <div class="col-md-2 col-sm-12">
+        <?php if (!$embedMedia && $itemMedia): ?>
+        <div class="media-list">
+            <?php foreach ($itemMedia as $media): ?>
+              here
+                <?php
+                  // TODO: see if there's an 'official' way to filter media files
+                  if( mb_strpos($media->linkPretty(), '.pdf') ) {
+                    // echo image_decorator($media, 'Download Full Text');
+                    $thumb = $media->thumbnailUrl('medium');
+                    echo '<a href="' . $media->originalUrl() . '">
+                      <img class="img-thumbnail" src="' . $thumb . '" alt="' . $media->displayTitle() . '" /> <span  class="btn btn-outline-secondary">Download Full Text</span>
+                    </a>';
+                  }
+                ?>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+      </div>
     <?php endif; ?>
-  </div>
 </div>
 
 
@@ -82,12 +92,25 @@ function icon_map($record_type)
 
 <?php if ($embedMedia && $itemMedia): ?>
 <div class="media-embeds">
+  media-embeds
 <?php foreach ($itemMedia as $media):
     echo $media->render();
 endforeach;
 ?>
 </div>
 <?php endif; ?>
+<!-- <?php if (!$embedMedia && $itemMedia): ?>
+<div class="media-list">
+    <?php foreach ($itemMedia as $media): ?>
+      <?php echo $item->value('ija:record_type'); ?>
+      <div class="ratio ratio-16x9">
+        <?php echo $media->render(['height' => '600', 'width' => '100%']); ?>
+      </div>
+
+        <?php //echo $media->linkPretty(); ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?> -->
 
 
 
