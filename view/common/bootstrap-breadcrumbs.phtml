@@ -1,0 +1,20 @@
+<?php $container = $this->navigation()->breadcrumbs()  ?>
+<?php $navigation = $container->getContainer() ?>
+<!-- view/common/bootstrap-breadcrumbs.html -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <?php foreach($this->pages as $page): ?>
+        <?php if( ! $page->isActive()): ?>
+            <li class="breadcrumb-item">
+                <a href="<?php echo $page->getHref() ?>"><?php echo $page->getLabel() ?></a>
+            </li>
+        <?php else: ?>
+            <li class="breadcrumb-item active" aria-current="page">
+                <?php if($container->getLinkLast()): ?><a href="<?php echo $page->getHref() ?>"><?php endif ?>
+                <?php echo $page->getLabel() ?>
+                <?php if($container->getLinkLast()): ?></a><?php endif ?>
+            </li>
+        <?php endif ?>
+    <?php endforeach ?>
+  </ol>
+</nav>
