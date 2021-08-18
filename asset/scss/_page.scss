@@ -1,0 +1,285 @@
+@import 'variables';
+
+// From application/asset/sass/_screen.scss
+/* @group ----- Pages ----- */
+.indent:before {
+  content: "\2014";
+  margin-right: -1px;
+}
+
+.block {
+  margin-bottom: $spacing-small;
+}
+
+.block .block-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: opacify($gray-on-white, .08);
+  padding: $spacing-small;
+  font-weight: bold;
+}
+
+.block .block-content input[type="hidden"] + * {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.block.html > div {
+  border: 1px solid $border-gray;
+}
+
+.block .field {
+  padding: 0;
+  border-color: transparent;
+  background-color: transparent;
+  margin-top: $spacing-small;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.block.delete > .block-header {
+  font-weight: normal;
+  display: flex;
+  background: transparent;
+}
+
+.block.delete > *:not(.block-header) {
+  display: none;
+}
+
+.block.delete span.restore-value {
+  padding: 0 (.5 * $spacing-small);
+  text-transform: lowercase;
+  width: auto;
+}
+
+.block.delete a.restore-value:before {
+  padding: 0;
+}
+
+.block.delete .sortable-handle {
+  display: none;
+}
+
+.block .delete div.item-title,
+.delete .block-type {
+  margin-left: 1.25 * $spacing-large;
+}
+
+.delete .block-type {
+  font-weight: bold;
+}
+
+.block div.item-title {
+  margin: $spacing-small 0;
+  display: flex;
+  align-items: center;
+}
+
+.block .item-title img {
+  height: (1.5 * $spacing-large);
+  width: auto;
+  display: inline-block;
+  margin-right: $spacing-small;
+  vertical-align: top;
+}
+
+.block .delete.attachment {
+  background-color: $delete-bg;
+}
+
+.block .delete.attachment .actions .undo {
+  display: inline-block;
+}
+
+.block .delete.attachment .actions .delete {
+  display: none;
+}
+
+.block .attachments-form {
+  margin-bottom: $spacing-medium;
+}
+
+.block .attachments-form a h4 {
+  display: inline-block;
+}
+
+.block .attachment .actions {
+  margin-left: auto;
+}
+
+.block .attachment .actions .button {
+  background-color: transparent;
+  color: $red;
+  padding: 0;
+  min-height: 0;
+
+  &:hover {
+    color: $red;
+  }
+}
+
+.block .attachment .actions .undo {
+  display: none;
+}
+
+.block .block-content {
+  clear: both;
+  background-color: $gray-on-white;
+  padding: $spacing-small;
+}
+
+.block.sortable-ghost .block-content {
+  display: none;
+}
+
+.block .attachment {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 $spacing-small;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $border-gray;
+    padding-bottom: -1px;
+  }
+}
+
+.block .attachment .button {
+  margin-bottom: 0;
+}
+
+.block .attachment-add {
+  margin: $spacing-small 0 0;
+}
+
+.block .collapse,
+.block .expand {
+  width: 100%;
+  display: flex;
+  padding: 0 $spacing-small 0 0;
+  justify-content: space-between;
+}
+
+.block .field-meta .collapse + .collapsible {
+  width: auto;
+  border: 0;
+}
+
+.block .collapse h4,
+.block .expand h4 {
+  display: inline-block;
+  padding: 0;
+}
+
+.block .collapse + .collapsible {
+  border-top: 1px solid $border-gray;
+  padding: -1px 0 0 $spacing-large;
+  margin-top: $spacing-small;
+}
+
+.block[data-block-layout="html"] [contenteditable="true"] {
+  resize: vertical;
+  min-height: 3 * $spacing-large;
+  max-height: 12 * $spacing-large;
+}
+
+#attachment-options .option {
+  position: relative;
+  margin-bottom: $spacing-medium;
+}
+
+#attachment-options .collapse,
+#attachment-options .expand {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#attachment-options h3 {
+  overflow: visible;
+  white-space: normal;
+}
+
+#attachment-item-select {
+  display: block;
+  margin: $spacing-medium 0 0;
+}
+
+#attachment-options .selected-attachment {
+  margin-bottom: $spacing-medium;
+  margin-top: -$spacing-medium;
+  // @include bleed-x($spacing-medium);
+  padding-top: $spacing-medium;
+  padding-bottom: $spacing-medium;
+  overflow: hidden;
+
+  img {
+    height: (4 * $spacing-large);
+    width: auto;
+    float: right;
+    margin: 0 0 0 $spacing-medium;
+  }
+
+  p:first-child {
+    margin: 0;
+  }
+}
+
+#attachment-options h3.item-title {
+  text-align: left;
+}
+
+#attachment-options .item-thumbnail ~ h3.item-title {
+  width: 100%;
+}
+
+#attachment-options .media-title {
+  font-size: 0.75 * $base-font-size;
+  display: block;
+  width: calc(100% - #{4.5 * $spacing-large});
+  float: left;
+  word-wrap: break-word;
+  text-align: left;
+  clear: left;
+}
+
+#attachment-options .item-thumbnail ~ #attachment-item-select {
+  font-size: 0.75 * $base-font-size;
+  display: inline-block;
+  width: calc(100% - #{4.5 * $spacing-large});
+  word-wrap: break-word;
+}
+
+#attachment-options h3 {
+  word-wrap: break-word;
+}
+
+#attachment-options .media-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 $spacing-medium;
+
+  li.media {
+    position: relative;
+    height: (2 * $spacing-large);
+    width: (2 * $spacing-large);
+    cursor: pointer;
+    display: inline-block;
+    padding: (.5 * $spacing-small);
+    border: 1px solid $border-gray;
+
+    &.attached,
+    &:hover {
+      background-color: $gray-on-white;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
