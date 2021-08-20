@@ -2,25 +2,6 @@
 @import '../../node_modules/bootstrap/scss/functions';
 @import 'variables';
 
-// @see https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss
-
-// Default variable overrides
-$primary: #002B5C;
-// $secondary: #9EADC8;
-$secondary: #57B8FF;
-$success: #03cea4;
-$danger: #D90429;
-$warning: #ECA400;
-$info: #57B8FF;
-// $brand-primary: darken($primary, 6.5%) !default;
-// $danger: $red;
-// $link-hover-decoration: underline !default;
-
-// $link-color: $primary;
-// $link-hover-color: lighten($link-color, 95%);
-
-$font-family-sans-serif: 'Source Sans Pro', sans-serif;
-$font-family-serif: 'Merriweather', serif;
 // https://getbootstrap.com/docs/5.1/customize/color/#color-sass-maps
 $theme-colors: (
   "primary":    $primary,
@@ -29,10 +10,9 @@ $theme-colors: (
   // "info":       $info,
   // "warning":    $warning,
   // "danger":     $danger,
-  // "light":      $light,
+  "light":      $light,
   // "dark":       $dark
 );
-
 
 // Required imports
 @import '../../node_modules/bootstrap/scss/variables';

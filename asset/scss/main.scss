@@ -3,18 +3,31 @@
 //
 @import 'https://fonts.googleapis.com/css2?family=Merriweather&family=Source+Sans+Pro&display=swap';
 @import 'omeka';
+@import 'mixins';
 @import 'page-blocks';
 @import 'page';
 @import 'variables';
 
 @for $i from 1 through 6 {
   h#{$i} {
-    font-family: $serif-font-family;
+    font-family: $font-family-serif;
   }
 }
 
 header {
   border-bottom: 8px solid $primary;
+}
+
+main {
+  @include clearfix;
+}
+
+.mirador {
+  display: block;
+  width: 100%;
+  height: 600px;
+  // margin: 1em 5%;
+  position: relative;
 }
 
 .social-links {

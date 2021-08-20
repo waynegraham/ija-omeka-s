@@ -1,25 +1,49 @@
+// Bootstrap
+// @see https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss
+
+// Default variable overrides
+$primary: #002B5C;
+// $secondary: #9EADC8;
+$secondary: #57B8FF;
+$success: #03cea4;
+$danger: #D90429;
+$warning: #ECA400;
+$info: #57B8FF;
+$light: #F8F9FA;
+// $brand-primary: darken($primary, 6.5%) !default;
+// $danger: $red;
+// $link-hover-decoration: underline !default;
+
+// $link-color: $primary;
+// $link-hover-color: lighten($link-color, 95%);
+
+$font-family-sans-serif: 'Source Sans Pro', sans-serif;
+$font-family-serif: 'Merriweather', serif;
+
+
+// Omeka variables
 // Typography
-// $base-font-size:        16px;
-// $base-line-height:      24px;
-// $spacing-large:         $base-line-height;
-// $spacing-medium:        .5 * $base-line-height;
-// $spacing-small:         .25 * $base-line-height;
+$base-font-size:        16px;
+$base-line-height:      24px;
+$spacing-large:         $base-line-height;
+$spacing-medium:        .5 * $base-line-height;
+$spacing-small:         .25 * $base-line-height;
 
 // Layout
-// $global-margin: 1rem;
-// $global-padding: 1rem;
-// $global-position: 1rem;
+$global-margin: 1rem;
+$global-padding: 1rem;
+$global-position: 1rem;
 
 // Colors
 $heading-color: #405353;
 
-// $red:                 #A91919;
-// $delete-bg:           #FFCCCC;
-// $gray-on-white:       rgba(0,0,0,.04);
-// $border-gray:         #dfdfdf;
-// $copy-gray:           #676767;
-// $blue:                #404E61;
+$red:                 #A91919;
+$delete-bg:           #FFCCCC;
+$gray-on-white:       rgba(0,0,0,.04);
+$border-gray:         #dfdfdf;
+$copy-gray:           #676767;
+$blue:                #404E61;
 
 // Prefix settings
 
-// $graceful-usage-threshold: .5;
+$graceful-usage-threshold: .5;

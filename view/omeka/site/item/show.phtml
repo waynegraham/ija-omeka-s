@@ -41,7 +41,7 @@ function icon_map($record_type)
   <div class="col-1">
     <i class="<?php echo icon_map($item->value('ija:record_type'));?> fa-5x"></i>
   </div>
-  <div class="col-11 px-4">
+  <div class="col-auto px-4">
     <?php if($item->value('ija:ija_number')): ?>
     <span class="small text-muted">IJA Number: <?php echo $item->value('ija:ija_number'); ?></span>
     <?php endif; ?>
@@ -66,9 +66,7 @@ function icon_map($record_type)
       <?php endforeach; ?>
     <?php else: ?>
       <h2>Preview</h2>
-      <div class="col">
-        <?php $this->trigger('view.show.after'); ?>
-      </div>
+      <?php $this->trigger('view.show.after'); ?>
     <?php endif; ?>
 </div>
 
