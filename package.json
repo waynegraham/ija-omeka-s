@@ -8,6 +8,7 @@
   "private": true,
   "dependencies": {
     "autoprefixer": "^10.2.6",
+    "bootstrap": "^5.1.0",
     "browser-sync": "^2.26.14",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
