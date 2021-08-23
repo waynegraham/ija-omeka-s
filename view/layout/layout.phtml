@@ -8,13 +8,6 @@ $this->headTitle($this->setting('installation_title', 'Omeka S'))->setSeparator(
 // $this->headLink()->appendStylesheet($this->assetUrl('css/style.css', 'Omeka'));
 $this->headLink()->appendStylesheet($this->assetUrl('css/custom-bootstrap.css'));
 $this->headLink()->appendStylesheet($this->assetUrl('css/main.css'));
-// $this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
-//   '',
-//   [
-//     'integrity' => 'sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC',
-//     'crossorigin' => 'anonymous'
-//   ]
-// );
 $this->headScript()->prependFile($this->assetUrl('vendor/jquery/jquery.min.js', 'Omeka'));
 $this->headScript()->appendFile($this->assetUrl('js/global.js', 'Omeka'));
 $this->headScript()->appendFile(
@@ -26,15 +19,31 @@ $this->headScript()->appendFile(
   ]
 );
 
+$favicon = array(
+  'rel' => 'shortcut',
+  'href' => $this->assetUrl('favicon.ico')
+);
+
+$appTouch = array(
+  'rel' => 'apple-touch-icon',
+  'href' => $this->assetUrl('icon.jpg')
+);
+
+$webManifest = array(
+  'rel' => 'manifest',
+  'href' => $this->assetUrl('site.manifest')
+);
+
+$this->headLink($favicon);
+$this->headLink($appTouch);
+$this->headLink($webManifest);
+
 $this->headScript()->appendFile('https://kit.fontawesome.com/ca0736de6c.js', 'text/javascript', ['crossorigin' => "anonymous"]);
 
 $this->trigger('view.layout');
 $userBar = $this->userBar();
 
-// $favicon = array(
-//   'rel' => 'shortcut',
-//   'href' => $this->assetUrl('favicon.ico')
-// );
+
 ?>
 <?php echo $this->doctype(); ?>
 <?php echo $this->htmlElement('html')->setAttribute('lang', $this->lang()); ?>
