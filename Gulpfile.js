@@ -33,7 +33,19 @@ function serve() {
   gulp.watch("**/*.php").on('change', browserSync.reload);
 }
 
-exports.default = gulp.series(sass, serve);
+function vendor() {
+  return gulp.src([
+    'node_modules/bootstrap/dist/js/bootstrap.bundle.js',
+    'node_modules/bootstrap/dist/js/bootstrap.bundle.js.map',
+    'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
+    'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js.map'
+  ])
+  .pipe(gulp.dest('asset/js/vendor/bootstrap'))
+  .pipe(browserSync.stream());
+}
+
+exports.default = gulp.series(sass, serve, vendor);
 
 gulp.task('sass', sass);
+gulp.task('vendor', vendor);
 gulp.task('serve', gulp.series('sass', serve));

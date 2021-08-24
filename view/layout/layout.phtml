@@ -10,14 +10,15 @@ $this->headLink()->appendStylesheet($this->assetUrl('css/custom-bootstrap.css'))
 $this->headLink()->appendStylesheet($this->assetUrl('css/main.css'));
 $this->headScript()->prependFile($this->assetUrl('vendor/jquery/jquery.min.js', 'Omeka'));
 $this->headScript()->appendFile($this->assetUrl('js/global.js', 'Omeka'));
-$this->headScript()->appendFile(
-  'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js',
-  'text/javascript',
-  [
-    'integrity' => "sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM",
-    'crossorigin' => 'anonymous'
-  ]
-);
+$this->headScript()->appendFile($this->assetUrl('js/vendor/bootstrap/bootstrap.bundle.min.js'));
+// $this->headScript()->appendFile(
+//   'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js',
+//   'text/javascript',
+//   [
+//     'integrity' => "sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM",
+//     'crossorigin' => 'anonymous'
+//   ]
+// );
 
 $favicon = array(
   'rel' => 'shortcut',
@@ -26,12 +27,12 @@ $favicon = array(
 
 $appTouch = array(
   'rel' => 'apple-touch-icon',
-  'href' => $this->assetUrl('icon.jpg')
+  'href' => $this->assetUrl('icon.png')
 );
 
 $webManifest = array(
   'rel' => 'manifest',
-  'href' => $this->assetUrl('site.manifest')
+  'href' => $this->assetUrl('site.webmanifest')
 );
 
 $this->headLink($favicon);

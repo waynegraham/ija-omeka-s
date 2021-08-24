@@ -14,12 +14,24 @@
   }
 }
 
-header {
-  border-bottom: 8px solid $primary;
+// @see https://codepen.io/simonli/pen/qppeER
+.breakout {
+  width: 100vw;
+  position: relative;
+  left: calc(-1 * (100vw - 100%) / 2);
+  color: rgba(0,0,0,.6);
+}
+
+.light-bg {
+  background-color: #f8f9fa;
 }
 
 main {
   @include clearfix;
+}
+
+header {
+  border-bottom: 8px solid $primary;
 }
 
 .mirador {

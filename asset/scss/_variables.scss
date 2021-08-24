@@ -17,6 +17,9 @@ $light: #F8F9FA;
 // $link-color: $primary;
 // $link-hover-color: lighten($link-color, 95%);
 
+// https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss#L52
+$font-size-base: 1.25rem; // builds up difference between Helvetica and Source Code
+
 $font-family-sans-serif: 'Source Sans Pro', sans-serif;
 $font-family-serif: 'Merriweather', serif;
 
