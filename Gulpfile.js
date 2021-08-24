@@ -35,6 +35,8 @@ function serve() {
 
 function vendor() {
   return gulp.src([
+    'node_modules/bootstrap/dist/js/bootstrap.js',
+    'node_modules/bootstrap/dist/js/bootstrap.js.map',
     'node_modules/bootstrap/dist/js/bootstrap.bundle.js',
     'node_modules/bootstrap/dist/js/bootstrap.bundle.js.map',
     'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
