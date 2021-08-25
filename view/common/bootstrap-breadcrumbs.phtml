@@ -1,7 +1,7 @@
 <?php $container = $this->navigation()->breadcrumbs()  ?>
 <?php $navigation = $container->getContainer() ?>
 <!-- view/common/bootstrap-breadcrumbs.html -->
-<nav aria-label="breadcrumb">
+<nav class="pt-3" aria-label="breadcrumb">
   <ol class="breadcrumb">
     <?php foreach($this->pages as $page): ?>
         <?php if( ! $page->isActive()): ?>
