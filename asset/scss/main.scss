@@ -43,7 +43,7 @@
 
   p {
     font-size: 24px;
-    color: #f5f5f5;
+    color: $light;
     text-align: center;
     line-height:60px;
   }
@@ -51,10 +51,6 @@
 
 .parallax1 {
   background-image: url("https://ijarchive.org/sites/default/files/siegfreid-wolff-letter-lg.jpg");
-}
-
-.parallax2 {
-  background-image: url("https://img.webnots.com/2017/05/parallax.jpg");
 }
 
 main {
