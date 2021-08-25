@@ -1,0 +1,11 @@
+<?php
+$translate = $this->plugin('translate');
+$prevText = $translate('« Prev ');
+$nextText = $translate('Next »');
+?>
+<?php if ($prevPage || $nextPage): ?>
+<div class="py-3 site-page-pagination">
+    <?php echo $prevPage ? $this->hyperlink($prevText, $prevPage->siteUrl(), ['class' => 'btn btn-primary']) : ''; ?>
+    <?php echo $nextPage ? $this->hyperlink($nextText, $nextPage->siteUrl(), ['class' => 'btn float-end btn-primary']) : ''; ?>
+</div>
+<?php endif; ?>
