@@ -5,13 +5,13 @@
 // https://getbootstrap.com/docs/5.1/customize/color/#color-sass-maps
 $theme-colors: (
   "primary":    $primary,
-  // "secondary":  $secondary,
-  // "success":    $success,
-  // "info":       $info,
-  // "warning":    $warning,
-  // "danger":     $danger,
+  "secondary":  $secondary,
+  "success":    $success,
+  "info":       $info,
+  "warning":    $warning,
+  "danger":     $danger,
   "light":      $light,
-  // "dark":       $dark
+  "dark":       $dark
 );
 
 // Required imports

@@ -8,6 +8,19 @@
 @import 'page';
 @import 'variables';
 
+footer {
+
+  a {
+    color: #fff;
+  }
+  // background: $primary;
+  // border-top: 1px solid darken($primary, .25);
+  //
+  // color: {
+  //   color: #d7d7d7;
+  // }
+}
+
 @for $i from 1 through 6 {
   h#{$i} {
     font-family: $font-family-serif;
@@ -84,13 +97,13 @@ header {
   a {
     font-size: 20px;
     display: inline-block;
-    color: $primary;
+    color: lighten($primary, 90%);
     line-height: 0;
     margin-right: 10px;
     transition: 0.3s;
 
     &:hover {
-      color: lighten($primary, 6.5%);
+      color: lighten($primary, 65%);
     }
   }
 }
