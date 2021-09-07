@@ -15,7 +15,7 @@ $activePage = $nav->findActive($container);
 
 <div class="row">
     <?php if ($activePage): ?>
-      <div class="col-md-3 col-sm-12 pt-3 light-bg">
+      <div class="col-md-3 pt-3 light-bg">
         <nav class="sub-menu"><?php echo $nav->menu()->renderSubMenu(); ?></nav>
       </div>
     <?php endif; ?>
