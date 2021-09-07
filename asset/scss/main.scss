@@ -66,6 +66,46 @@ footer {
   background-image: url("https://ijarchive.org/sites/default/files/siegfreid-wolff-letter-lg.jpg");
 }
 
+.related_materials {
+  background: #f2f1ef url('../images/sidebar-bg.jpg') repeat-x top center;
+  // width: 168px;
+  float: right;
+  padding: 20px 20px 8px 20px;
+  margin: 0 0 30px 30px;
+  border: 1px solid #acacac;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.28);
+
+  h2 {
+    font-size: 16px;
+    color: #8a1f03;
+    padding-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  li {
+    padding: 0 0 12px 25px;
+    line-height: 115%;
+  }
+
+  .document {
+    background: url('../images/related-doc-icon.png') no-repeat 0 4px;
+  }
+
+  .web_page {
+    background: url('../images/related-page-icon.png') no-repeat 0 4px;
+  }
+}
+
+// page navigation
+.page-nav ul {
+  padding-bottom: 110px;
+  margin-bottom: 80px;
+  background-image: url('../images/mandala.png');
+  background-repeat: no-repeat;
+  background-position: bottom center;
+}
+
 main {
   @include clearfix;
 }
