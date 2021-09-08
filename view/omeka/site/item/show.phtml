@@ -38,10 +38,10 @@ function icon_map($record_type)
 <!-- view/omeka/site/item/show.phtml -->
 
 <div class="row title-bar auto">
-  <div class="col-1">
+  <div class="col-1 mx-4">
     <i class="<?php echo icon_map($item->value('ija:record_type'));?> fa-5x"></i>
   </div>
-  <div class="col-auto px-4">
+  <div class="col col-auto px-4">
     <?php if($item->value('ija:ija_number')): ?>
     <span class="small text-muted">IJA Number: <?php echo $item->value('ija:ija_number'); ?></span>
     <?php endif; ?>
