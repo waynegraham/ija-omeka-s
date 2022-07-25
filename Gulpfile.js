@@ -25,7 +25,7 @@ function serve() {
   browserSync.init({
     // server: "./",
     watch: true,
-    proxy: "localhost:8888/omeka-s/"
+    proxy: "localhost:8888/"
   });
 
   gulp.watch("**/*.scss", sass);

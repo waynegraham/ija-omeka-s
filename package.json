@@ -7,8 +7,11 @@
   "license": "Apache2",
   "private": true,
   "dependencies": {
+    "@popperjs/core": "^2.11.5",
+    "bootstrap": "^5.1.0"
+  },
+  "devDependencies": {
     "autoprefixer": "^10.2.6",
-    "bootstrap": "^5.1.0",
     "browser-sync": "^2.26.14",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
@@ -16,6 +19,9 @@
     "gulp-load-plugins": "^2.0.7",
     "gulp-postcss": "^9.0.0",
     "gulp-sass": "^4.1.0",
-    "postcss": "^8.3.0"
-  }
+    "gulp-yarn": "^3.0.0",
+    "postcss": "^8.3.0",
+    "sass": "^1.54.0"
+  },
+  "packageManager": "yarn@3.2.2"
 }
