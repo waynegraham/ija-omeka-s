@@ -3,22 +3,31 @@ const browserSync   = require('browser-sync').create();
 const $             = require('gulp-load-plugins')();
 const autoprefixer  = require('autoprefixer');
 
+const sass = require('gulp-sass')(require('sass'));
+
 const sassPaths = [
   ''
 ];
 
-function sass() {
+function scss() {
   return gulp.src('asset/scss/*.scss')
-    .pipe($.sass({
-      includePaths: sassPaths,
-      outputStyle: 'compressed' // if css compressed **file size**
-    })
-      .on('error', $.sass.logError))
-    .pipe($.postcss([
-      autoprefixer()
-    ]))
+    .pipe(sass({
+      includePaths: sassPaths, 
+      outputStyle: 'compressed'
+    }).on('error', sass.logError))
+    .pipe($.postcss([autoprefixer()]))
     .pipe(gulp.dest('asset/css'))
     .pipe(browserSync.stream());
+    // .pipe($.sass({
+    //   includePaths: sassPaths,
+    //   outputStyle: 'compressed' // if css compressed **file size**
+    // })
+    //   .on('error', $.sass.logError))
+    // .pipe($.postcss([
+    //   autoprefixer()
+    // ]))
+    // .pipe(gulp.dest('asset/css'))
+    // .pipe(browserSync.stream());
 };
 
 function serve() {
@@ -28,7 +37,7 @@ function serve() {
     proxy: "localhost:8888/"
   });
 
-  gulp.watch("**/*.scss", sass);
+  gulp.watch("**/*.scss", scss);
   gulp.watch("**/*.phtml").on('change', browserSync.reload);
   gulp.watch("**/*.php").on('change', browserSync.reload);
 }
@@ -50,6 +59,6 @@ function vendor() {
 
 exports.default = gulp.series(sass, serve, vendor);
 
-gulp.task('sass', sass);
+gulp.task('scss', scss);
 gulp.task('vendor', vendor);
-gulp.task('serve', gulp.series('sass', serve));
+gulp.task('serve', gulp.series('scss', serve));

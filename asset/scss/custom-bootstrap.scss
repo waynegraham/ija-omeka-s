@@ -1,5 +1,8 @@
 // @see https://getbootstrap.com/docs/5.1/customize/sass/
-@import '../../node_modules/bootstrap/scss/functions';
+@import "../../node_modules/bootstrap/scss/functions";
+// TODO: debug the inclusion of all of bootstrap
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
 @import 'variables';
 
 // https://getbootstrap.com/docs/5.1/customize/color/#color-sass-maps
