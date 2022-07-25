@@ -15,12 +15,12 @@ $activePage = $nav->findActive($container);
 
 <div class="row">
     <?php if ($activePage): ?>
-      <div class="col col-3 pt-3 light-bg page-nav">
+      <div class="col-sm-12 col-md-3 pt-3 light-bg page-nav">
         <nav class="sub-menu"><?php echo $nav->menu()->renderSubMenu(); ?></nav>
       </div>
     <?php endif; ?>
 
-  <div class="col">
+  <div class="col-sm-12 col-md-9">
     <?php $this->trigger('view.show.before'); ?>
     <div class="blocks mt-3 ps-2">
         <?php echo $this->content; ?>
