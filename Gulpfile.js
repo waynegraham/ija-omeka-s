@@ -18,16 +18,6 @@ function scss() {
     .pipe($.postcss([autoprefixer()]))
     .pipe(gulp.dest('asset/css'))
     .pipe(browserSync.stream());
-    // .pipe($.sass({
-    //   includePaths: sassPaths,
-    //   outputStyle: 'compressed' // if css compressed **file size**
-    // })
-    //   .on('error', $.sass.logError))
-    // .pipe($.postcss([
-    //   autoprefixer()
-    // ]))
-    // .pipe(gulp.dest('asset/css'))
-    // .pipe(browserSync.stream());
 };
 
 function serve() {
@@ -51,7 +41,9 @@ function vendor() {
     'node_modules/bootstrap/dist/js/bootstrap.bundle.js',
     'node_modules/bootstrap/dist/js/bootstrap.bundle.js.map',
     'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
-    'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js.map'
+    'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js.map',
+    'node_modules/@popperjs/core/dist/umd/popper.min.js',
+    'node_modules/@popperjs/core/dist/umd/popper.min.js.map'
   ])
   .pipe(gulp.dest('asset/js/vendor/bootstrap'))
   .pipe(browserSync.stream());
