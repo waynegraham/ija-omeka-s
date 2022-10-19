@@ -78,11 +78,13 @@ function icon_map($record_type)
     <div class="col col-md-auto">
       <div class="media-list">
           <?php foreach ($itemMedia as $media): ?>
+
               <?php
                 // TODO: see if there's an 'official' way to filter media files
-                if( mb_strpos($media->linkPretty(), '.pdf') ) {
+                if( mb_strpos($media->filename(), '.pdf') ) {
                   // echo image_decorator($media, 'Download Full Text');
                   $thumb = $media->thumbnailUrl('medium');
+
                   echo '<div class="card"><a target="_blank" href="' . $media->originalUrl() . '">
                     <img class="card-img-top" src="' . $thumb . '" alt="' . $media->displayTitle() . '" />
                     <div class="card-body">
