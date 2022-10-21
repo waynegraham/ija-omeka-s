@@ -8,8 +8,12 @@ switch ($searchType) {
     case 'sitewide':
     default:
         $searchAction = $this->url('site/resource', ['controller' => 'index', 'action' => 'search'], true);
+        // $searchAction = $this->url('site/resource', ['controller' => 'item'], true);
 }
 $searchValue = $this->escapeHtml($this->params()->fromQuery('fulltext_search', ''));
+  // http://localhost:8888/omeka-s/s/iraqi-jewish-archive/index/search?fulltext_search=book
+  // http://localhost:8888/omeka-s/s/iraqi-jewish-archive/item?fulltext_search=book
+
   // $search = $this->escapeHtml($this->url(null, ['action' => 'browse'], true));
   $search = $this->escapeHtml($searchAction);
 ?>
@@ -24,7 +28,7 @@ $searchValue = $this->escapeHtml($this->params()->fromQuery('fulltext_search', '
     </div>
     <button type="submit" class="btn btn-primary">
       <i class="fas fa-search"></i>
-      <?php //echo $translate('Search'); ?>
+      <span class="visually-hidden"><?php echo $translate('Search'); ?></span>
     </button>
   </div>
 </form>

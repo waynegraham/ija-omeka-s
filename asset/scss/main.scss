@@ -12,15 +12,14 @@
 footer {
 
   a {
-    color: #fff;
+    color: $light;
 
     &:hover {
-      color: #fff;
-      text-decoration: none;
+      color: darken($light, 50%);
+      // text-decoration: none;
     }
   }
 
-  
   // background: $primary;
   // border-top: 1px solid darken($primary, .25);
   //
