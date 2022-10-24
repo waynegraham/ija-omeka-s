@@ -109,7 +109,9 @@ function icon_map($record_type)
               Date: <?php echo $item->value('dcterms:date'); ?>
             <?php endif; ?>
             <?php if($item->value('ija:ija_number')): ?>
-              &middot;
+              <?php if($item->value('dcterms:date')): ?>
+                &middot;
+              <?php endif; ?>
               IJA Number: <?php echo $item->value('ija:ija_number'); ?>
             <?php endif; ?>
             <?php if($item->value('dcterms:language')): ?>
