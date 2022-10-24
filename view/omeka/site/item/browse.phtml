@@ -107,14 +107,14 @@ function icon_map($record_type)
           <div class="mb-1 text-muted">
             <?php if($item->value('dcterms:date')): ?>
               Date: <?php echo $item->value('dcterms:date'); ?>
-              &middot;
             <?php endif; ?>
             <?php if($item->value('ija:ija_number')): ?>
-              IJA Number: <?php echo $item->value('ija:ija_number'); ?>
               &middot;
+              IJA Number: <?php echo $item->value('ija:ija_number'); ?>
             <?php endif; ?>
             <?php if($item->value('dcterms:language')): ?>
-            Language: <?php echo $item->value('dcterms:language'); ?>
+              &middot;
+              Language: <?php echo $item->value('dcterms:language'); ?>
             <?php endif; ?>
           </div>
           <p class="card-text mb-auto">
