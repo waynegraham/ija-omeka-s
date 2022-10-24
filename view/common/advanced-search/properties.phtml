@@ -37,56 +37,58 @@ $queryText = function(array $search, $index) {
 
 <div id="property-queries" class="field removable multi-value" role="group" aria-labelledby="by-value-label">
     <div class="row">
-    <div class="field-meta">
-        <span id="by-value-label" class="label"><?php echo $translate('Search by value'); ?></span>
-        <button type="button" class="btn add-value o-icon-add button" aria-label="<?php echo $translate('Add new value'); ?>" title="<?php echo $translate('Add new value'); ?>">
-            <i class="fas fa-plus"></i>
-        </button>
-    </div>
-    <div class="inputs">
-        <?php
-        $index = 0;
-        foreach ($properties as $property):
-        $stem = "property[$index]";
-        ?>
-        <div class="value mb-2">
-
-                <select class="joiner form-select form-control" name="<?php echo $this->escapeHtml($stem . '[joiner]'); ?>">
-                    <?php echo $queryOption('and', $property, 'joiner', $translate('AND')); ?>
-                    <?php echo $queryOption('or', $property, 'joiner', $translate('OR')); ?>
-                </select>
-
-            <?php echo $this->propertySelect([
-                'name' => $stem . '[property]',
-                'attributes' => [
-                    'class' => 'form-select query-property',
-                    'value' => isset($property['property']) ? $property['property'] : null,
-                    'aria-label' => $translate('Property'),
-                ],
-                'options' => [
-                    'empty_option' => '[Any Property]', // @translate
-                    'apply_templates' => $this->status()->isSiteRequest() ? $this->siteSetting('search_apply_templates') : false,
-                ]
-            ]); ?>
-            <select class="form-select query-type form-control" name="<?php echo $this->escapeHtml($stem . '[type]'); ?>" aria-label="<?php echo $translate('Query type'); ?>">
-                <?php echo $queryOption('eq', $property, 'type', $translate('is exactly')); ?>
-                <?php echo $queryOption('neq', $property, 'type', $translate('is not exactly')); ?>
-                <?php echo $queryOption('in', $property, 'type', $translate('contains')); ?>
-                <?php echo $queryOption('nin', $property, 'type', $translate('does not contain')); ?>
-                <?php echo $queryOption('res', $property, 'type', $translate('is resource with ID')); ?>
-                <?php echo $queryOption('nres', $property, 'type', $translate('is not resource with ID')); ?>
-                <?php echo $queryOption('ex', $property, 'type', $translate('has any value')); ?>
-                <?php echo $queryOption('nex', $property, 'type', $translate('has no values')); ?>
-            </select>
-            <?php echo $queryText($property, $index); ?>
-            <button type="button" class="btn btn-danger remove-value button" aria-label="<?php echo $translate('Remove value'); ?>" title="<?php echo $translate('Remove value'); ?>">
-                <i class="fas fa-minus"></i>
+        <div class="field-meta">
+            <span id="by-value-label" class="label"><?php echo $translate('Search by value'); ?></span>
+            <button type="button" class="btn btn-primary-outline add-value o-icon-add button" aria-label="<?php echo $translate('Add new value'); ?>" title="<?php echo $translate('Add new value'); ?>">
+                <i class="fas fa-plus"></i>
             </button>
         </div>
-        <?php
-        $index++;
-        endforeach;
-        ?>
     </div>
+    <div class="row row-cols-lg-auto align-items-center">
+        <div class="inputs">
+            <?php
+            $index = 0;
+            foreach ($properties as $property):
+            $stem = "property[$index]";
+            ?>
+            <div class="value mb-2">
+
+                    <select class="joiner form-select form-control" name="<?php echo $this->escapeHtml($stem . '[joiner]'); ?>">
+                        <?php echo $queryOption('and', $property, 'joiner', $translate('AND')); ?>
+                        <?php echo $queryOption('or', $property, 'joiner', $translate('OR')); ?>
+                    </select>
+
+                <?php echo $this->propertySelect([
+                    'name' => $stem . '[property]',
+                    'attributes' => [
+                        'class' => 'form-select query-property',
+                        'value' => isset($property['property']) ? $property['property'] : null,
+                        'aria-label' => $translate('Property'),
+                    ],
+                    'options' => [
+                        'empty_option' => '[Any Property]', // @translate
+                        'apply_templates' => $this->status()->isSiteRequest() ? $this->siteSetting('search_apply_templates') : false,
+                    ]
+                ]); ?>
+                <select class="form-select query-type form-control" name="<?php echo $this->escapeHtml($stem . '[type]'); ?>" aria-label="<?php echo $translate('Query type'); ?>">
+                    <?php echo $queryOption('eq', $property, 'type', $translate('is exactly')); ?>
+                    <?php echo $queryOption('neq', $property, 'type', $translate('is not exactly')); ?>
+                    <?php echo $queryOption('in', $property, 'type', $translate('contains')); ?>
+                    <?php echo $queryOption('nin', $property, 'type', $translate('does not contain')); ?>
+                    <?php echo $queryOption('res', $property, 'type', $translate('is resource with ID')); ?>
+                    <?php echo $queryOption('nres', $property, 'type', $translate('is not resource with ID')); ?>
+                    <?php echo $queryOption('ex', $property, 'type', $translate('has any value')); ?>
+                    <?php echo $queryOption('nex', $property, 'type', $translate('has no values')); ?>
+                </select>
+                <?php echo $queryText($property, $index); ?>
+                <button type="button" class="btn btn-danger remove-value" aria-label="<?php echo $translate('Remove value'); ?>" title="<?php echo $translate('Remove value'); ?>">
+                    <i class="fas fa-minus"></i> <span class="visually-hidden"><?php echo $translate('Remove value'); ?></span>
+                </button>
+            </div>
+            <?php
+            $index++;
+            endforeach;
+            ?>
+        </div>
     </div>
 </div>
