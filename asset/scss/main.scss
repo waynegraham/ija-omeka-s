@@ -72,7 +72,9 @@ footer {
 }
 
 .parallax1 {
-  background-image: url("https://ijarchive.org/sites/default/files/siegfreid-wolff-letter-lg.jpg");
+  // background-image: url("../images/siegfreid-wolff-letter-lg.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../images/siegfreid-wolff-letter-lg.jpg");
+  // background-image: url("https://ijarchive.org/sites/default/files/siegfreid-wolff-letter-lg.jpg");
 }
 
 .related_materials {
