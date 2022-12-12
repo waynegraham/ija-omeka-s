@@ -1,8 +1,10 @@
 <?php
 $translate = $this->plugin('translate');
 $escape = $this->plugin('escapeHtml');
-// $this->headScript()->appendFile($this->assetUrl('js/browse.js'));
 $this->htmlElement('body')->appendAttribute('class', 'item resource browse');
+
+$filterLocale = (bool) $this->siteSetting('filter_locale_values');
+$lang = $this->lang();
 
 $query = $this->params()->fromQuery();
 $itemSetShow = isset($itemSet);
@@ -98,6 +100,7 @@ function icon_map($record_type)
     ?>
     <div class="col-md-6">
       <div class="card row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="row"></div>
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary">
             <i class="<?php echo icon_map($recordType); ?>"></i>

@@ -6,6 +6,9 @@ $this->htmlElement('body')->appendAttribute('class', 'item resource show');
 $embedMedia = $this->siteSetting('item_media_embed', false);
 $itemMedia = $item->media();
 
+$filterLocale = (bool) $this->siteSetting('filter_locale_values');
+$lang = $this->lang();
+
 // TODO refactor into shared functions
 function icon_map($record_type)
 {
@@ -143,3 +146,5 @@ endforeach;
    <?php echo $subjectValues; ?>
 </div>
 <?php endif; ?>
+
+<?php //$this->trigger('view.show.after'); ?>
