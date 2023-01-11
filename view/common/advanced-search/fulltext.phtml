@@ -4,5 +4,5 @@ $value = isset($query['fulltext_search']) ? $query['fulltext_search'] : null;
 <!-- view/common/advanced-search/fulltext.phtml -->
 <div class="mb-3 field">
   <label for="fulltext_search"><?php echo $this->translate('Search full-text'); ?></label>
-  <input type="text" class="form-control" id="fulltext_search"value="<?php echo $this->escapeHtml($value); ?>">
+  <input type="text" class="form-control" name="fulltext_search" id="fulltext_search"value="<?php echo $this->escapeHtml($value); ?>">
 </div>
