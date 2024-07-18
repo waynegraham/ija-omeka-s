@@ -1,6 +1,6 @@
 {
   "name": "ija-omeka-s-theme",
-  "version": "0.0.2",
+  "version": "2.0.0",
   "description": "Iraqi Jewish Archive Omeka S Theme",
   "main": "gulpfile.js",
   "author": "Iraqi Jewish Archive",
@@ -8,7 +8,7 @@
   "private": true,
   "dependencies": {
     "@popperjs/core": "^2.11.5",
-    "bootstrap": "^5.2.0"
+    "bootstrap": "^5.3.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
