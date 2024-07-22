@@ -132,8 +132,9 @@ function icon_map($record_type)
           <?php echo $item->link('View Item', null, ['class' => 'streched-link']); ?>
         </div>
         <div class="col-auto d-none d-lg-block">
-          <?php if ($thumbnail = $this->thumbnail($item, 'medium')): ?>
-            <?php echo $item->linkRaw($thumbnail, null, ['class' => 'img-thumbnail', 'width' => 200, 'height' => 250]); ?>
+          <?php if ($thumbnail = $this->thumbnail($item, 'medium', ['class' => 'img-thumbnail m-2'])): ?>
+            <?php // 'width' => 200, 'height' => 250 taken from thumbnail options ?>
+            <?php echo $item->linkRaw($thumbnail); ?>
           <?php endif; ?>
         </div>
       </div>
