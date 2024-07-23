@@ -1,6 +1,6 @@
 {
-    "name": "ija/omeke-s-theme",
-    "type": "ija-omeka-s-theme",
+    "name": "omeka-s-theme/ija",
+    "type": "omeka-s-theme",
     "require": {
         "omeka/omeka-s": "*"
     }
