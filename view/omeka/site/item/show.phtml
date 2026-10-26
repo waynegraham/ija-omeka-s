@@ -1,48 +1,16 @@
 <?php
 $translate = $this->plugin('translate');
 $escape = $this->plugin('escapeHtml');
-$labelInfo = $this->setting('property_label_information');
 $this->htmlElement('body')->appendAttribute('class', 'item resource show');
 $embedMedia = $this->siteSetting('item_media_embed', false);
 $itemMedia = $item->media();
 
-$filterLocale = (bool) $this->siteSetting('filter_locale_values');
-$lang = $this->lang();
-
-// TODO refactor into shared functions
-function icon_map($record_type)
-{
-  switch($record_type) {
-    case 'Books':
-      echo 'fas fa-book-open';
-      break;
-    case 'Fragments':
-      echo 'far fa-images';
-      break;
-    case 'Archival Materials':
-      echo('fas fa-archive');
-      break;
-    case 'Video':
-      echo('fab fa-youtube');
-      break;
-    case 'Other':
-      echo('far fa-folder');
-      break;
-    case 'Documentation':
-      echo('far fa-file-alt');
-      break;
-    case 'Photograph':
-      echo('far fa-image');
-      break;
-    default:
-      echo('far fa-file');
-  }}
 ?>
 <!-- view/omeka/site/item/show.phtml -->
 
 <div class="row title-bar auto">
   <div class="col-1 mx-4">
-    <i class="<?php echo icon_map($item->value('ija:record_type'));?> fa-5x"></i>
+    <i class="<?php echo $this->partial('common/record-type-icon', ['recordType' => $item->value('ija:record_type')]);?> fa-5x"></i>
   </div>
   <div class="col col-auto px-4">
     <?php if($item->value('ija:ija_number')): ?>
@@ -83,14 +51,15 @@ function icon_map($record_type)
           <?php foreach ($itemMedia as $media): ?>
 
               <?php
-                // TODO: see if there's an 'official' way to filter media files
-                if( mb_strpos($media->filename(), '.pdf') ) {
-                  // echo image_decorator($media, 'Download Full Text');
+                // URL and embed media may have no filename.
+                if ($media->mediaType() === 'application/pdf' || strtolower(pathinfo((string) $media->filename(), PATHINFO_EXTENSION)) === 'pdf') {
                   $thumb = $media->thumbnailUrl('medium');
 
-                  echo '<div class="card"><a target="_blank" href="' . $media->originalUrl() . '">
-                    <img class="card-img-top" src="' . $thumb . '" alt="' . $media->displayTitle() . '" />
-                    <div class="card-body">
+                  echo '<div class="card"><a target="_blank" rel="noopener" href="' . $escape($media->originalUrl()) . '">';
+                  if ($thumb) {
+                    echo '<img class="card-img-top" src="' . $escape($thumb) . '" alt="' . $escape($media->displayTitle()) . '" />';
+                  }
+                  echo '<div class="card-body">
                     <p class="card-text">
                       <span class="btn btn-outline-primary">Download Full Text</span>
                     </p>
@@ -109,31 +78,14 @@ function icon_map($record_type)
     </div>
   </div>
 
-</div>
-
 <?php if ($embedMedia && $itemMedia): ?>
 <div class="media-embeds">
-  media-embeds
 <?php foreach ($itemMedia as $media):
     echo $media->render();
 endforeach;
 ?>
 </div>
 <?php endif; ?>
-<!-- <?php if (!$embedMedia && $itemMedia): ?>
-<div class="media-list">
-    <?php foreach ($itemMedia as $media): ?>
-      <?php echo $item->value('ija:record_type'); ?>
-      <div class="ratio ratio-16x9">
-        <?php echo $media->render(['height' => '600', 'width' => '100%']); ?>
-      </div>
-
-        <?php //echo $media->linkPretty(); ?>
-    <?php endforeach; ?>
-</div>
-<?php endif; ?> -->
-
-
 
 <?php
    $page = $this->params()->fromQuery('page', 1);
@@ -146,5 +98,3 @@ endforeach;
    <?php echo $subjectValues; ?>
 </div>
 <?php endif; ?>
-
-<?php //$this->trigger('view.show.after'); ?>

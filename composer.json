@@ -1,7 +1,12 @@
 {
     "name": "ija/omeke-s-theme",
     "type": "ija-omeka-s-theme",
+    "license": "Apache-2.0",
     "require": {
-        "omeka/omeka-s": "*"
+        "php": "^8.1",
+        "omeka/omeka-s": "^4.0"
+    },
+    "scripts": {
+        "test": "@php tests/compatibility.php"
     }
 }

@@ -1,0 +1,12 @@
+<?php
+// Values are Omeka representations (or null); compare their string values.
+echo match ((string) $recordType) {
+    'Books' => 'fas fa-book-open',
+    'Fragments' => 'far fa-images',
+    'Archival Materials' => 'fas fa-archive',
+    'Video' => 'fab fa-youtube',
+    'Other' => 'far fa-folder',
+    'Documentation' => 'far fa-file-alt',
+    'Photograph' => 'far fa-image',
+    default => 'far fa-file',
+};

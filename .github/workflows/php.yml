@@ -1,0 +1,21 @@
+name: PHP compatibility
+
+on: [push, pull_request]
+
+jobs:
+  templates:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.1', '8.5']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring
+          coverage: none
+      - name: Check PHP and template syntax
+        run: find view tests -type f \( -name '*.php' -o -name '*.phtml' \) -print0 | xargs -0 -n 1 php -l
+      - name: Run template regression tests with E_ALL
+        run: php tests/compatibility.php

@@ -36,7 +36,7 @@ $sortHeadings = [
     ],
     [
         'label' => $translate('Date'),
-        'value' => 'dctersm:date'
+        'value' => 'dcterms:date'
     ],
     [
         'label' => $translate('Language'),
@@ -44,34 +44,6 @@ $sortHeadings = [
     ],
 ];
 
-function icon_map($record_type)
-{
-  switch($record_type) {
-    case 'Books':
-      echo 'fas fa-book-open';
-      break;
-    case 'Fragments':
-      echo 'far fa-images';
-      break;
-    case 'Archival Materials':
-      echo('fas fa-archive');
-      break;
-    case 'Video':
-      echo('fab fa-youtube');
-      break;
-    case 'Other':
-      echo('far fa-folder');
-      break;
-    case 'Documentation':
-      echo('far fa-file-alt');
-      break;
-    case 'Photograph':
-      echo('far fa-image');
-      break;
-    default:
-      echo('far fa-file');
-  }
-}
 ?>
 <!-- view/omeka/site/item/browse.phtml -->
 
@@ -85,7 +57,7 @@ function icon_map($record_type)
     <?php echo $this->hyperlink($translate('Advanced search'), $this->url('site/resource', ['controller' => 'item', 'action' => 'search'], ['query' => $query], true), ['class' => 'advanced-search']); ?>
   </div>
   <div class="col-md-4 col-sm-6">
-    <?php echo $this->sortSelector($sortHeadings); ?>
+    <?php echo $this->browse()->renderSortSelector(array_column($sortHeadings, 'label', 'value')); ?>
   </div>
 </div>
 
@@ -103,7 +75,7 @@ function icon_map($record_type)
         <div class="row"></div>
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary">
-            <i class="<?php echo icon_map($recordType); ?>"></i>
+            <i class="<?php echo $this->partial('common/record-type-icon', ['recordType' => $recordType]); ?>"></i>
             <?php echo $recordType; ?>
           </strong>
           <h3 class="mb-0"><?php echo $heading; ?></h3>

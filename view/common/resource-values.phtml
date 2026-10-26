@@ -6,7 +6,7 @@ $labelInfo = $this->setting('property_label_information');
 if ($this->status()->isSiteRequest()) {
   $showLocale = (bool) $this->siteSetting('show_locale_label', true);
   $filterLocale = $this->siteSetting('filter_locale_values');
-  $lang = $this->lang();
+  $lang = (string) $this->lang();
   $showValueAnnotations = (bool) $this->siteSetting('show_value_annotations', false);
 } else {
   $showLocale = true;
@@ -20,7 +20,7 @@ if ($this->status()->isSiteRequest()) {
 <dl class="row dl-invert mt-5">
   <?php foreach ($values as $term => $propertyData): ?>
     <dt class="col-sm-4 term">
-    <?php if ($propertyData['alternate_label']): ?>
+    <?php if (!empty($propertyData['alternate_label'])): ?>
         <?php echo $escape($propertyData['alternate_label']); ?>
         <?php else: ?>
         <?php echo $escape($translate($propertyData['property']->label())); ?>
@@ -35,7 +35,7 @@ if ($this->status()->isSiteRequest()) {
     <?php foreach ($propertyData['values'] as $value): ?>
             <?php
             $valueType = $value->type();
-            $valueLang = $value->lang();
+            $valueLang = (string) $value->lang();
             $valueAnnotation = $value->valueAnnotation();
             $class = ['value'];
             if ('resource' == $valueType || strpos($valueType, 'resource') !== false) {

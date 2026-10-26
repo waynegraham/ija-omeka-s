@@ -1,7 +1,7 @@
 <?php
 // @see https://github.com/fabiopaiva/zf2-navigation-bootstrap3
 // Updated for Bootstrap 5
-/* @var $container Zend\Navigation\Navigation */
+/* @var $container Laminas\Navigation\Navigation */
 $container = $this->container;
 $ulClass= 'navbar-nav me-auto mb-2 mb-md-0';
 ?>
@@ -9,7 +9,7 @@ $ulClass= 'navbar-nav me-auto mb-2 mb-md-0';
 <ul class="<?php echo $ulClass; ?>">
     <?php foreach ($container as $page): ?>
         <?php if (!$this->navigation()->accept($page)) continue; ?>
-        <?php /* @var $page Zend\Navigation\Page\Mvc */ ?>
+        <?php /* @var $page Laminas\Navigation\Page\Mvc */ ?>
         <?php $hasChildren = $page->hasPages() ?>
         <?php if (!$hasChildren): ?>
             <li class="nav-item">

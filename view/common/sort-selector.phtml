@@ -6,11 +6,11 @@ $escape = $this->plugin('escapeHtml');
 <form class="sorting" action="">
   <div class="form-row row">
     <div class="col">
-      <?php echo $this->queryToHiddenInputs(['sort_by', 'sort_order']); ?>
+      <?php echo $this->queryToHiddenInputs(['sort_by', 'sort_order', 'sort_by_default', 'sort_order_default']); ?>
       <select class="form-select" name="sort_by" aria-label="<?php echo $translate('Sort by'); ?>">
-      <?php foreach($sortBy as $sortByHeading): ?>
-          <?php $selected = ($sortByQuery === $sortByHeading['value']) ? 'selected' : ''; ?>
-          <option value="<?php echo $escape($sortByHeading['value']); ?>" <?php echo $selected; ?>><?php echo $sortByHeading['label']; ?></option>
+      <?php foreach ($sortConfig as $sortBy => $label): ?>
+          <?php $selected = ($sortByQuery === $sortBy) ? 'selected' : ''; ?>
+          <option value="<?php echo $escape($sortBy); ?>" <?php echo $selected; ?>><?php echo $escape($label); ?></option>
       <?php endforeach; ?>
       </select>
     </div>

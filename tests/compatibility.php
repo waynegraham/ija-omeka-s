@@ -1,0 +1,140 @@
+<?php
+/** Run with PHP 8.5: php tests/compatibility.php */
+error_reporting(E_ALL);
+set_error_handler(static function ($severity, $message, $file, $line) {
+    throw new ErrorException($message, 0, $severity, $file, $line);
+});
+
+final class ThemeView
+{
+    public array $hiddenExclusions = [];
+    public array $events = [];
+
+    public function render(string $template, array $variables = []): string
+    {
+        extract($variables);
+        ob_start();
+        try {
+            include dirname(__DIR__) . '/view/' . $template . '.phtml';
+            return ob_get_contents();
+        } finally {
+            ob_end_clean();
+        }
+    }
+
+    public function plugin($name): Closure
+    {
+        return match ($name) {
+            'translate' => static fn ($value) => $value,
+            'escapeHtml' => static fn ($value) => htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8'),
+            default => throw new RuntimeException("Unexpected plugin: $name"),
+        };
+    }
+    public function escapeHtml($value): string { return ($this->plugin('escapeHtml'))($value); }
+    public function partial($template, $variables = []): string { return $this->render($template, $variables); }
+    public function setting(...$args) { return null; }
+    public function siteSetting($name, $default = null) { return $default; }
+    public function lang(): string { return 'en'; }
+    public function htmlElement($name): self { return $this; }
+    public function appendAttribute(...$args): self { return $this; }
+    public function pageTitle($title, $level = 2): string { return "<h$level>" . $this->escapeHtml($title) . "</h$level>"; }
+    public function params(): self { return $this; }
+    public function fromQuery($key = null, $default = null) { return $key === null ? [] : $default; }
+    public function trigger($name, ...$args): void { $this->events[] = $name; }
+    public function queryToHiddenInputs($exclude): string { $this->hiddenExclusions = $exclude; return ''; }
+}
+
+final class ThemeItem
+{
+    public function __construct(private array $media = [], private string|Stringable|null $type = null) {}
+    public function value($term) { return $term === 'ija:record_type' ? $this->type : null; }
+    public function media(): array { return $this->media; }
+    public function displayTitle(): string { return 'Test item'; }
+    public function displayValues(): string { return '<dl><dt>Title</dt><dd>Test item</dd></dl>'; }
+    public function displaySubjectValues(...$args): string { return ''; }
+}
+
+final class ThemeMedia
+{
+    public function __construct(private ?string $filename, private ?string $type) {}
+    public function filename(): ?string { return $this->filename; }
+    public function mediaType(): ?string { return $this->type; }
+    public function thumbnailUrl($size): ?string { return null; }
+    public function originalUrl(): string { return '/files/test.pdf'; }
+    public function displayTitle(): string { return 'A "PDF"'; }
+    public function render(...$args): string { return '<video></video>'; }
+}
+
+function check(bool $condition, string $message): void
+{
+    if (!$condition) {
+        throw new RuntimeException($message);
+    }
+}
+
+$tests = [
+    'Omeka 4 sort config renders escaped and selected options' => static function () {
+        $view = new ThemeView;
+        $html = $view->render('common/sort-selector', [
+            'sortConfig' => ['title' => 'Title', 'dcterms:date' => 'Date <new>'],
+            'sortByQuery' => 'dcterms:date', 'sortOrderQuery' => 'desc',
+        ]);
+        check(str_contains($html, 'value="dcterms:date" selected'), 'Selected sort is missing');
+        check(str_contains($html, 'Date &lt;new&gt;'), 'Sort label is not escaped');
+        check(in_array('sort_by_default', $view->hiddenExclusions, true), 'Default sort flag would override explicit selection');
+        check(in_array('sort_order_default', $view->hiddenExclusions, true), 'Default order flag would override explicit selection');
+    },
+    'URL media with no filename renders without PHP deprecations' => static function () {
+        $html = (new ThemeView)->render('omeka/site/item/show', [
+            'item' => new ThemeItem([new ThemeMedia(null, null)]),
+        ]);
+        check(str_contains($html, 'Test item'), 'Item did not render');
+        check(!str_contains($html, 'Download Full Text'), 'URL media treated as a PDF');
+    },
+    'PDF media identified by MIME type with nullable filename and thumbnail' => static function () {
+        $html = (new ThemeView)->render('omeka/site/item/show', [
+            'item' => new ThemeItem([new ThemeMedia(null, 'application/pdf')]),
+        ]);
+        check(str_contains($html, 'Download Full Text'), 'PDF download is missing');
+        check(!str_contains($html, 'src=""'), 'Missing thumbnail rendered as broken image');
+    },
+    'Templates may render multiple items in one request' => static function () {
+        $view = new ThemeView;
+        $html = $view->render('omeka/site/item/show', ['item' => new ThemeItem([], 'Books')]);
+        $html .= $view->render('omeka/site/item/show', ['item' => new ThemeItem([], 'Video')]);
+        check(str_contains($html, 'fas fa-book-open'), 'Book icon is missing');
+        check(str_contains($html, 'fab fa-youtube'), 'Video icon is missing');
+    },
+    'Record icons accept stringable Omeka values and missing values' => static function () {
+        $view = new ThemeView;
+        $value = new class implements Stringable {
+            public function __toString(): string { return 'Archival Materials'; }
+        };
+        check(trim($view->render('common/record-type-icon', ['recordType' => $value])) === 'fas fa-archive', 'Representation value did not resolve to archive icon');
+        check(trim($view->render('common/record-type-icon', ['recordType' => null])) === 'far fa-file', 'Missing value did not resolve to fallback icon');
+    },
+    'PDF filename fallback accepts uppercase extensions' => static function () {
+        $html = (new ThemeView)->render('omeka/site/item/show', [
+            'item' => new ThemeItem([new ThemeMedia('scan.PDF', null)]),
+        ]);
+        check(str_contains($html, 'Download Full Text'), 'Uppercase PDF download is missing');
+    },
+    'Video media renders once without executing hidden legacy embeds' => static function () {
+        $html = (new ThemeView)->render('omeka/site/item/show', [
+            'item' => new ThemeItem([new ThemeMedia(null, 'video/mp4')], 'Video'),
+        ]);
+        check(substr_count($html, '<video>') === 1, 'Media was rendered again inside an HTML comment');
+    },
+];
+
+$failed = 0;
+foreach ($tests as $name => $test) {
+    try {
+        $test();
+        echo "PASS: $name\n";
+    } catch (Throwable $error) {
+        $failed++;
+        echo "FAIL: $name: {$error->getMessage()}\n";
+    }
+}
+exit($failed ? 1 : 0);
