@@ -111,6 +111,12 @@ browse-preview components, locale filtering, property-label settings and module
 hooks. They were run locally with Omeka S 4.2.1 on PHP 8.5.12. A complete
 browser/database smoke test is still required for the deployed installation.
 
+For the page/sidebar layout regression, open
+`/themes/ija-omeka-s/tests/fixtures/sidebar-layout.html` on a local Omeka host.
+It should report **PASS: navigation and content stay side by side**. This browser
+fixture exercises the core Media Embed gallery's viewport-width sizing inside
+Bootstrap columns; it is a manual check, not part of the Node/PHP CI suites.
+
 When upgrading Omeka, compare overridden templates with the matching files in
 the core version, update the pinned CI archive/checksum, and run both PHP suites.
 Keep changes focused on the IJA layout and leave core helpers responsible for

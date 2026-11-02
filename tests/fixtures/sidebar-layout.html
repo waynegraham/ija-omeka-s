@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sidebar layout regression</title>
+  <link rel="stylesheet" href="/application/asset/css/page-blocks.css">
+  <link rel="stylesheet" href="../../asset/css/custom-bootstrap.css">
+  <link rel="stylesheet" href="../../asset/css/main.css">
+</head>
+<body>
+  <main class="container py-4">
+    <h1>Sidebar layout regression</h1>
+    <p>Serve this fixture within an Omeka installation. The navigation and content
+      must remain side by side, including when the content contains Omeka's
+      viewport-width media gallery.</p>
+    <output id="result" role="status">Checking layout…</output>
+    <div class="row mt-3">
+      <aside id="navigation" class="col-3 bg-light">Navigation column</aside>
+      <div id="content" class="col site-page-content">
+        <h2>Content column</h2>
+        <div class="blocks-inner page-layout-normal">
+          <div class="block block-media">
+            <div class="media-embed layout-horizontal multiple-attachments">
+              <div class="item resource"><h3>Gallery item one</h3></div>
+              <div class="item resource"><h3>Gallery item two</h3></div>
+              <div class="item resource"><h3>Gallery item three</h3></div>
+              <div class="item resource"><h3>Gallery item four</h3></div>
+              <div class="item resource"><h3>Gallery item five</h3></div>
+              <div class="item resource"><h3>Gallery item six</h3></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    function checkLayout() {
+      const gallery = document.querySelector('.media-embed');
+      if (getComputedStyle(gallery).display !== 'grid') {
+        const message = 'FAIL: core Media Embed stylesheet is not loaded';
+        document.getElementById('result').textContent = message;
+        document.title = message;
+        return;
+      }
+      const navigation = document.getElementById('navigation').getBoundingClientRect();
+      const content = document.getElementById('content').getBoundingClientRect();
+      const sideBySide = Math.abs(navigation.top - content.top) <= 1
+        && content.left >= navigation.right - 1;
+      const message = sideBySide
+        ? 'PASS: navigation and content stay side by side'
+        : 'FAIL: content wraps below navigation';
+      document.getElementById('result').textContent = message;
+      document.title = message;
+    }
+    window.addEventListener('load', checkLayout);
+    window.addEventListener('resize', checkLayout);
+  </script>
+</body>
+</html>

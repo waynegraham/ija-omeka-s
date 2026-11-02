@@ -3,6 +3,12 @@
 
 // From application/asset/sass/_screen.scss
 /* @group ----- Pages ----- */
+.site-page-content {
+  // Core media galleries use viewport widths. Allow this Bootstrap flex item to
+  // shrink to the available space rather than wrap below the navigation column.
+  min-width: 0;
+}
+
 .indent:before {
   content: "\2014";
   margin-right: -1px;

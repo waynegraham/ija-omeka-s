@@ -7,6 +7,8 @@ deployment record to establish publication or installation status.
 
 ### Fixed
 
+- Kept page content beside the navigation when a migrated Media Embed gallery
+  would otherwise force the Bootstrap content column onto a second row.
 - Restored Omeka's core page-block stylesheet in the custom page template so
   migrated Media Embed alignment and block-layout classes receive their styles.
 
