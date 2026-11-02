@@ -51,7 +51,7 @@ final class ThemeItem
     public function media(): array { return $this->media; }
     public function displayTitle(): string { return 'Test item'; }
     public function displayValues(): string { return '<dl><dt>Title</dt><dd>Test item</dd></dl>'; }
-    public function displaySubjectValues(...$args): string { return ''; }
+    public function displaySubjectValues(array $options = []): string { return ''; }
 }
 
 final class ThemeMedia
