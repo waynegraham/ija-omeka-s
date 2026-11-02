@@ -10,6 +10,9 @@ $escape = $this->plugin('escapeHtml');
 
 <ul class="resource-list preview">
 <?php
+$showThumbnail = in_array('thumbnail', $this->components);
+$showHeading = in_array('resource-heading', $this->components);
+$showBody = in_array('resource-body', $this->components);
 $headingTerm = $this->siteSetting('browse_heading_property_term');
 $bodyTerm = $this->siteSetting('browse_body_property_term');
 foreach ($this->resources as $resource):
@@ -17,9 +20,13 @@ foreach ($this->resources as $resource):
     $body = $bodyTerm ? $resource->value($bodyTerm) : $resource->displayDescription();
 ?>
     <li class="<?php echo $this->resourceType; ?> resource">
-        <?php echo $resource->linkRaw($this->thumbnail($resource, 'medium', ['title' => $heading])); ?>
+        <?php if ($showThumbnail): ?>
+        <?php echo $resource->linkRaw($this->thumbnail($resource, 'medium')); ?>
+        <?php endif; ?>
+        <?php if ($showHeading): ?>
         <h4><?php echo $resource->link($heading); ?></h4>
-        <?php if ($body): ?>
+        <?php endif; ?>
+        <?php if ($showBody && $body): ?>
         <div class="description"><?php echo $escape($body); ?></div>
         <?php endif; ?>
     </li>

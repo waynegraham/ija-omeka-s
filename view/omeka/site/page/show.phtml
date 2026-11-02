@@ -6,6 +6,16 @@ $showPagePagination = $this->siteSetting('show_page_pagination', true);
 $nav = $site->publicNav();
 $container = $nav->getContainer();
 $activePage = $nav->findActive($container);
+switch ($this->siteSetting('subnav_display')) {
+    case 'show':
+        $displaySubnav = $this->displayNavigation;
+        break;
+    case 'hide':
+        $displaySubnav = false;
+        break;
+    default:
+        $displaySubnav = $this->displayNavigation && $activePage && $activePage['page']->hasPages();
+}
 ?>
 <?php if ($activePage): ?>
     <?php if ($activePage['depth'] !== 0): ?>
@@ -14,7 +24,7 @@ $activePage = $nav->findActive($container);
 <?php endif; ?>
 <div class="container">
   <div class="row">
-      <?php if ($activePage): ?>
+      <?php if ($activePage && $displaySubnav): ?>
         <div class="col-3 pt-3 light-bg page-nav">
           <nav class="sub-menu"><?php echo $nav->menu()->renderSubMenu(); ?></nav>
         </div>

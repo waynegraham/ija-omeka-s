@@ -2,25 +2,25 @@
   "name": "ija-omeka-s-theme",
   "version": "0.1.0",
   "description": "Iraqi Jewish Archive Omeka S Theme",
-  "main": "gulpfile.js",
   "author": "Iraqi Jewish Archive",
   "license": "Apache2",
   "private": true,
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "build": "npm run build:css && npm run vendor",
+    "build:css": "node scripts/assets.js css",
+    "watch": "node scripts/assets.js watch",
+    "vendor": "node scripts/assets.js vendor"
+  },
   "dependencies": {
     "@popperjs/core": "^2.11.5",
     "bootstrap": "^5.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
-    "browser-sync": "^2.27.10",
-    "gulp": "^4.0.2",
-    "gulp-cli": "^2.3.0",
-    "gulp-livereload": "^4.0.2",
-    "gulp-load-plugins": "^2.0.7",
-    "gulp-postcss": "^9.0.0",
-    "gulp-sass": "^5.1.0",
     "postcss": "^8.4.14",
     "sass": "^1.54.0"
-  },
-  "packageManager": "yarn@3.2.2"
+  }
 }

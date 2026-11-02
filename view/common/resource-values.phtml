@@ -1,7 +1,7 @@
 <?php
 $translate = $this->plugin('translate');
 $escape = $this->plugin('escapeHtml');
-$labelInfo = $this->setting('property_label_information');
+$labelInfo = $this->fallbackSetting('property_label_information', ['site', 'global'], 'none');
 
 if ($this->status()->isSiteRequest()) {
   $showLocale = (bool) $this->siteSetting('show_locale_label', true);

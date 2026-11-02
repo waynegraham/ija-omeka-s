@@ -39,7 +39,7 @@ $helpers->setService('params', new FixtureHelper(static fn () => new class($quer
     public function __construct(private array $query) {}
     public function fromQuery($key = null, $default = null) { return $key === null ? $this->query : ($this->query[$key] ?? $default); }
 }));
-$helpers->setService('trigger', new FixtureHelper(static fn ($name, $args) => $args));
+$helpers->setService('trigger', new FixtureHelper(static fn ($name, $args = []) => $args));
 $helpers->setService('queryToHiddenInputs', new Omeka\View\Helper\QueryToHiddenInputs);
 $helpers->setService('formSelect', new Laminas\Form\View\Helper\FormSelect);
 
@@ -86,3 +86,120 @@ foreach (['browse_layout', 'truncate_body_property'] as $name) {
 verify(Composer\Semver\Semver::satisfies('4.0.0', $config['info']['omeka_version_constraint']), 'Omeka S 4.0 cannot select this theme');
 verify(Composer\Semver\Semver::satisfies('4.2.1', $config['info']['omeka_version_constraint']), 'Omeka S 4.2 cannot select this theme');
 echo "PASS: Theme metadata and configuration work with Omeka 4 and Laminas\n";
+
+// Keep rendering and fallback resolution real; substitute database-backed settings.
+$globalSettings = new class extends Omeka\Settings\Settings {
+    public array $values = [];
+    public function __construct() {}
+    public function get($id, $default = null) { return $this->values[$id] ?? $default; }
+};
+$siteSettings = new class extends Omeka\Settings\SiteSettings {
+    public array $values = [];
+    public function __construct() {}
+    public function get($id, $default = null, $targetId = null) { return $this->values[$id] ?? $default; }
+};
+$userSettings = new class extends Omeka\Settings\UserSettings {
+    public function __construct() {}
+};
+$helpers->setService('fallbackSetting', new Omeka\View\Helper\FallbackSetting(
+    new Omeka\Settings\FallbackSettings($globalSettings, $siteSettings, $userSettings)
+));
+$helpers->setService('setting', new FixtureHelper(static fn ($id, $default = null) => $globalSettings->get($id, $default)));
+$helpers->setService('siteSetting', new FixtureHelper(static fn ($id, $default = null) => $siteSettings->get($id, $default)));
+$helpers->setService('lang', new FixtureHelper(static fn () => 'en'));
+$helpers->setService('pageTitle', new FixtureHelper(static fn (...$args) => 'Page title'));
+$helpers->setService('htmlElement', new Omeka\View\Helper\HtmlElement);
+$navigation = new Laminas\View\Helper\Navigation;
+$navigation->setPluginManager(new Laminas\View\Helper\Navigation\PluginManager(new Laminas\ServiceManager\ServiceManager));
+$helpers->setService('navigation', $navigation);
+$helpers->setService('thumbnail', new FixtureHelper(static fn (...$args) => '<img src="thumbnail.jpg">'));
+foreach (['fallbackSetting', 'setting', 'siteSetting', 'lang', 'pageTitle', 'htmlElement', 'navigation', 'thumbnail'] as $name) {
+    $helpers->get($name)->setView($view);
+}
+
+$renderingTests = [
+    'Site property-label settings override global settings and fall back when absent' => static function () use ($view, $globalSettings, $siteSettings) {
+        $property = new class {
+            public function label() { return 'Title'; }
+            public function term() { return 'dcterms:title'; }
+            public function vocabulary() { return new class { public function label() { return 'Dublin Core'; } }; }
+        };
+        $variables = ['values' => ['dcterms:title' => ['property' => $property, 'alternate_label' => null, 'values' => []]]];
+        foreach ([
+            ['none', 'term', '(dcterms:title)'],
+            ['none', 'vocab', '(Dublin Core)'],
+            ['term', null, '(dcterms:title)'],
+            ['term', 'none', null],
+        ] as [$global, $site, $expected]) {
+            $globalSettings->values = ['property_label_information' => $global];
+            $siteSettings->values = ['property_label_information' => $site];
+            $html = $view->render('common/resource-values', $variables);
+            verify($expected === null ? !str_contains($html, 'field-term') : str_contains($html, $expected), 'Wrong property-label output for global=' . $global . ', site=' . ($site ?? 'unset'));
+        }
+    },
+    'Browse preview renders only the selected resource components' => static function () use ($view, $siteSettings) {
+        $siteSettings->values = [];
+        $resource = new class {
+            public function displayTitle() { return 'Preview title'; }
+            public function displayDescription() { return 'Preview description'; }
+            public function linkRaw($content, ...$args) { return '<a>' . $content . '</a>'; }
+            public function link($content, ...$args) { return '<a>' . $content . '</a>'; }
+        };
+        foreach ([
+            [['resource-heading'], false, true, false],
+            [['thumbnail'], true, false, false],
+            [['resource-body'], false, false, true],
+            [['thumbnail', 'resource-heading', 'resource-body'], true, true, true],
+        ] as [$components, $thumbnail, $heading, $body]) {
+            $html = $view->render('common/block-layout/browse-preview', [
+                'components' => $components, 'heading' => null, 'resources' => [$resource],
+                'resourceType' => 'item', 'linkText' => null,
+            ]);
+            verify(str_contains($html, '<img') === $thumbnail, 'Preview thumbnail selection ignored');
+            verify(str_contains($html, 'Preview title') === $heading, 'Preview heading selection ignored');
+            verify(str_contains($html, 'Preview description') === $body, 'Preview body selection ignored');
+        }
+    },
+    'Page subnavigation honors hidden, shown, leaf and navigation-disabled modes' => static function () use ($view, $siteSettings) {
+        $page = new class {
+            public function title() { return 'Example'; }
+            public function slug() { return 'example'; }
+        };
+        foreach ([
+            ['hide', true, true, false],
+            ['show', true, true, true],
+            [null, true, true, true],
+            [null, false, true, false],
+            ['show', true, false, false],
+        ] as [$mode, $hasChildren, $displayNavigation, $expected]) {
+            $siteSettings->values = ['subnav_display' => $mode, 'show_page_pagination' => false];
+            $container = new Laminas\Navigation\Navigation([[
+                'label' => 'Example', 'uri' => '/example', 'active' => true,
+                'pages' => $hasChildren ? [['label' => 'Child', 'uri' => '/child']] : [],
+            ]]);
+            $nav = $view->navigation($container);
+            $site = new class($nav) {
+                public function __construct(private object $nav) {}
+                public function publicNav() { return $this->nav; }
+            };
+            $html = $view->render('omeka/site/page/show', [
+                'site' => $site, 'page' => $page, 'content' => 'Page content',
+                'displayNavigation' => $displayNavigation,
+            ]);
+            verify(str_contains($html, 'class="sub-menu"') === $expected, 'Wrong subnavigation visibility for mode=' . ($mode ?? 'default'));
+            verify(str_contains($html, 'Page content'), 'Page content was lost');
+        }
+    },
+];
+
+$failed = 0;
+foreach ($renderingTests as $name => $test) {
+    try {
+        $test();
+        echo "PASS: $name\n";
+    } catch (Throwable $error) {
+        $failed++;
+        echo "FAIL: $name: {$error->getMessage()}\n";
+    }
+}
+exit($failed ? 1 : 0);

@@ -9,6 +9,7 @@ final class ThemeView
 {
     public array $hiddenExclusions = [];
     public array $events = [];
+    public array $siteSettings = [];
 
     public function render(string $template, array $variables = []): string
     {
@@ -33,7 +34,7 @@ final class ThemeView
     public function escapeHtml($value): string { return ($this->plugin('escapeHtml'))($value); }
     public function partial($template, $variables = []): string { return $this->render($template, $variables); }
     public function setting(...$args) { return null; }
-    public function siteSetting($name, $default = null) { return $default; }
+    public function siteSetting($name, $default = null) { return $this->siteSettings[$name] ?? $default; }
     public function lang(): string { return 'en'; }
     public function htmlElement($name): self { return $this; }
     public function appendAttribute(...$args): self { return $this; }
@@ -124,6 +125,23 @@ $tests = [
             'item' => new ThemeItem([new ThemeMedia(null, 'video/mp4')], 'Video'),
         ]);
         check(substr_count($html, '<video>') === 1, 'Media was rendered again inside an HTML comment');
+    },
+    'Video media renders once when item media embedding is enabled' => static function () {
+        $view = new ThemeView;
+        $view->siteSettings['item_media_embed'] = true;
+        $html = $view->render('omeka/site/item/show', [
+            'item' => new ThemeItem([new ThemeMedia(null, 'video/mp4')], 'Video'),
+        ]);
+        check(substr_count($html, '<video>') === 1, 'Video rendered in both preview and media embeds');
+    },
+    'Non-video items retain media embeds and preview integration' => static function () {
+        $view = new ThemeView;
+        $view->siteSettings['item_media_embed'] = true;
+        $html = $view->render('omeka/site/item/show', [
+            'item' => new ThemeItem([new ThemeMedia(null, 'application/pdf')], 'Books'),
+        ]);
+        check(substr_count($html, '<video>') === 1, 'Non-video item media embed is missing');
+        check(in_array('view.show.after', $view->events, true), 'Preview integration event is missing');
     },
 ];
 

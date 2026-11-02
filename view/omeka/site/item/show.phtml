@@ -4,6 +4,7 @@ $escape = $this->plugin('escapeHtml');
 $this->htmlElement('body')->appendAttribute('class', 'item resource show');
 $embedMedia = $this->siteSetting('item_media_embed', false);
 $itemMedia = $item->media();
+$isVideo = (string) $item->value('ija:record_type') === 'Video';
 
 ?>
 <!-- view/omeka/site/item/show.phtml -->
@@ -28,7 +29,7 @@ $itemMedia = $item->media();
 </div>
 
 <div class="row">
-    <?php if($item->value('ija:record_type') == 'Video'): ?>
+    <?php if ($isVideo): ?>
       <h2>View</h2>
       <?php foreach ($itemMedia as $media): ?>
         <div class="ratio ratio-16x9">
@@ -78,7 +79,7 @@ $itemMedia = $item->media();
     </div>
   </div>
 
-<?php if ($embedMedia && $itemMedia): ?>
+<?php if ($embedMedia && $itemMedia && !$isVideo): ?>
 <div class="media-embeds">
 <?php foreach ($itemMedia as $media):
     echo $media->render();
