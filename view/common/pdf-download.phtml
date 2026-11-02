@@ -1,0 +1,22 @@
+<?php
+$escape = $this->plugin('escapeHtml');
+$translate = $this->plugin('translate');
+// URL and embed media may have no filename.
+$isPdf = $media->mediaType() === 'application/pdf'
+    || strtolower(pathinfo((string) $media->filename(), PATHINFO_EXTENSION)) === 'pdf';
+?>
+<?php if ($isPdf): ?>
+<?php $thumbnail = $media->thumbnailUrl('medium'); ?>
+<div class="card">
+    <a target="_blank" rel="noopener" href="<?php echo $escape($media->originalUrl()); ?>">
+        <?php if ($thumbnail): ?>
+        <img class="card-img-top" src="<?php echo $escape($thumbnail); ?>" alt="<?php echo $escape($media->displayTitle()); ?>">
+        <?php endif; ?>
+        <div class="card-body">
+            <p class="card-text">
+                <span class="btn btn-outline-primary"><?php echo $escape($translate('Download Full Text')); ?></span>
+            </p>
+        </div>
+    </a>
+</div>
+<?php endif; ?>

@@ -5,18 +5,21 @@ const root = path.resolve(__dirname, '..');
 const scssDirectory = path.join(root, 'asset/scss');
 const cssDirectory = path.join(root, 'asset/css');
 
-function buildCss() {
+function buildCss(destinationDirectory = cssDirectory) {
   const sass = require('sass');
   const postcss = require('postcss');
   const autoprefixer = require('autoprefixer');
 
-  fs.mkdirSync(cssDirectory, { recursive: true });
+  fs.mkdirSync(destinationDirectory, { recursive: true });
   for (const file of fs.readdirSync(scssDirectory)) {
     if (!file.endsWith('.scss') || file.startsWith('_')) continue;
 
     const source = path.join(scssDirectory, file);
-    const destination = path.join(cssDirectory, file.replace(/\.scss$/, '.css'));
-    const compiled = sass.compile(source, { style: 'compressed', sourceMap: false });
+    const destination = path.join(destinationDirectory, file.replace(/\.scss$/, '.css'));
+    const compiled = sass.compile(source, {
+      style: 'compressed', sourceMap: false,
+      loadPaths: [path.join(root, 'node_modules')], quietDeps: true,
+    });
     const result = postcss([autoprefixer()]).process(compiled.css, {
       from: source,
       to: destination,
@@ -24,20 +27,17 @@ function buildCss() {
     });
     fs.writeFileSync(destination, result.css);
     for (const warning of result.warnings()) console.warn(warning.toString());
-    console.log(`Built ${path.relative(root, destination)}`);
+    console.log(`Built ${path.basename(destination)}`);
   }
 }
 
-function copyVendor() {
-  const destination = path.join(root, 'asset/js/vendor/bootstrap');
+function copyVendor(destination = path.join(root, 'asset/js/vendor/bootstrap')) {
   const bootstrap = path.dirname(require.resolve('bootstrap/package.json'));
   const popper = path.dirname(require.resolve('@popperjs/core/package.json'));
   fs.mkdirSync(destination, { recursive: true });
 
   for (const file of [
-    'bootstrap.js', 'bootstrap.js.map', 'bootstrap.min.js', 'bootstrap.min.js.map',
-    'bootstrap.bundle.js', 'bootstrap.bundle.js.map',
-    'bootstrap.bundle.min.js', 'bootstrap.bundle.min.js.map',
+    'bootstrap.min.js', 'bootstrap.min.js.map',
   ]) {
     fs.copyFileSync(path.join(bootstrap, 'dist/js', file), path.join(destination, file));
   }
@@ -47,7 +47,9 @@ function copyVendor() {
   console.log('Copied Bootstrap and Popper assets');
 }
 
-switch (process.argv[2]) {
+module.exports = { buildCss, copyVendor };
+
+if (require.main === module) switch (process.argv[2]) {
   case 'css':
     buildCss();
     break;

@@ -10,17 +10,19 @@
   },
   "scripts": {
     "build": "npm run build:css && npm run vendor",
+    "check:assets": "node scripts/check-assets.js",
+    "test": "node --test tests/assets.test.js",
     "build:css": "node scripts/assets.js css",
     "watch": "node scripts/assets.js watch",
     "vendor": "node scripts/assets.js vendor"
   },
   "dependencies": {
-    "@popperjs/core": "^2.11.5",
-    "bootstrap": "^5.2.0"
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.8"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.7",
-    "postcss": "^8.4.14",
-    "sass": "^1.54.0"
+    "autoprefixer": "^10.6.2",
+    "postcss": "^8.5.32",
+    "sass": "^1.107.1"
   }
 }

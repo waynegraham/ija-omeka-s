@@ -1,15 +1,11 @@
-// Main scss file
-//
-//
-@import 'https://fonts.googleapis.com/css2?family=Merriweather&family=Source+Sans+Pro&display=swap';
-
-@import 'omeka';
-@import 'mixins';
-@import 'page-blocks';
-@import 'page';
-@import 'variables';
-
-@import 'advanced-search';
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'fonts';
+@use 'omeka';
+@use 'page-blocks';
+@use 'page';
+@use 'advanced-search';
 
 footer {
 
@@ -17,16 +13,10 @@ footer {
     color: $light;
 
     &:hover {
-      color: darken($light, 50%);
-      // text-decoration: none;
+      color: color.adjust($light, $lightness: -50%, $space: hsl);
     }
   }
-
-  // background: $primary;
-  // border-top: 1px solid darken($primary, .25);
   //
-  // color: {
-  //   color: #d7d7d7;
   // }
 }
 
@@ -72,14 +62,11 @@ footer {
 }
 
 .parallax1 {
-  // background-image: url("../images/siegfreid-wolff-letter-lg.jpg");
   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../images/siegfreid-wolff-letter-lg.jpg");
-  // background-image: url("https://ijarchive.org/sites/default/files/siegfreid-wolff-letter-lg.jpg");
 }
 
 .related_materials {
   background: #f2f1ef url('../images/sidebar-bg.jpg') repeat-x top center;
-  // width: 168px;
   float: right;
   padding: 20px 20px 8px 20px;
   margin: 0 0 30px 30px;
@@ -121,16 +108,6 @@ main {
   @include clearfix;
 }
 
-main {
-  // background-color: $primary;
-  // background-color: #002b5c;
-  // background-image: url('../images/exhibit-panel-texture.png');
-  // background-image: url('../images/sidebar-bg.jpg');
-  // background-repeat: repeat;
-  // background-repeat: repeat-x, repeat-y;
-  // background-position: bottom left, top left;
-  // height: 151px;
-}
 
 header {
   border-bottom: 8px solid $primary;
@@ -140,7 +117,6 @@ header {
   display: block;
   width: 100%;
   height: 600px;
-  // margin: 1em 5%;
   position: relative;
 }
 
@@ -148,13 +124,13 @@ header {
   a {
     font-size: 20px;
     display: inline-block;
-    color: lighten($primary, 90%);
+    color: color.to-gamut(color.adjust($primary, $lightness: 90%, $space: hsl), $space: rgb, $method: clip);
     line-height: 0;
     margin-right: 10px;
     transition: 0.3s;
 
     &:hover {
-      color: lighten($primary, 65%);
+      color: color.adjust($primary, $lightness: 65%, $space: hsl);
     }
   }
 }
@@ -167,7 +143,6 @@ header {
 .title-bar {
   h1 { color: $heading-color; }
   i {
-    // color: $hover-color;
     color: $heading-color;
   }
   h2 {

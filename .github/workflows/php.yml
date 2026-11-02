@@ -13,9 +13,32 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring
+          extensions: mbstring, pdo_mysql, xml
           coverage: none
       - name: Check PHP and template syntax
         run: find view tests -type f \( -name '*.php' -o -name '*.phtml' \) -print0 | xargs -0 -n 1 php -l
       - name: Run template regression tests with E_ALL
         run: php tests/compatibility.php
+      - name: Download pinned Omeka S integration fixture
+        env:
+          OMEKA_VERSION: '4.2.1'
+          OMEKA_SHA256: cc27d1c7aca0209523d19aa285f4a08e29e34950dcc446951a7c1311de348e82
+        run: |
+          curl --fail --location --retry 3 "https://github.com/omeka/omeka-s/releases/download/v${OMEKA_VERSION}/omeka-s-${OMEKA_VERSION}.zip" -o "$RUNNER_TEMP/omeka.zip"
+          echo "$OMEKA_SHA256  $RUNNER_TEMP/omeka.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/omeka.zip" -d "$RUNNER_TEMP/omeka"
+      - name: Run integration regressions against Omeka S 4.2.1
+        run: php tests/omeka-integration.php "$RUNNER_TEMP/omeka/omeka-s"
+
+  assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Verify committed CSS and vendor JavaScript
+        run: npm run check:assets

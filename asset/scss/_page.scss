@@ -1,4 +1,5 @@
-@import 'variables';
+@use 'sass:color';
+@use 'variables' as *;
 
 // From application/asset/sass/_screen.scss
 /* @group ----- Pages ----- */
@@ -15,7 +16,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  background-color: opacify($gray-on-white, .08);
+  background-color: color.adjust($gray-on-white, $alpha: .08);
   padding: $spacing-small;
   font-weight: bold;
 }

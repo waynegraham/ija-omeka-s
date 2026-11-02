@@ -5,7 +5,6 @@
 
 // Default variable overrides
 $primary: #002B5C;
-// $secondary: #9EADC8;
 $secondary: #57B8FF;
 $success: #03cea4;
 $danger: #D90429;
@@ -13,14 +12,6 @@ $warning: #ECA400;
 $info: #57B8FF;
 $light: #F8F9FA;
 $dark: $primary;
-// $brand-primary: darken($primary, 6.5%) !default;
-// $danger: $red;
-// $link-hover-decoration: underline !default;
-
-
-
-// $link-color: $primary;
-// $link-hover-color: lighten($link-color, 95%);
 
 // https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss#L52
 $font-size-base: 1.25rem; // builds up difference between Helvetica and Source Code

@@ -1,5 +1,5 @@
 // foundation-s/asset/scss/_omeka
-@import 'variables';
+@use 'variables' as *;
 
 .description {
   &.ellipsis {

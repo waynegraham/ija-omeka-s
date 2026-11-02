@@ -79,7 +79,7 @@ echo "PASS: Advanced sorting renders through Laminas for items, item sets and me
 $config = (new Laminas\Config\Reader\Ini)->fromFile(dirname(__DIR__) . '/config/theme.ini');
 $form = new Laminas\Form\Form;
 $form->getFormFactory()->setFormElementManager(new Laminas\Form\FormElementManager(new Laminas\ServiceManager\ServiceManager));
-foreach (['browse_layout', 'truncate_body_property'] as $name) {
+foreach (['truncate_body_property'] as $name) {
     $form->add($config['config']['elements'][$name]);
     verify($form->get($name) instanceof Laminas\Form\Element\Select, 'Theme setting must resolve to a Laminas select');
 }
@@ -109,15 +109,42 @@ $helpers->setService('siteSetting', new FixtureHelper(static fn ($id, $default =
 $helpers->setService('lang', new FixtureHelper(static fn () => 'en'));
 $helpers->setService('pageTitle', new FixtureHelper(static fn (...$args) => 'Page title'));
 $helpers->setService('htmlElement', new Omeka\View\Helper\HtmlElement);
+$helpers->setService('hyperlink', new Omeka\View\Helper\Hyperlink);
 $navigation = new Laminas\View\Helper\Navigation;
 $navigation->setPluginManager(new Laminas\View\Helper\Navigation\PluginManager(new Laminas\ServiceManager\ServiceManager));
 $helpers->setService('navigation', $navigation);
 $helpers->setService('thumbnail', new FixtureHelper(static fn (...$args) => '<img src="thumbnail.jpg">'));
-foreach (['fallbackSetting', 'setting', 'siteSetting', 'lang', 'pageTitle', 'htmlElement', 'navigation', 'thumbnail'] as $name) {
+$helpers->setService('themeSetting', new FixtureHelper(static fn ($id) => null));
+$helpers->setService('searchFilters', new FixtureHelper(static fn () => ''));
+$helpers->setService('pagination', new FixtureHelper(static fn () => ''));
+$helpers->setService('url', new FixtureHelper(static fn (...$args) => '/items/search'));
+foreach (['fallbackSetting', 'setting', 'siteSetting', 'lang', 'pageTitle', 'htmlElement', 'hyperlink', 'navigation', 'thumbnail', 'themeSetting', 'searchFilters', 'pagination', 'url'] as $name) {
     $helpers->get($name)->setView($view);
 }
 
 $renderingTests = [
+    'Browse cards have valid description containers and preserve module hooks' => static function () use ($view, $helpers, $siteSettings) {
+        $siteSettings->values = [];
+        $events = [];
+        $helpers->setAllowOverride(true);
+        $trigger = new FixtureHelper(static function ($name, $args = []) use (&$events) {
+            $events[] = $name;
+            return $args;
+        });
+        $trigger->setView($view);
+        $helpers->setService('trigger', $trigger);
+        $item = new class {
+            public function value($term) { return null; }
+            public function displayTitle() { return 'Browse title'; }
+            public function displayDescription() { return 'Browse description'; }
+            public function link($content, ...$args) { return '<a>' . $content . '</a>'; }
+            public function linkRaw($content, ...$args) { return '<a>' . $content . '</a>'; }
+        };
+        $html = $view->render('omeka/site/item/browse', ['items' => [$item]]);
+        verify(str_contains($html, 'Browse description'), 'Browse description is missing');
+        verify(!preg_match('/<p\b[^>]*>\s*<div\b/', $html), 'A paragraph contains a block-level description div');
+        verify(in_array('view.browse.before', $events, true) && in_array('view.browse.after', $events, true), 'Browse module hooks are missing');
+    },
     'Site property-label settings override global settings and fall back when absent' => static function () use ($view, $globalSettings, $siteSettings) {
         $property = new class {
             public function label() { return 'Title'; }
@@ -160,6 +187,26 @@ $renderingTests = [
             verify(str_contains($html, 'Preview description') === $body, 'Preview body selection ignored');
         }
     },
+    'Browse and preview cards respect the locale filter setting' => static function () use ($view, $siteSettings) {
+        $item = new class {
+            public function value($term) { return null; }
+            public function displayTitle($default = null, $languages = null) { return $languages === ['en', ''] ? 'English title' : 'French title'; }
+            public function displayDescription($default = null, $languages = null) { return $languages === ['en', ''] ? 'English description' : 'French description'; }
+            public function link($content, ...$args) { return '<a>' . $content . '</a>'; }
+            public function linkRaw($content, ...$args) { return '<a>' . $content . '</a>'; }
+        };
+        foreach ([false, true] as $filterLocale) {
+            $siteSettings->values = ['filter_locale_values' => $filterLocale];
+            foreach (['omeka/site/item/browse', 'common/block-layout/browse-preview'] as $template) {
+                $html = $view->render($template, [
+                    'items' => [$item], 'resources' => [$item], 'resourceType' => 'item',
+                    'components' => ['resource-heading', 'resource-body'], 'heading' => null, 'linkText' => null,
+                ]);
+                verify(str_contains($html, $filterLocale ? 'English title' : 'French title'), 'Card title ignores locale filtering');
+                verify(str_contains($html, $filterLocale ? 'English description' : 'French description'), 'Card description ignores locale filtering');
+            }
+        }
+    },
     'Page subnavigation honors hidden, shown, leaf and navigation-disabled modes' => static function () use ($view, $siteSettings) {
         $page = new class {
             public function title() { return 'Example'; }
@@ -185,9 +232,11 @@ $renderingTests = [
             $html = $view->render('omeka/site/page/show', [
                 'site' => $site, 'page' => $page, 'content' => 'Page content',
                 'displayNavigation' => $displayNavigation,
+                'pageBodyClass' => 'page custom-layout site-page-example',
             ]);
             verify(str_contains($html, 'class="sub-menu"') === $expected, 'Wrong subnavigation visibility for mode=' . ($mode ?? 'default'));
             verify(str_contains($html, 'Page content'), 'Page content was lost');
+            verify(str_contains((string) $view->htmlElement('body'), 'custom-layout'), 'Configured page body class was lost');
         }
     },
 ];

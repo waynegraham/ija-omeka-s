@@ -143,6 +143,13 @@ $tests = [
         check(substr_count($html, '<video>') === 1, 'Non-video item media embed is missing');
         check(in_array('view.show.after', $view->events, true), 'Preview integration event is missing');
     },
+    'Item before-show event is available to modules for every record type' => static function () {
+        foreach (['Books', 'Video', null] as $type) {
+            $view = new ThemeView;
+            $view->render('omeka/site/item/show', ['item' => new ThemeItem([], $type)]);
+            check(($view->events[0] ?? null) === 'view.show.before', 'Before-show event is missing or occurs after the preview event');
+        }
+    },
 ];
 
 $failed = 0;

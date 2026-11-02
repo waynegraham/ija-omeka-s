@@ -1,13 +1,12 @@
 <?php
 $translate = $this->plugin('translate');
-$escape = $this->plugin('escapeHtml');
 $this->htmlElement('body')->appendAttribute('class', 'item resource show');
 $embedMedia = $this->siteSetting('item_media_embed', false);
 $itemMedia = $item->media();
 $isVideo = (string) $item->value('ija:record_type') === 'Video';
 
 ?>
-<!-- view/omeka/site/item/show.phtml -->
+<?php $this->trigger('view.show.before'); ?>
 
 <div class="row title-bar auto">
   <div class="col-1 mx-4">
@@ -46,28 +45,11 @@ $isVideo = (string) $item->value('ija:record_type') === 'Video';
 <div id="ija_metadata">
   <div class="row">
     <?php if (!$embedMedia && $itemMedia): ?>
-      <!-- if anything in itemMedia contains a PDF, add a new column -->
     <div class="col col-md-auto">
       <div class="media-list">
           <?php foreach ($itemMedia as $media): ?>
 
-              <?php
-                // URL and embed media may have no filename.
-                if ($media->mediaType() === 'application/pdf' || strtolower(pathinfo((string) $media->filename(), PATHINFO_EXTENSION)) === 'pdf') {
-                  $thumb = $media->thumbnailUrl('medium');
-
-                  echo '<div class="card"><a target="_blank" rel="noopener" href="' . $escape($media->originalUrl()) . '">';
-                  if ($thumb) {
-                    echo '<img class="card-img-top" src="' . $escape($thumb) . '" alt="' . $escape($media->displayTitle()) . '" />';
-                  }
-                  echo '<div class="card-body">
-                    <p class="card-text">
-                      <span class="btn btn-outline-primary">Download Full Text</span>
-                    </p>
-                    </div>
-                  </a></div>';
-                }
-              ?>
+              <?php echo $this->partial('common/pdf-download', ['media' => $media]); ?>
           <?php endforeach; ?>
       </div>
     </div>
