@@ -118,7 +118,7 @@ $helpers->setService('themeSetting', new FixtureHelper(static fn ($id) => null))
 $helpers->setService('searchFilters', new FixtureHelper(static fn () => ''));
 $helpers->setService('pagination', new FixtureHelper(static fn () => ''));
 $helpers->setService('url', new FixtureHelper(static fn (...$args) => '/items/search'));
-$helpers->setService('assetUrl', new FixtureHelper(static fn ($file) => '/theme/asset/' . $file));
+$helpers->setService('assetUrl', new FixtureHelper(static fn ($file, $module = null) => ($module === 'Omeka' ? '/application/asset/' : '/theme/asset/') . $file));
 $helpers->setService('propertySelect', new FixtureHelper(static fn (...$args) => '<select></select>'));
 foreach (['fallbackSetting', 'setting', 'siteSetting', 'lang', 'pageTitle', 'htmlElement', 'hyperlink', 'navigation', 'thumbnail', 'themeSetting', 'searchFilters', 'pagination', 'url', 'assetUrl', 'propertySelect'] as $name) {
     $helpers->get($name)->setView($view);
@@ -259,6 +259,7 @@ $renderingTests = [
             verify(str_contains($html, 'class="sub-menu"') === $expected, 'Wrong subnavigation visibility for mode=' . ($mode ?? 'default'));
             verify(str_contains($html, 'Page content'), 'Page content was lost');
             verify(str_contains((string) $view->htmlElement('body'), 'custom-layout'), 'Configured page body class was lost');
+            verify(str_contains(html_entity_decode((string) $view->headLink(), ENT_QUOTES, 'UTF-8'), '/application/asset/css/page-blocks.css'), 'Core page-block stylesheet was not enqueued');
         }
     },
 ];

@@ -5,6 +5,11 @@ deployment record to establish publication or installation status.
 
 ## Unreleased
 
+### Fixed
+
+- Restored Omeka's core page-block stylesheet in the custom page template so
+  migrated Media Embed alignment and block-layout classes receive their styles.
+
 ### Changed
 
 - Replaced Font Awesome font classes and the remote kit with locally generated SVG

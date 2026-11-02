@@ -15,6 +15,7 @@ this repository. Keeping this folder alone is not a complete site backup.
 | Recreate representative records | [Sample records](docs/sample-records.md) |
 | Understand a template override | [Override inventory](docs/overrides.md) |
 | Compare the visual appearance | [Screenshot protocol](docs/screenshots/README.md) |
+| Find production/beta pages for a comparison audit | [Discovered URL pairs](docs/audit/discovery.md) |
 | Prepare, deploy or roll back a release | [Release checklist](docs/releases.md) |
 | Understand previous changes | [Changelog](CHANGELOG.md) |
 
