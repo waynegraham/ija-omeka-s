@@ -39,8 +39,8 @@ $queryText = function(array $search, $index) {
     <div class="row">
         <div class="field-meta">
             <span id="by-value-label" class="label"><?php echo $translate('Search by value'); ?></span>
-            <button type="button" class="btn btn-primary-outline add-value o-icon-add button" aria-label="<?php echo $translate('Add new value'); ?>" title="<?php echo $translate('Add new value'); ?>">
-                <i class="fas fa-plus"></i>
+            <button type="button" class="btn btn-primary-outline add-value button" aria-label="<?php echo $translate('Add new value'); ?>" title="<?php echo $translate('Add new value'); ?>">
+                <?php echo $this->partial('common/icon', ['icon' => 'plus']); ?>
             </button>
         </div>
     </div>
@@ -82,7 +82,7 @@ $queryText = function(array $search, $index) {
                 </select>
                 <?php echo $queryText($property, $index); ?>
                 <button type="button" class="btn btn-danger remove-value" aria-label="<?php echo $translate('Remove value'); ?>" title="<?php echo $translate('Remove value'); ?>">
-                    <i class="fas fa-minus"></i> <span class="visually-hidden"><?php echo $translate('Remove value'); ?></span>
+                    <?php echo $this->partial('common/icon', ['icon' => 'minus']); ?> <span class="visually-hidden"><?php echo $translate('Remove value'); ?></span>
                 </button>
             </div>
             <?php

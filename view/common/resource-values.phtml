@@ -52,11 +52,11 @@ if ($this->status()->isSiteRequest()) {
                 <?php endif; ?>
                 <span class="value-content"><?php echo $filterLocale ? $value->asHtml($lang) : $value->asHtml(); ?></span>
                 <?php if(!$value->isPublic()): ?>
-                    <span class="fa-solid fa-eye-slash" aria-role="tooltip" title="<?php echo $this->escapeHtml($translate('Private')); ?>" aria-label="<?php echo $this->escapeHtml($translate('Private')); ?>"></span>
+                    <span role="img" title="<?php echo $escape($translate('Private')); ?>" aria-label="<?php echo $escape($translate('Private')); ?>"><?php echo $this->partial('common/icon', ['icon' => 'private']); ?></span>
                 <?php endif; ?>
                 <?php if ($valueAnnotation && $showValueAnnotations): ?>
                     <a href="#" class="expand" aria-label="<?php echo $this->escapeHtml($translate('Expand')); ?>">
-                        <span class="has-annotation fa-solid fa-message" aria-role="tooltip" title="<?php echo $this->escapeHtml($translate('Has annotation')); ?>" aria-label="<?php echo $this->escapeHtml($translate('Has annotation')); ?>"></span>
+                        <span class="has-annotation" title="<?php echo $escape($translate('Has annotation')); ?>"><?php echo $this->partial('common/icon', ['icon' => 'annotation']); ?></span>
                     </a>
                     <div class="collapsible annotation">
                         <?php echo $valueAnnotation->displayValues(); ?>

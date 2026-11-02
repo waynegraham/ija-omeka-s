@@ -32,7 +32,8 @@ These have no matching core template at the recorded baseline:
 | --- | --- |
 | `common/bootstrap-navigation.phtml` | Laminas navigation rendered with Bootstrap dropdowns plus header search |
 | `common/bootstrap-breadcrumbs.phtml` | Bootstrap breadcrumb markup supplied with navigation pages |
-| `common/record-type-icon.phtml` | Literal IJA record-type-to-icon mapping, including generic fallback |
+| `common/record-type-icon.phtml` | Literal IJA record-type-to-SVG mapping, including generic fallback |
+| `common/icon.phtml` | Decorative SVG referencing the local sprite; shared sizing and inherited text color |
 | `common/pdf-download.phtml` | PDF detection, nullable thumbnail and escaped download card |
 
 ## Review an upstream change

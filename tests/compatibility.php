@@ -33,6 +33,8 @@ final class ThemeView
     }
     public function escapeHtml($value): string { return ($this->plugin('escapeHtml'))($value); }
     public function partial($template, $variables = []): string { return $this->render($template, $variables); }
+    public function assetUrl($path): string { return '/theme/asset/' . $path; }
+    public function url(...$args): string { return '/search'; }
     public function setting(...$args) { return null; }
     public function siteSetting($name, $default = null) { return $this->siteSettings[$name] ?? $default; }
     public function lang(): string { return 'en'; }
@@ -103,16 +105,32 @@ $tests = [
         $view = new ThemeView;
         $html = $view->render('omeka/site/item/show', ['item' => new ThemeItem([], 'Books')]);
         $html .= $view->render('omeka/site/item/show', ['item' => new ThemeItem([], 'Video')]);
-        check(str_contains($html, 'fas fa-book-open'), 'Book icon is missing');
-        check(str_contains($html, 'fab fa-youtube'), 'Video icon is missing');
+        check(str_contains($html, '#book"'), 'Book SVG is missing');
+        check(str_contains($html, '#youtube"'), 'Video SVG is missing');
+        check(substr_count($html, '<svg') === 2, 'Record icons must render as SVG elements');
     },
     'Record icons accept stringable Omeka values and missing values' => static function () {
         $view = new ThemeView;
         $value = new class implements Stringable {
             public function __toString(): string { return 'Archival Materials'; }
         };
-        check(trim($view->render('common/record-type-icon', ['recordType' => $value])) === 'fas fa-archive', 'Representation value did not resolve to archive icon');
-        check(trim($view->render('common/record-type-icon', ['recordType' => null])) === 'far fa-file', 'Missing value did not resolve to fallback icon');
+        check(str_contains($view->render('common/record-type-icon', ['recordType' => $value]), '#archive"'), 'Representation value did not resolve to archive SVG');
+        check(str_contains($view->render('common/record-type-icon', ['recordType' => null]), '#file"'), 'Missing value did not resolve to fallback SVG');
+    },
+    'Record-type SVGs preserve every icon choice and hide decorative graphics' => static function () {
+        foreach (['Books' => 'book', 'Fragments' => 'images', 'Archival Materials' => 'archive',
+            'Video' => 'youtube', 'Other' => 'folder', 'Documentation' => 'file-text',
+            'Photograph' => 'image', 'Unknown' => 'file'] as $type => $icon) {
+            $html = (new ThemeView)->render('common/record-type-icon', ['recordType' => $type]);
+            check(str_contains($html, '<svg') && str_contains($html, '#' . $icon . '"'), 'Wrong SVG for ' . $type);
+            check(str_contains($html, 'aria-hidden="true"') && str_contains($html, 'focusable="false"'), 'Decorative icon is exposed to assistive technology');
+        }
+    },
+    'Header search uses a local SVG and retains its accessible button label' => static function () {
+        $html = (new ThemeView)->render('common/search-form');
+        check(str_contains($html, '<svg') && str_contains($html, '/theme/asset/icons/fontawesome.svg#search"'), 'Search SVG is missing');
+        check(str_contains($html, 'class="visually-hidden">Search</span>'), 'Search button label is missing');
+        check(!str_contains($html, '<i '), 'Legacy font icon remains in search button');
     },
     'PDF filename fallback accepts uppercase extensions' => static function () {
         $html = (new ThemeView)->render('omeka/site/item/show', [

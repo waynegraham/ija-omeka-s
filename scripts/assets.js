@@ -47,7 +47,31 @@ function copyVendor(destination = path.join(root, 'asset/js/vendor/bootstrap')) 
   console.log('Copied Bootstrap and Popper assets');
 }
 
-module.exports = { buildCss, copyVendor };
+function buildIcons(destination = path.join(root, 'asset/icons')) {
+  const fontawesome = path.dirname(require.resolve('@fortawesome/fontawesome-free/package.json'));
+  const icons = {
+    search: 'solid/magnifying-glass', plus: 'solid/plus', minus: 'solid/minus',
+    private: 'solid/eye-slash', annotation: 'solid/message',
+    book: 'solid/book-open', images: 'regular/images', archive: 'solid/box-archive',
+    youtube: 'brands/youtube', folder: 'regular/folder',
+    'file-text': 'regular/file-lines', image: 'regular/image', file: 'regular/file',
+  };
+  const symbols = Object.entries(icons).map(([id, source]) => {
+    const svg = fs.readFileSync(path.join(fontawesome, 'svgs', `${source}.svg`), 'utf8');
+    const match = svg.match(/^<svg[^>]*viewBox="([^"]+)"[^>]*>([\s\S]*)<\/svg>\s*$/);
+    if (!match) throw new Error(`Unexpected SVG format for ${source}`);
+    return `<symbol id="${id}" viewBox="${match[1]}">${match[2]}</symbol>`;
+  });
+  fs.mkdirSync(destination, { recursive: true });
+  fs.writeFileSync(path.join(destination, 'fontawesome.svg'),
+    '<svg xmlns="http://www.w3.org/2000/svg">\n'
+    + '<!-- Font Awesome Free icons converted to a symbol sprite; original attribution retained below. -->\n'
+    + symbols.join('\n') + '\n</svg>\n');
+  fs.copyFileSync(path.join(fontawesome, 'LICENSE.txt'), path.join(destination, 'LICENSE.txt'));
+  console.log('Built local Font Awesome SVG sprite');
+}
+
+module.exports = { buildCss, copyVendor, buildIcons };
 
 if (require.main === module) switch (process.argv[2]) {
   case 'css':
@@ -55,6 +79,9 @@ if (require.main === module) switch (process.argv[2]) {
     break;
   case 'vendor':
     copyVendor();
+    break;
+  case 'icons':
+    buildIcons();
     break;
   case 'watch': {
     const rebuild = () => {
@@ -75,6 +102,6 @@ if (require.main === module) switch (process.argv[2]) {
     break;
   }
   default:
-    console.error('Usage: node scripts/assets.js <css|vendor|watch>');
+    console.error('Usage: node scripts/assets.js <css|vendor|icons|watch>');
     process.exitCode = 1;
 }

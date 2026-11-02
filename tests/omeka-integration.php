@@ -118,11 +118,33 @@ $helpers->setService('themeSetting', new FixtureHelper(static fn ($id) => null))
 $helpers->setService('searchFilters', new FixtureHelper(static fn () => ''));
 $helpers->setService('pagination', new FixtureHelper(static fn () => ''));
 $helpers->setService('url', new FixtureHelper(static fn (...$args) => '/items/search'));
-foreach (['fallbackSetting', 'setting', 'siteSetting', 'lang', 'pageTitle', 'htmlElement', 'hyperlink', 'navigation', 'thumbnail', 'themeSetting', 'searchFilters', 'pagination', 'url'] as $name) {
+$helpers->setService('assetUrl', new FixtureHelper(static fn ($file) => '/theme/asset/' . $file));
+$helpers->setService('propertySelect', new FixtureHelper(static fn (...$args) => '<select></select>'));
+foreach (['fallbackSetting', 'setting', 'siteSetting', 'lang', 'pageTitle', 'htmlElement', 'hyperlink', 'navigation', 'thumbnail', 'themeSetting', 'searchFilters', 'pagination', 'url', 'assetUrl', 'propertySelect'] as $name) {
     $helpers->get($name)->setView($view);
 }
 
 $renderingTests = [
+    'Advanced search and metadata use SVG icons with accessible controls' => static function () use ($view, $siteSettings) {
+        $siteSettings->values = ['show_value_annotations' => true];
+        $html = $view->render('common/advanced-search/properties', ['query' => []]);
+        verify(str_contains($html, '#plus"') && str_contains($html, '#minus"'), 'Advanced search SVGs are missing');
+        verify(str_contains($html, 'aria-label="Add new value"') && str_contains($html, 'aria-label="Remove value"'), 'Search control labels are missing');
+        $property = new class { public function label() { return 'Title'; } };
+        $value = new class {
+            public function type() { return 'literal'; }
+            public function lang() { return null; }
+            public function valueAnnotation() { return new class { public function displayValues() { return 'Annotation text'; } }; }
+            public function asHtml() { return 'Private test title'; }
+            public function isPublic() { return false; }
+        };
+        $html = $view->render('common/resource-values', ['values' => [
+            'dcterms:title' => ['property' => $property, 'alternate_label' => null, 'values' => [$value]],
+        ]]);
+        verify(str_contains($html, '#private"') && str_contains($html, '#annotation"'), 'Metadata SVGs are missing');
+        verify(str_contains($html, 'aria-label="Private"') && str_contains($html, 'aria-label="Expand"'), 'Metadata icon labels are missing');
+        verify(str_contains($html, 'class="has-annotation"') && str_contains($html, 'class="collapsible annotation"'), 'Annotation toggle hooks were lost');
+    },
     'Browse cards have valid description containers and preserve module hooks' => static function () use ($view, $helpers, $siteSettings) {
         $siteSettings->values = [];
         $events = [];

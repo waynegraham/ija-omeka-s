@@ -52,9 +52,10 @@ refresh vendor assets, install Node.js 20.19 or newer, then run:
 ```sh
 npm ci
 npm run build:css  # Compile SCSS to compressed CSS and apply Autoprefixer
+npm run build:icons # Generate the local Font Awesome SVG sprite and license
 npm run watch      # Build CSS and rebuild when SCSS files change
 npm run vendor     # Copy installed Bootstrap and Popper JavaScript into asset/js/vendor/bootstrap
-npm run build      # Build CSS and copy vendor JavaScript
+npm run build      # Build CSS, vendor JavaScript and SVG icons
 npm run check:assets # Verify committed assets match a clean build without changing them
 npm test           # Test Sass compilation and asset-drift detection
 ```
@@ -66,7 +67,15 @@ assets alongside their source changes. Review vendor diffs when updating package
 Only the Bootstrap and Popper minified scripts loaded by the layout and their
 source maps are shipped. Use `npm ci` to reproduce the versions in the lockfile.
 When removing or renaming an output, delete the obsolete generated file as well;
-the asset check rejects extra files in the generated CSS/vendor directories.
+the asset check rejects extra files in the generated CSS/vendor/icon directories.
+
+Icons use a local SVG sprite generated from the pinned Font Awesome Free package.
+There is no remote Font Awesome kit, icon font or runtime icon-replacement script.
+Render icons through `common/icon` (or `common/record-type-icon` for item types).
+SVGs inherit text color and are decorative; keep an accessible name on their
+surrounding control or indicator. The generated sprite retains attribution and
+ships with `asset/icons/LICENSE.txt`. Update the curated icon list in
+`scripts/assets.js`, then rebuild when adding an icon.
 
 Theme-owned SCSS uses `@use` and the Sass color module. Bootstrap's internal legacy
 imports remain isolated behind `custom-bootstrap.scss`; dependency deprecations

@@ -40,6 +40,10 @@ this repository. Keeping this folder alone is not a complete site backup.
 - **Generated assets are shipped.** Edit SCSS, then build and commit CSS. Vendor
   scripts come from the npm lockfile. Bootstrap's legacy Sass stays inside its
   dependency boundary; theme styles use modules. Do not hand-edit generated files.
+- **Icons are self-hosted SVGs.** `common/icon` references a curated symbol in
+  `asset/icons/fontawesome.svg`; `common/record-type-icon` maps record types to those
+  symbols. `npm run build:icons` regenerates the sprite and license from the pinned
+  Font Awesome Free package. Keep its attribution and accessible control labels.
 
 ## Preview dependencies: what is actually known
 

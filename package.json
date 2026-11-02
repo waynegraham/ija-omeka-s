@@ -9,7 +9,8 @@
     "node": ">=20.19.0"
   },
   "scripts": {
-    "build": "npm run build:css && npm run vendor",
+    "build": "npm run build:css && npm run vendor && npm run build:icons",
+    "build:icons": "node scripts/assets.js icons",
     "check:assets": "node scripts/check-assets.js",
     "test": "node --test tests/assets.test.js",
     "build:css": "node scripts/assets.js css",
@@ -21,6 +22,7 @@
     "bootstrap": "^5.3.8"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "6.7.2",
     "autoprefixer": "^10.6.2",
     "postcss": "^8.5.32",
     "sass": "^1.107.1"

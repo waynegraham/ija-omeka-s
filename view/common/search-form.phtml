@@ -27,7 +27,7 @@ $searchValue = $this->escapeHtml($this->params()->fromQuery('fulltext_search', '
           aria-label="<?php echo $translate('Search'); ?>" class="form-text input-group-field">
     </div>
     <button type="submit" class="btn btn-primary">
-      <i class="fas fa-search"></i>
+      <?php echo $this->partial('common/icon', ['icon' => 'search']); ?>
       <span class="visually-hidden"><?php echo $translate('Search'); ?></span>
     </button>
   </div>

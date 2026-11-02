@@ -29,8 +29,6 @@ $this->headLink($favicon);
 $this->headLink($appTouch);
 $this->headLink($webManifest);
 
-$this->headScript()->appendFile('https://kit.fontawesome.com/ca0736de6c.js', 'text/javascript', ['crossorigin' => "anonymous"]);
-
 $this->trigger('view.layout');
 $userBar = $this->userBar();
 

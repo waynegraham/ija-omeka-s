@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { buildCss, copyVendor } = require('./assets');
+const { buildCss, copyVendor, buildIcons } = require('./assets');
 
 const root = path.resolve(__dirname, '..');
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'ija-assets-check-'));
@@ -10,7 +10,8 @@ let mismatches = 0;
 try {
   buildCss(path.join(temporary, 'css'));
   copyVendor(path.join(temporary, 'js/vendor/bootstrap'));
-  for (const directory of ['css', 'js/vendor/bootstrap']) {
+  buildIcons(path.join(temporary, 'icons'));
+  for (const directory of ['css', 'js/vendor/bootstrap', 'icons']) {
     const generated = path.join(temporary, directory);
     const committed = path.join(root, 'asset', directory);
     const files = new Set([

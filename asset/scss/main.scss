@@ -6,6 +6,7 @@
 @use 'page-blocks';
 @use 'page';
 @use 'advanced-search';
+@use 'icons';
 
 footer {
 
@@ -142,7 +143,7 @@ header {
 
 .title-bar {
   h1 { color: $heading-color; }
-  i {
+  .ija-icon {
     color: $heading-color;
   }
   h2 {

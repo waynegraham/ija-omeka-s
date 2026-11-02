@@ -1,0 +1,4 @@
+<?php $escape = $this->plugin('escapeHtml'); ?>
+<svg class="ija-icon<?php echo !empty($large) ? ' ija-icon--large' : ''; ?>" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <use href="<?php echo $escape($this->assetUrl('icons/fontawesome.svg') . '#' . $icon); ?>"></use>
+</svg>

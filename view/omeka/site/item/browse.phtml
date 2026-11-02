@@ -72,7 +72,7 @@ $sortHeadings = [
         <div class="row"></div>
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary">
-            <i class="<?php echo $this->partial('common/record-type-icon', ['recordType' => $recordType]); ?>"></i>
+            <?php echo $this->partial('common/record-type-icon', ['recordType' => $recordType]); ?>
             <?php echo $recordType; ?>
           </strong>
           <h3 class="mb-0"><?php echo $heading; ?></h3>

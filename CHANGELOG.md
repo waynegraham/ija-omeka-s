@@ -5,6 +5,12 @@ deployment record to establish publication or installation status.
 
 ## Unreleased
 
+### Changed
+
+- Replaced Font Awesome font classes and the remote kit with locally generated SVG
+  icons. Preserved accessible control labels, record-type choices and attribution.
+- Added SVG sprite/license generation to the asset build and reproducibility checks.
+
 ### Added
 
 - Maintenance guide, disposable local setup, template override inventory,
