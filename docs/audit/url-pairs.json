@@ -1,0 +1,568 @@
+{
+  "discovered_on": "2026-11-02",
+  "site_slug": "iraqi-jewish-archive",
+  "scope": "Public URL discovery, identity matching and HTTP/HTML checks only; no browser visual, interaction, accessibility or playback audit performed.",
+  "coverage_gaps": [
+    "No no-media items returned by beta site_id=1,has_media=0 query. Production Omeka API appears to ignore has_media=0, so that response was not used as evidence of no-media records.",
+    "Missing thumbnails and null stored filenames were not established from these public samples. Retain synthetic PHP fixtures for those edge cases."
+  ],
+  "pairs": [
+    {
+      "key": "home",
+      "label": "Home",
+      "coverage": [
+        "header search",
+        "navigation",
+        "content images",
+        "embedded video"
+      ],
+      "match": {
+        "method": "site slug and page slug",
+        "site_slug": "iraqi-jewish-archive",
+        "page_slug": "home"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/page/home",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/page/home",
+        "html_title": "Home · Iraqi Jewish Archive",
+        "bytes": 12002,
+        "sha256": "292a9e4993fa3abeead788f43cca08191d73c080f99477723e35132ba2b424ad",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/page/home",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/page/home",
+        "html_title": "Home · Iraqi Jewish Archive",
+        "bytes": 10473,
+        "sha256": "48c0e3a747dfe3fb2a01bea41a6099232bd017bdc6fb0928cd65e7d46b30b83d",
+        "server_error_text_detected": false,
+        "production_origin_links": [
+          "https://ijarchive.org/s/iraqi-jewish-archive/page/preservation-project"
+        ],
+        "production_origin_embeds": [
+          "https://ijarchive.org/files/large/09085a22169470ed0812c1ada608afc006bff06a.jpg"
+        ]
+      }
+    },
+    {
+      "key": "parent-page",
+      "label": "The Preservation Project",
+      "coverage": [
+        "parent subnavigation",
+        "content blocks"
+      ],
+      "match": {
+        "method": "site slug and page slug",
+        "site_slug": "iraqi-jewish-archive",
+        "page_slug": "preservation-project"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/page/preservation-project",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/page/preservation-project",
+        "html_title": "The Preservation Project · Iraqi Jewish Archive",
+        "bytes": 12351,
+        "sha256": "15412a232d0cd3857685972c70def1700e7dbd686f4336ad2b506d9ccdcfb3a8",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/page/preservation-project",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/page/preservation-project",
+        "html_title": "The Preservation Project · Iraqi Jewish Archive",
+        "bytes": 10923,
+        "sha256": "68df144b2710bcd3d99294f3e31d16e7ee2eed20674389c0ccb65898cf676404",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "child-page",
+      "label": "Recovery of Artifacts",
+      "coverage": [
+        "nested navigation",
+        "breadcrumbs",
+        "content images"
+      ],
+      "match": {
+        "method": "site slug and page slug",
+        "site_slug": "iraqi-jewish-archive",
+        "page_slug": "recovery-artifacts"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/page/recovery-artifacts",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/page/recovery-artifacts",
+        "html_title": "Recovery of Artifacts · Iraqi Jewish Archive",
+        "bytes": 26628,
+        "sha256": "998bd0ad808c7227452ca56d79054307be1100f2b12c03d368682739cebb3b47",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/page/recovery-artifacts",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/page/recovery-artifacts",
+        "html_title": "Recovery of Artifacts · Iraqi Jewish Archive",
+        "bytes": 24722,
+        "sha256": "9fe084d5b14047093d617bb68bcf7227ec4c43321f7fdf10e33bb398ecc23068",
+        "server_error_text_detected": false,
+        "production_origin_links": [
+          "https://ijarchive.org/files/original/695a7b637254b7dc8a081bd9b1eb311b19f020a0.pdf",
+          "https://ijarchive.org/files/original/fdb14e11b58e12ff466258a707fb225beb201e4d.pdf"
+        ],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "arabic-page",
+      "label": "Arabic exhibit introduction",
+      "coverage": [
+        "Arabic text",
+        "text direction",
+        "page blocks"
+      ],
+      "match": {
+        "method": "site slug and page slug",
+        "site_slug": "iraqi-jewish-archive",
+        "page_slug": "discovery-recovery-ar_iraqi-jewish-archive"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/page/discovery-recovery-ar_iraqi-jewish-archive",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/page/discovery-recovery-ar_iraqi-jewish-archive",
+        "html_title": "الاكتشاف وعملية الإنقاذ: الحفاظ على التراث اليهودي العراقي · Iraqi Jewish Archive",
+        "bytes": 9124,
+        "sha256": "8061611dac457f96696f6cbfc75c2116d7c5edbb11004a0d196bb3d965f717fd",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/page/discovery-recovery-ar_iraqi-jewish-archive",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/page/discovery-recovery-ar_iraqi-jewish-archive",
+        "html_title": "الاكتشاف وعملية الإنقاذ: الحفاظ على التراث اليهودي العراقي · Iraqi Jewish Archive",
+        "bytes": 7510,
+        "sha256": "bff80e319abf5dfe32ec0fcc0f180752dc405bbda92323cbd5f9515a34e15e01",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "browse",
+      "label": "Browse, page 1",
+      "coverage": [
+        "cards",
+        "record icons",
+        "sort controls",
+        "result totals"
+      ],
+      "match": {
+        "method": "same public route"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/item",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/item",
+        "html_title": "Iraqi Jewish Archive",
+        "bytes": 45810,
+        "sha256": "de94b5727aa88e95a9b5b3b4c7d3f07c97cb90d59958689c02110e22dd372d6f",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item",
+        "html_title": "Iraqi Jewish Archive",
+        "bytes": 181770,
+        "sha256": "f53586c06c03e816ae1671a2dc4e066dad97604e2f3e7eb4462b3d0b845584a1",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "browse-page-2",
+      "label": "Browse, page 2",
+      "coverage": [
+        "pagination",
+        "query preservation"
+      ],
+      "match": {
+        "method": "same public route and page number"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/item?page=2",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/item?page=2",
+        "html_title": "Iraqi Jewish Archive",
+        "bytes": 46771,
+        "sha256": "40573ee1a00d4331f1a3275969009aa015ca4abf325c5df26e1f7f45efd202a2",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item?page=2",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item?page=2",
+        "html_title": "Iraqi Jewish Archive",
+        "bytes": 195778,
+        "sha256": "eaa6796fd3307eeb9e2d703b088e2eb13c5efc6f27ca2337964ea25469c0a64a",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "advanced-search",
+      "label": "Advanced search",
+      "coverage": [
+        "property queries",
+        "add/remove controls",
+        "sort options"
+      ],
+      "match": {
+        "method": "same public route"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/item/search",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/item/search",
+        "html_title": "Iraqi Jewish Archive",
+        "bytes": 37808,
+        "sha256": "5bd700e09e61b59d2a3de50e1a70e5eb1d6d7b96dfc1d6eabed1ce79b6bb0a0e",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/search",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/search",
+        "html_title": "Iraqi Jewish Archive",
+        "bytes": 43919,
+        "sha256": "16557680e0ad1fca9ba20ae3d095cadef581b1d4c8d5d2677a72436906f396d9",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "search-results",
+      "label": "Sitewide search: book",
+      "coverage": [
+        "search submission",
+        "result groups",
+        "result links"
+      ],
+      "match": {
+        "method": "same public route and query"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/index/search?fulltext_search=book",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/index/search?fulltext_search=book",
+        "html_title": "Search results for “book” · Iraqi Jewish Archive",
+        "bytes": 11879,
+        "sha256": "acc39d78e782a610d14442711f1ab8bc3a3867ae5ab903d42ee0cfb253fdeea8",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/index/search?fulltext_search=book",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/index/search?fulltext_search=book",
+        "html_title": "Search results for “book” · Iraqi Jewish Archive",
+        "bytes": 10053,
+        "sha256": "83abe4795a977ff196897e723d115c479cd7e6fe2bff1b5c5292210ab9e0ff46",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "empty-search",
+      "label": "Sitewide search: no matches",
+      "coverage": [
+        "empty-results message"
+      ],
+      "match": {
+        "method": "same public route and query"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/index/search?fulltext_search=ijaauditnomatch20261102xyz",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/index/search?fulltext_search=ijaauditnomatch20261102xyz",
+        "html_title": "Search results for “ijaauditnomatch20261102xyz” · Iraqi Jewish Archive",
+        "bytes": 8747,
+        "sha256": "778294daff3a346302ecc454c8711febdd9335744113cd8d00a7e0cfd2a33457",
+        "server_error_text_detected": false,
+        "empty_result_message_present": true
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/index/search?fulltext_search=ijaauditnomatch20261102xyz",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/index/search?fulltext_search=ijaauditnomatch20261102xyz",
+        "html_title": "Search results for “ijaauditnomatch20261102xyz” · Iraqi Jewish Archive",
+        "bytes": 7006,
+        "sha256": "c16f289bc556a9168bb78b8f1345a4a6916db71183ad66a00fc4599193cb5770",
+        "server_error_text_detected": false,
+        "empty_result_message_present": true,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "item-set",
+      "label": "Iraqi Jewish Archive item set",
+      "coverage": [
+        "item-set page",
+        "collection browsing"
+      ],
+      "match": {
+        "method": "exact public item-set title",
+        "title": "Iraqi Jewish Archive"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/item-set/17227",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/item-set/17227",
+        "html_title": "Iraqi Jewish Archive",
+        "bytes": 10196,
+        "sha256": "330a41fda77e0cffa920c02ea60bdad681966620dc001cec0ff8173f5f3e0b29",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item-set/17227",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item-set/17227",
+        "html_title": "Iraqi Jewish Archive",
+        "bytes": 8873,
+        "sha256": "c1e05f588e3341d0bc642e425ae6f9dc5f8d86a2da97131ad58775c046670ebf",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "hebrew-book",
+      "label": "Hebrew-titled book",
+      "coverage": [
+        "Hebrew title",
+        "book icon",
+        "multi-image preview",
+        "metadata"
+      ],
+      "match": {
+        "method": "unique IJA number on each site, confirmed title",
+        "ija_number": "80",
+        "title": "מחזור לראש השנה"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/item/17159",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/item/17159",
+        "html_title": "מחזור לראש השנה · Iraqi Jewish Archive",
+        "bytes": 40468,
+        "sha256": "dec93162abf1208315284b895cc326789ec52e29951f5218065d6cf8be6f7c5e",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/17159",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/17159",
+        "html_title": "מחזור לראש השנה · Iraqi Jewish Archive",
+        "bytes": 32449,
+        "sha256": "09230f1dc6ae8ee58654842da0c8f7f957c95207453898ca96af3c6cd2e507b5",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "archival-item",
+      "label": "Archival map",
+      "coverage": [
+        "archive icon",
+        "image preview",
+        "metadata"
+      ],
+      "match": {
+        "method": "unique IJA number on each site, confirmed title",
+        "ija_number": "238",
+        "title": "Map: The World Series 1145"
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/item/1022",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/item/1022",
+        "html_title": "Map: The World Series 1145 · Iraqi Jewish Archive",
+        "bytes": 25924,
+        "sha256": "4022bf868e0ed2cecfc71f2d0a642347c7ae22634c2a99c35c7fa4d42c946c22",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/1022",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/1022",
+        "html_title": "Map: The World Series 1145 · Iraqi Jewish Archive",
+        "bytes": 22612,
+        "sha256": "99090c95175bc6b166eb539a8d691c9ae461a7fe336b248ae20d2f3b3a2a5d19",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "video",
+      "label": "YouTube video",
+      "coverage": [
+        "video rendering",
+        "player count",
+        "embedded media"
+      ],
+      "match": {
+        "method": "exact title on each site plus record type and media identity",
+        "title": "Conservation Lab at the National Archives at College Park",
+        "record_types": [
+          "Video"
+        ],
+        "media": [
+          {
+            "ingester": "youtube",
+            "media_type": null,
+            "source": "https://www.youtube.com/watch?v=Rzg_FYn_rZg",
+            "filename": "4e1328aab0b93c104121ec076404c86d8b016ed7"
+          }
+        ]
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/item/275",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/item/275",
+        "html_title": "Conservation Lab at the National Archives at College Park · Iraqi Jewish Archive",
+        "bytes": 12207,
+        "sha256": "b54f7981db0e2a802027e891229f4a9cb84dfee52f48c20dc1cb16b5b12a0228",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/275",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/275",
+        "html_title": "Conservation Lab at the National Archives at College Park · Iraqi Jewish Archive",
+        "bytes": 10283,
+        "sha256": "e2a1b61678a56af3d2c36b1904779eac18c403a8182478633e7e7515bf1d9660",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "photograph",
+      "label": "Photograph",
+      "coverage": [
+        "photograph icon",
+        "image preview"
+      ],
+      "match": {
+        "method": "exact title on each site plus record type and media identity",
+        "title": "Iraqi Jewish Archive books and documents awaiting preservation",
+        "record_types": [
+          "Photograph"
+        ],
+        "media": [
+          {
+            "ingester": "upload",
+            "media_type": "image/jpeg",
+            "source": "200DriedIraqiJewishArchive.JPG",
+            "filename": "1cd70dc0c7df1a2dcfd470598c9f083439f907b9.jpg"
+          }
+        ]
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/item/284",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/item/284",
+        "html_title": "Iraqi Jewish Archive books and documents awaiting preservation · Iraqi Jewish Archive",
+        "bytes": 15082,
+        "sha256": "7f3ca9554448fdaadb8ea1b48247add2414d2bf7fcbe75c605a4840b39260b8a",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/284",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/284",
+        "html_title": "Iraqi Jewish Archive books and documents awaiting preservation · Iraqi Jewish Archive",
+        "bytes": 12816,
+        "sha256": "4e6a32431c187c45885bdb7acc346ca7d99e1dff8e5ce0fe6ef1c9947cb295d5",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    },
+    {
+      "key": "pdf-document",
+      "label": "PDF document without an IJA number",
+      "coverage": [
+        "PDF download",
+        "thumbnail",
+        "fallback record icon"
+      ],
+      "match": {
+        "method": "exact title on each site plus record type and media identity",
+        "title": "2003 Memorandum of Agreement",
+        "record_types": [
+          "Document"
+        ],
+        "media": [
+          {
+            "ingester": "upload",
+            "media_type": "application/pdf",
+            "source": "MOA_CPA_NARA.pdf",
+            "filename": "fdb14e11b58e12ff466258a707fb225beb201e4d.pdf"
+          }
+        ]
+      },
+      "production": {
+        "url": "https://ijarchive.org/s/iraqi-jewish-archive/item/269",
+        "http_status": 200,
+        "final_url": "https://ijarchive.org/s/iraqi-jewish-archive/item/269",
+        "html_title": "2003 Memorandum of Agreement · Iraqi Jewish Archive",
+        "bytes": 14192,
+        "sha256": "1040ec5f398e99c69af99c471dc441eb384b06750529bd929e9db464f46bfbb6",
+        "server_error_text_detected": false
+      },
+      "beta": {
+        "url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/269",
+        "http_status": 200,
+        "final_url": "https://beta.ijarchive.org/s/iraqi-jewish-archive/item/269",
+        "html_title": "2003 Memorandum of Agreement · Iraqi Jewish Archive",
+        "bytes": 12169,
+        "sha256": "b045bb670d9b17d56f2fc76e891f631d3e958be027af1cfc23d521d5c094216d",
+        "server_error_text_detected": false,
+        "production_origin_links": [],
+        "production_origin_embeds": []
+      }
+    }
+  ],
+  "search_result_totals": {
+    "query": "book",
+    "production": {
+      "site_pages": 8,
+      "items": 2277
+    },
+    "beta": {
+      "site_pages": 8,
+      "items": 2277
+    },
+    "observation": "Visible ordering and sampled items differ; this is not yet classified as a regression."
+  },
+  "observed_homepage_asset_versions": {
+    "production": {
+      "theme_asset_query": null,
+      "core_asset_query": null
+    },
+    "beta": {
+      "theme_asset_query": null,
+      "core_asset_query": null
+    }
+  }
+}

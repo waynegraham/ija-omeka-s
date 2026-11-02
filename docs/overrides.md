@@ -12,7 +12,7 @@ every core feature is implemented. Recheck behavior as well as markup on upgrade
 | `omeka/site/item/browse.phtml` | Two-column cards and fixed IJA property sorts | Both browse hooks, item-set query context, locale filtering, Browse helper sort contract |
 | `omeka/site/item/search.phtml` | Bootstrap advanced-search form | GET submission, browse action, resource type and query propagation |
 | `omeka/site/index/search.phtml` | Sitewide results grouped by resource kind | Page title versus resource display title; full-text links and totals |
-| `omeka/site/page/show.phtml` | Bootstrap content/sidebar layout and breadcrumbs | Supplied page body classes, navigation visibility, content, hooks and page pagination |
+| `omeka/site/page/show.phtml` | Bootstrap content/sidebar layout and breadcrumbs | Core `page-blocks.css`, supplied page body classes, navigation visibility, content, hooks and page pagination |
 | `common/advanced-search.phtml` | Styled search assembly; resource-class partial intentionally omitted | Partial exclude list, resource-type branches, `view.advanced_search` filtering and core search JS |
 | `common/advanced-search/fulltext.phtml` | Bootstrap full-text input | Query value, escaping and input name |
 | `common/advanced-search/properties.phtml` | Bootstrap property-query rows | Core query names, joiners, property select and add/remove JS hooks; review newly added core operators |
