@@ -1,6 +1,6 @@
 # Iraqi Jewish Archive theme
 
-Version 0.1.0 targets **Omeka S 4.x** and **PHP 8.1–8.5**. This is an
+Version 2.0.1 targets **Omeka S 4.x** and **PHP 8.1–8.5**. This is an
 Omeka S theme; it is not for Omeka Classic. Compiled CSS and JavaScript are
 included, so no asset rebuild is needed for this compatibility upgrade.
 
@@ -27,7 +27,7 @@ global settings. Video items render their media once even when embedding is enab
    requirements; its PHP 8.5 checks do not certify the whole installation.
 3. Replace this theme's files in `themes/ija-omeka-s`, preserving the directory name
    so existing site assignments and saved theme settings continue to apply.
-4. Confirm version 0.1.0 appears under the site's Themes settings. Open and save
+4. Confirm version 2.0.1 appears under the site's Themes settings. Open and save
    the theme settings, checking the logo, header, footer and browse options.
 5. Check public navigation, site pages, full-text search, advanced property search,
    sorting, pagination, item-set browsing, and linked resources. Test items with
