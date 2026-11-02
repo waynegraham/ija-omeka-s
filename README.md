@@ -4,6 +4,10 @@ Version 2.0.1 targets **Omeka S 4.x** and **PHP 8.1–8.5**. This is an
 Omeka S theme; it is not for Omeka Classic. Compiled CSS and JavaScript are
 included, so no asset rebuild is needed for this compatibility upgrade.
 
+Returning to this project? Start with [MAINTENANCE.md](MAINTENANCE.md) for the
+architecture, setup, sample records, override inventory and release procedures.
+See [CHANGELOG.md](CHANGELOG.md) for recorded changes.
+
 The upgrade replaces legacy Zend form classes with Laminas, uses Omeka 4's
 `sortConfig` contract and Browse helper, and reads configured advanced-search
 sort options from Omeka. The IJA browse sorts are preserved, including a corrected

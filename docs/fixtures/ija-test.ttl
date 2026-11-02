@@ -1,0 +1,12 @@
+@prefix ija: <https://example.org/ija-test/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Synthetic vocabulary for a fresh, disposable database only.
+ija:record_type a rdf:Property ;
+    rdfs:label "Record Type"@en ;
+    rdfs:comment "Literal record type used by the IJA theme test fixtures."@en .
+
+ija:ija_number a rdf:Property ;
+    rdfs:label "IJA Number"@en ;
+    rdfs:comment "Synthetic identifier used by the IJA theme test fixtures."@en .

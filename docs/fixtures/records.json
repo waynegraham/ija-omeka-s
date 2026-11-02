@@ -1,0 +1,62 @@
+{
+  "description": "Synthetic manual fixture manifest; not an Omeka API payload.",
+  "records": [
+    {
+      "key": "book-pdf",
+      "values": {
+        "dcterms:title": "Synthetic book: a maintenance test",
+        "dcterms:description": "A made-up book for checking PDF downloads and item metadata.",
+        "dcterms:date": "1950",
+        "dcterms:language": "English",
+        "ija:record_type": "Books",
+        "ija:ija_number": "TEST-001"
+      },
+      "media_recipe": "Attach a locally created two-page PDF and test with embedding off and on."
+    },
+    {
+      "key": "archival-images",
+      "values": {
+        "dcterms:title": "Synthetic archival folder",
+        "dcterms:description": "A made-up folder for checking the configured IIIF viewer.",
+        "ija:record_type": "Archival Materials",
+        "ija:ija_number": "TEST-002"
+      },
+      "media_recipe": "Attach two rights-cleared test images and verify the configured viewer/manifest."
+    },
+    {
+      "key": "video",
+      "values": {"dcterms:title": "Synthetic video", "ija:record_type": "Video", "ija:ija_number": "TEST-003"},
+      "media_recipe": "Attach a short locally created MP4."
+    },
+    {
+      "key": "pdf-no-thumbnail",
+      "values": {"dcterms:title": "Synthetic PDF without thumbnail", "ija:record_type": "Documentation"},
+      "media_recipe": "Use an isolated PDF fixture without a thumbnail; also run the PHP nullable-thumbnail test."
+    },
+    {
+      "key": "url-media",
+      "values": {"dcterms:title": "Synthetic URL/embed record", "ija:record_type": "Other"},
+      "media_recipe": "Add test URL/embed media with no stored filename; avoid production or personal URLs."
+    },
+    {
+      "key": "minimal",
+      "values": {"dcterms:title": "Synthetic minimal record"},
+      "media_recipe": "No media, record type, IJA number, date or description."
+    },
+    {
+      "key": "multilingual",
+      "values": {
+        "dcterms:title": [{"value": "כותרת בדיקה", "lang": "he"}, {"value": "English test title", "lang": "en"}],
+        "dcterms:description": [{"value": "תיאור לבדיקה", "lang": "he"}, {"value": "English test description", "lang": "en"}, {"value": "Untagged test description", "lang": ""}],
+        "ija:record_type": "Books",
+        "ija:ija_number": "TEST-007"
+      },
+      "media_recipe": "No media needed; compare locale filtering off/on with English site language."
+    },
+    {
+      "key": "unknown-type",
+      "values": {"dcterms:title": "Synthetic unknown record type", "ija:record_type": "Unrecognized test type"},
+      "media_recipe": "No media needed; expect the generic file icon."
+    }
+  ]
+}
