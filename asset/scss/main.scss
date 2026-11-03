@@ -224,3 +224,40 @@ header {
     margin-top: 7rem;
   }
 }
+
+/* Shared layout and disclosure rules. Keep these after the desktop defaults. */
+.skip-link:focus {
+  position: fixed;
+  top: .5rem;
+  left: .5rem;
+  padding: .75rem 1rem;
+  background: white;
+  color: #002855;
+  z-index: 1100;
+}
+
+.value-annotation {
+  margin-top: .5rem;
+
+  summary { cursor: pointer; }
+  .annotation { padding: .75rem; border-inline-start: 3px solid #ddd; }
+}
+
+.item-title-text, .browse-card-body { min-width: 0; overflow-wrap: anywhere; }
+.item-title-icon .ija-icon--large { font-size: clamp(2.5rem, 8vw, 5rem); }
+.browse-thumbnail { width: 6rem; padding: .5rem; }
+.browse-thumbnail img { display: block; width: 100%; height: 8rem; object-fit: contain; }
+
+@media (min-width: 992px) {
+  .browse-thumbnail { width: 10rem; }
+  .browse-thumbnail img { height: 12.5rem; }
+}
+
+@media (max-width: 767.98px) {
+  .page-nav ul { background-image: none; padding-bottom: .5rem; margin-bottom: .5rem; }
+  .related_materials { float: none; margin: 0 0 1rem; max-width: 100%; }
+}
+
+@media (max-width: 575.98px) {
+  .dl-invert dt { text-align: start; }
+}

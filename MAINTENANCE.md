@@ -41,6 +41,15 @@ this repository. Keeping this folder alone is not a complete site backup.
 - **Generated assets are shipped.** Edit SCSS, then build and commit CSS. Vendor
   scripts come from the npm lockfile. Bootstrap's legacy Sass stays inside its
   dependency boundary; theme styles use modules. Do not hand-edit generated files.
+- **Annotations use native disclosure controls.** Site setting
+  `show_value_annotations` supports hidden, `collapsed` and `expanded`. Keep
+  `.value-annotation` independent of Omeka's legacy expand/collapse handlers and
+  Bootstrap's `.collapse` styles. Render metadata through `asHtml()` as before;
+  titles and custom item text are plain text.
+- **Responsive layout is intentional.** Navigation sits beside content at 768px
+  and wider and stacks below that breakpoint. Keep `min-width: 0` on the content
+  flex item for core media galleries. Browser regressions and screenshots are
+  available through `npm run test:browser`; see the README for setup and limits.
 - **Icons are self-hosted SVGs.** `common/icon` references a curated symbol in
   `asset/icons/fontawesome.svg`; `common/record-type-icon` maps record types to those
   symbols. `npm run build:icons` regenerates the sprite and license from the pinned

@@ -1,20 +1,18 @@
 <?php $container = $this->navigation()->breadcrumbs()  ?>
-<?php $navigation = $container->getContainer() ?>
 <!-- view/common/bootstrap-breadcrumbs.html -->
-<nav class="pt-3" aria-label="breadcrumb">
-  <ol class="breadcrumb">
+
+  <ol class="breadcrumb pt-3">
     <?php foreach($this->pages as $page): ?>
         <?php if( ! $page->isActive()): ?>
             <li class="breadcrumb-item">
-                <a href="<?php echo $page->getHref() ?>"><?php echo $page->getLabel() ?></a>
+                <a href="<?php echo $this->escapeHtmlAttr($page->getHref()) ?>"><?php echo $this->escapeHtml($page->getLabel()) ?></a>
             </li>
         <?php else: ?>
             <li class="breadcrumb-item active" aria-current="page">
-                <?php if($container->getLinkLast()): ?><a href="<?php echo $page->getHref() ?>"><?php endif ?>
-                <?php echo $page->getLabel() ?>
+                <?php if($container->getLinkLast()): ?><a href="<?php echo $this->escapeHtmlAttr($page->getHref()) ?>"><?php endif ?>
+                <?php echo $this->escapeHtml($page->getLabel()) ?>
                 <?php if($container->getLinkLast()): ?></a><?php endif ?>
             </li>
         <?php endif ?>
     <?php endforeach ?>
   </ol>
-</nav>

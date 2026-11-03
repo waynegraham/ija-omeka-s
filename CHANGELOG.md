@@ -7,6 +7,12 @@ deployment record to establish publication or installation status.
 
 ### Fixed
 
+- Honored hidden, collapsed and expanded annotation modes with native keyboard
+  disclosure controls that avoid Bootstrap's `.collapse` class conflict.
+- Omitted metadata property rows when locale filtering removes all their values.
+- Escaped plain titles, custom item text, navigation attributes and breadcrumbs.
+- Removed duplicate search-input attributes and nested breadcrumb navigation.
+
 - Kept page content beside the navigation when a migrated Media Embed gallery
   would otherwise force the Bootstrap content column onto a second row.
 - Restored Omeka's core page-block stylesheet in the custom page template so
@@ -14,11 +20,19 @@ deployment record to establish publication or installation status.
 
 ### Changed
 
+- Stack page navigation on phones, keep compact browse thumbnails visible and
+  scale item title icons to the viewport.
+- Use named dropdown buttons with unique relationships, meaningful logo text
+  and a keyboard-accessible skip link.
+
 - Replaced Font Awesome font classes and the remote kit with locally generated SVG
   icons. Preserved accessible control labels, record-type choices and attribution.
 - Added SVG sprite/license generation to the asset build and reproducibility checks.
 
 ### Added
+
+- Desktop/mobile Chromium regression checks in CI with screenshots and failure
+  traces, using actual templates and synthetic records without a database.
 
 - Maintenance guide, disposable local setup, template override inventory,
   synthetic record manifest/test vocabulary, screenshot protocol and release checklist.

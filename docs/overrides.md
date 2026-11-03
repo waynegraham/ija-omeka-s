@@ -7,18 +7,18 @@ every core feature is implemented. Recheck behavior as well as markup on upgrade
 
 | Override | Purpose / intentional difference | Contract to preserve |
 | --- | --- | --- |
-| `layout/layout.phtml` | Bootstrap header/footer, IJA branding and assets | Core jQuery/global script, queued assets, messages, content, `view.layout` |
+| `layout/layout.phtml` | Bootstrap header/footer, IJA branding and assets | Core jQuery/global script, queued assets, messages, content, `view.layout`, skip link to focusable main |
 | `omeka/site/item/show.phtml` | IJA title, preview, PDF downloads, metadata and linked resources; fixed layout instead of resource page blocks | Before-show hook; special non-video after-show placement; one video render; subject-value options array |
 | `omeka/site/item/browse.phtml` | Two-column cards and fixed IJA property sorts | Both browse hooks, item-set query context, locale filtering, Browse helper sort contract |
 | `omeka/site/item/search.phtml` | Bootstrap advanced-search form | GET submission, browse action, resource type and query propagation |
 | `omeka/site/index/search.phtml` | Sitewide results grouped by resource kind | Page title versus resource display title; full-text links and totals |
-| `omeka/site/page/show.phtml` | Bootstrap content/sidebar layout and breadcrumbs | Core `page-blocks.css`, shrinkable `site-page-content` column for wide galleries, supplied page body classes, navigation visibility, content, hooks and page pagination |
+| `omeka/site/page/show.phtml` | Bootstrap content/sidebar layout and breadcrumbs | Responsive sidebar (stack below 768px), core `page-blocks.css`, shrinkable `site-page-content` column for wide galleries, supplied page body classes, navigation visibility, content, hooks and page pagination |
 | `common/advanced-search.phtml` | Styled search assembly; resource-class partial intentionally omitted | Partial exclude list, resource-type branches, `view.advanced_search` filtering and core search JS |
 | `common/advanced-search/fulltext.phtml` | Bootstrap full-text input | Query value, escaping and input name |
 | `common/advanced-search/properties.phtml` | Bootstrap property-query rows | Core query names, joiners, property select and add/remove JS hooks; review newly added core operators |
 | `common/advanced-search/sort.phtml` | Styled sort controls through Laminas | Context/resource mapping, configured sorts and default-sort flags |
 | `common/block-layout/browse-preview.phtml` | IJA preview markup | Selected components, locale filtering and browse query/link |
-| `common/resource-values.phtml` | Bootstrap metadata definition list | Settings fallback, value rendering, locale/private/annotation behavior and `view.show.value` |
+| `common/resource-values.phtml` | Bootstrap metadata definition list | Settings fallback, value rendering, locale filtering before property rows, private flags, native annotation disclosure modes and `view.show.value` |
 | `common/search-form.phtml` | Header search controls | Sitewide/cross-site routes and `fulltext_search` |
 | `common/sort-selector.phtml` | Bootstrap sort form | `sortConfig`, selected values and hidden query inputs excluding default-sort flags |
 | `common/pagination.phtml` | Compact previous/range/next controls | Core helper's totals, offsets, page bounds and generated URLs |

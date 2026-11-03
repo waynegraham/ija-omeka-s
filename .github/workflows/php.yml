@@ -42,3 +42,39 @@ jobs:
       - run: npm test
       - name: Verify committed CSS and vendor JavaScript
         run: npm run check:assets
+
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, pdo_mysql, xml
+          coverage: none
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Download pinned Omeka S browser fixture
+        env:
+          OMEKA_VERSION: '4.2.1'
+          OMEKA_SHA256: cc27d1c7aca0209523d19aa285f4a08e29e34950dcc446951a7c1311de348e82
+        run: |
+          curl --fail --location --retry 3 "https://github.com/omeka/omeka-s/releases/download/v${OMEKA_VERSION}/omeka-s-${OMEKA_VERSION}.zip" -o "$RUNNER_TEMP/omeka.zip"
+          echo "$OMEKA_SHA256  $RUNNER_TEMP/omeka.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/omeka.zip" -d "$RUNNER_TEMP/omeka"
+      - name: Check desktop and mobile layouts and interactions
+        run: OMEKA_PATH="$RUNNER_TEMP/omeka/omeka-s" npm run test:browser
+      - name: Save browser report, screenshots and failure traces
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: theme-browser-report
+          path: |
+            playwright-report/
+            test-results/
+            tests/browser/generated/server.log
+          retention-days: 14

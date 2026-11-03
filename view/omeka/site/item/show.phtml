@@ -9,21 +9,21 @@ $isVideo = (string) $item->value('ija:record_type') === 'Video';
 <?php $this->trigger('view.show.before'); ?>
 
 <div class="row title-bar auto">
-  <div class="col-1 mx-4">
+  <div class="col-auto item-title-icon">
     <?php echo $this->partial('common/record-type-icon', ['recordType' => $item->value('ija:record_type'), 'large' => true]); ?>
   </div>
-  <div class="col col-auto px-4">
+  <div class="col item-title-text">
     <?php if($item->value('ija:ija_number')): ?>
-    <span class="small text-muted">IJA Number: <?php echo $item->value('ija:ija_number'); ?></span>
+    <span class="small text-muted">IJA Number: <?php echo $this->escapeHtml($item->value('ija:ija_number')); ?></span>
     <?php endif; ?>
     <?php echo $this->pageTitle($item->displayTitle(), 1); ?>
     <?php if($item->value('dcterms:alternative')): ?>
-      <h2 class="transliteration"><?php echo $item->value('dcterms:alternative'); ?></h2>
+      <h2 class="transliteration"><?php echo $this->escapeHtml($item->value('dcterms:alternative')); ?></h2>
     <?php endif; ?>
   </div>
 
   <p class="lead mb-4 mt-4">
-    <?php echo $item->value('dcterms:description'); ?>
+    <?php echo $this->escapeHtml($item->value('dcterms:description')); ?>
   </p>
 </div>
 

@@ -3,3 +3,8 @@ node_modules/
 carousel_exhibit.html
 scratch.html
 .yarn
+
+# Browser regression artifacts
+tests/browser/generated/
+playwright-report/
+test-results/

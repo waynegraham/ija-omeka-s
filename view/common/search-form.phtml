@@ -8,27 +8,20 @@ switch ($searchType) {
     case 'sitewide':
     default:
         $searchAction = $this->url('site/resource', ['controller' => 'index', 'action' => 'search'], true);
-        // $searchAction = $this->url('site/resource', ['controller' => 'item'], true);
 }
 $searchValue = $this->escapeHtml($this->params()->fromQuery('fulltext_search', ''));
-  // http://localhost:8888/omeka-s/s/iraqi-jewish-archive/index/search?fulltext_search=book
-  // http://localhost:8888/omeka-s/s/iraqi-jewish-archive/item?fulltext_search=book
-
-  // $search = $this->escapeHtml($this->url(null, ['action' => 'browse'], true));
-  $search = $this->escapeHtml($searchAction);
+$search = $this->escapeHtmlAttr($searchAction);
 ?>
 
 <!-- view/common/search-form.phtml -->
-<form action="<?php echo $search ?>" id="search-form" class="d-flex">
+<form action="<?php echo $search ?>" id="search-form" class="d-flex" role="search">
   <div class="input-group">
-    <div class="form-outline">
-      <input class="form-control me-2" type="text" name="fulltext_search" value="<?php echo $searchValue; ?>"
-          placeholder="<?php echo $translate('Search'); ?>"
-          aria-label="<?php echo $translate('Search'); ?>" class="form-text input-group-field">
-    </div>
+    <input class="form-control" type="search" name="fulltext_search" value="<?php echo $searchValue; ?>"
+          placeholder="<?php echo $this->escapeHtml($translate('Search')); ?>"
+          aria-label="<?php echo $this->escapeHtml($translate('Search')); ?>">
     <button type="submit" class="btn btn-primary">
       <?php echo $this->partial('common/icon', ['icon' => 'search']); ?>
-      <span class="visually-hidden"><?php echo $translate('Search'); ?></span>
+      <span class="visually-hidden"><?php echo $this->escapeHtml($translate('Search')); ?></span>
     </button>
   </div>
 </form>

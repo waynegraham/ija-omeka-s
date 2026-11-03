@@ -1,8 +1,11 @@
 # Reference screenshots
 
-No reference images have been captured yet. This directory defines the baseline
-to collect when a running test site is available; do not treat it as visual QA
-evidence. Use only the synthetic records from [the fixture guide](../sample-records.md).
+No deployed-site reference images are committed here. `npm run test:browser`
+captures isolated page, browse and item layouts at both sizes and attaches them
+to the Playwright report (see the README). CI retains those artifacts for 14 days;
+they are not pixel-diff baselines or evidence about deployed content or viewers.
+This directory defines the broader baseline to collect on a running test site.
+Use only the synthetic records from [the fixture guide](../sample-records.md).
 
 ## Capture consistently
 

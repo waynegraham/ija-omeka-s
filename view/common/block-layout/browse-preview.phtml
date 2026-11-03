@@ -5,7 +5,7 @@ $escape = $this->plugin('escapeHtml');
 <div class="preview-block">
 
 <?php if ($this->heading): ?>
-<h2><?php echo $this->heading; ?></h2>
+<h2><?php echo $escape($this->heading); ?></h2>
 <?php endif; ?>
 
 <ul class="resource-list preview">
@@ -20,7 +20,7 @@ foreach ($this->resources as $resource):
     $heading = $headingTerm ? $resource->value($headingTerm, ['default' => $translate('[Untitled]'), 'lang' => $valueLang]) : $resource->displayTitle(null, $valueLang);
     $body = $bodyTerm ? $resource->value($bodyTerm, ['lang' => $valueLang]) : $resource->displayDescription(null, $valueLang);
 ?>
-    <li class="<?php echo $this->resourceType; ?> resource">
+    <li class="<?php echo $this->escapeHtmlAttr($this->resourceType); ?> resource">
         <?php if ($showThumbnail): ?>
         <?php echo $resource->linkRaw($this->thumbnail($resource, 'medium')); ?>
         <?php endif; ?>

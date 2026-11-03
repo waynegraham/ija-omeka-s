@@ -12,12 +12,12 @@
   <main class="container py-4">
     <h1>Sidebar layout regression</h1>
     <p>Serve this fixture within an Omeka installation. The navigation and content
-      must remain side by side, including when the content contains Omeka's
+      must remain side by side on desktop and stack on phones, including with Omeka's
       viewport-width media gallery.</p>
     <output id="result" role="status">Checking layout…</output>
     <div class="row mt-3">
-      <aside id="navigation" class="col-3 bg-light">Navigation column</aside>
-      <div id="content" class="col site-page-content">
+      <aside id="navigation" class="col-12 col-md-3 bg-light">Navigation column</aside>
+      <div id="content" class="col-12 col-md site-page-content">
         <h2>Content column</h2>
         <div class="blocks-inner page-layout-normal">
           <div class="block block-media">
@@ -47,9 +47,10 @@
       const content = document.getElementById('content').getBoundingClientRect();
       const sideBySide = Math.abs(navigation.top - content.top) <= 1
         && content.left >= navigation.right - 1;
-      const message = sideBySide
-        ? 'PASS: navigation and content stay side by side'
-        : 'FAIL: content wraps below navigation';
+      const correct = innerWidth < 768 ? content.top >= navigation.bottom - 1 : sideBySide;
+      const message = correct
+        ? 'PASS: navigation and content use the expected responsive layout'
+        : 'FAIL: unexpected navigation/content layout';
       document.getElementById('result').textContent = message;
       document.title = message;
     }

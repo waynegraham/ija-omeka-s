@@ -142,8 +142,41 @@ $renderingTests = [
             'dcterms:title' => ['property' => $property, 'alternate_label' => null, 'values' => [$value]],
         ]]);
         verify(str_contains($html, '#private"') && str_contains($html, '#annotation"'), 'Metadata SVGs are missing');
-        verify(str_contains($html, 'aria-label="Private"') && str_contains($html, 'aria-label="Expand"'), 'Metadata icon labels are missing');
-        verify(str_contains($html, 'class="has-annotation"') && str_contains($html, 'class="collapsible annotation"'), 'Annotation toggle hooks were lost');
+        verify(str_contains($html, 'aria-label="Private"') && str_contains($html, 'Value annotation'), 'Metadata icon labels are missing');
+        verify(str_contains($html, 'class="has-annotation"') && str_contains($html, 'class="value-annotation"'), 'Annotation toggle hooks were lost');
+    },
+    'Annotations honor all display modes and filtered properties leave no empty rows' => static function () use ($view, $siteSettings) {
+        $property = new class { public function label() { return 'Hidden French property'; } };
+        $value = new class {
+            public function type() { return 'literal'; }
+            public function lang() { return 'fr'; }
+            public function valueAnnotation() { return new class { public function displayValues() { return 'Annotation text'; } }; }
+            public function asHtml() { return 'French value'; }
+            public function isPublic() { return true; }
+        };
+        $values = ['test:term' => ['property' => $property, 'values' => [$value]]];
+        foreach (['collapsed', 'expanded', ''] as $mode) {
+            $siteSettings->values = ['show_value_annotations' => $mode];
+            $html = $view->render('common/resource-values', ['values' => $values]);
+            verify(str_contains($html, '<details') === ($mode !== ''), 'Annotation visibility does not follow setting');
+            verify(str_contains($html, 'class="value-annotation" open') === ($mode === 'expanded'), 'Annotation initial state does not follow setting');
+            verify(!str_contains($html, 'class="expand"'), 'Bootstrap-conflicting annotation toggle remains');
+        }
+        $siteSettings->values = ['filter_locale_values' => true];
+        $html = $view->render('common/resource-values', ['values' => $values]);
+        verify(!str_contains($html, '<dt') && !str_contains($html, '<dd'), 'Filtered metadata leaves an empty property row');
+    },
+    'Navigation escapes attributes and provides unique dropdown relationships' => static function () use ($view) {
+        $container = new Laminas\Navigation\Navigation([
+            ['label' => 'First', 'uri' => '/first', 'pages' => [['label' => '<First>', 'uri' => '/a?x="quoted"']]],
+            ['label' => 'Second', 'uri' => '/second', 'pages' => [['label' => 'Second child', 'uri' => '/b']]],
+        ]);
+        $html = $view->render('common/bootstrap-navigation', ['container' => $container]);
+        verify(substr_count($html, '<button') >= 2, 'Dropdowns need button controls');
+        preg_match_all('/id="([^" ]+)"/', $html, $matches);
+        verify(count($matches[1]) === count(array_unique($matches[1])), 'Duplicate navigation IDs');
+        verify(str_contains($html, 'aria-labelledby=') && !str_contains($html, 'aria-controlledby='), 'Invalid dropdown ARIA');
+        verify(str_contains($html, '&lt;First&gt;') && !str_contains($html, 'href="/a?x="quoted"'), 'Navigation output is not escaped');
     },
     'Browse cards have valid description containers and preserve module hooks' => static function () use ($view, $helpers, $siteSettings) {
         $siteSettings->values = [];
@@ -173,7 +206,14 @@ $renderingTests = [
             public function term() { return 'dcterms:title'; }
             public function vocabulary() { return new class { public function label() { return 'Dublin Core'; } }; }
         };
-        $variables = ['values' => ['dcterms:title' => ['property' => $property, 'alternate_label' => null, 'values' => []]]];
+        $value = new class {
+            public function type() { return 'literal'; }
+            public function lang() { return ''; }
+            public function valueAnnotation() { return null; }
+            public function asHtml() { return 'Title value'; }
+            public function isPublic() { return true; }
+        };
+        $variables = ['values' => ['dcterms:title' => ['property' => $property, 'alternate_label' => null, 'values' => [$value]]]];
         foreach ([
             ['none', 'term', '(dcterms:title)'],
             ['none', 'vocab', '(Dublin Core)'],
@@ -274,4 +314,6 @@ foreach ($renderingTests as $name => $test) {
         echo "FAIL: $name: {$error->getMessage()}\n";
     }
 }
-exit($failed ? 1 : 0);
+if ($failed || realpath($_SERVER['SCRIPT_FILENAME']) === __FILE__) {
+    exit($failed ? 1 : 0);
+}

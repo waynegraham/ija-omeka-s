@@ -20,18 +20,18 @@ switch ($this->siteSetting('subnav_display')) {
 ?>
 <?php if ($activePage): ?>
     <?php if ($activePage['depth'] !== 0): ?>
-    <nav class="breadcrumbs"><?php echo $nav->breadcrumbs()->setPartial('common/bootstrap-breadcrumbs'); ?></nav>
+    <nav class="breadcrumbs" aria-label="<?php echo $this->escapeHtmlAttr($this->translate('Breadcrumb')); ?>"><?php echo $nav->breadcrumbs()->setPartial('common/bootstrap-breadcrumbs'); ?></nav>
     <?php endif; ?>
 <?php endif; ?>
 <div class="container">
   <div class="row">
       <?php if ($activePage && $displaySubnav): ?>
-        <div class="col-3 pt-3 light-bg page-nav">
+        <aside class="col-12 col-md-3 pt-3 light-bg page-nav">
           <nav class="sub-menu"><?php echo $nav->menu()->renderSubMenu(); ?></nav>
-        </div>
+        </aside>
       <?php endif; ?>
 
-    <div class="col site-page-content">
+    <div class="col-12 col-md site-page-content">
       <?php $this->trigger('view.show.before'); ?>
       <div class="blocks mt-3 ps-2">
           <?php echo $this->content; ?>

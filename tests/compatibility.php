@@ -32,6 +32,7 @@ final class ThemeView
         };
     }
     public function escapeHtml($value): string { return ($this->plugin('escapeHtml'))($value); }
+    public function escapeHtmlAttr($value): string { return $this->escapeHtml($value); }
     public function partial($template, $variables = []): string { return $this->render($template, $variables); }
     public function assetUrl($path): string { return '/theme/asset/' . $path; }
     public function url(...$args): string { return '/search'; }
@@ -86,6 +87,19 @@ $tests = [
         check(str_contains($html, 'Date &lt;new&gt;'), 'Sort label is not escaped');
         check(in_array('sort_by_default', $view->hiddenExclusions, true), 'Default sort flag would override explicit selection');
         check(in_array('sort_order_default', $view->hiddenExclusions, true), 'Default order flag would override explicit selection');
+    },
+    'Item custom text remains plain while metadata rendering preserves HTML' => static function () {
+        $item = new class {
+            public function value($term) { return '<b>Custom text</b>'; }
+            public function media() { return []; }
+            public function displayTitle() { return '<b>Item title</b>'; }
+            public function displayValues() { return '<dl><dt>Metadata</dt><dd><a href="/resource">Linked value</a></dd></dl>'; }
+            public function displaySubjectValues(...$args) { return ''; }
+        };
+        $html = (new ThemeView)->render('omeka/site/item/show', ['item' => $item]);
+        check(str_contains($html, '&lt;b&gt;Item title&lt;/b&gt;'), 'Item title is not escaped');
+        check(substr_count($html, '&lt;b&gt;Custom text&lt;/b&gt;') === 3, 'Custom item text is not consistently escaped');
+        check(str_contains($html, '<a href="/resource">Linked value</a>'), 'Metadata HTML was escaped');
     },
     'URL media with no filename renders without PHP deprecations' => static function () {
         $html = (new ThemeView)->render('omeka/site/item/show', [

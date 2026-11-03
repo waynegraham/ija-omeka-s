@@ -111,11 +111,36 @@ browse-preview components, locale filtering, property-label settings and module
 hooks. They were run locally with Omeka S 4.2.1 on PHP 8.5.12. A complete
 browser/database smoke test is still required for the deployed installation.
 
-For the page/sidebar layout regression, open
-`/themes/ija-omeka-s/tests/fixtures/sidebar-layout.html` on a local Omeka host.
-It should report **PASS: navigation and content stay side by side**. This browser
-fixture exercises the core Media Embed gallery's viewport-width sizing inside
-Bootstrap columns; it is a manual check, not part of the Node/PHP CI suites.
+Browser regression checks run in Chromium at 1440 × 1000 and 390 × 844:
+
+```sh
+npm ci
+npx playwright install chromium
+OMEKA_PATH=/path/to/omeka-s npm run test:browser
+npx playwright show-report
+```
+
+The suite renders the actual theme templates with Omeka/Laminas helpers and
+synthetic records, then serves them on loopback port 8766. `OMEKA_PATH` must point
+to an installed release with `vendor/autoload.php`; it defaults to the enclosing
+Omeka installation. No database, DDEV or public website is required. The fixture
+generator first runs the PHP integration regressions. CI downloads the same
+checksum-pinned release used by those tests and installs Chromium automatically.
+
+Checks cover desktop/sidebar and phone/stacked layouts, core Media Embed sizing,
+visible browse thumbnails, title escaping, annotation keyboard toggling, dropdown
+keyboard controls, the skip link, search submission and advanced-search row
+addition/removal. JavaScript exceptions and HTTP errors fail tests. Layout
+screenshots are attached to the HTML report on successful runs too; failures also
+retain traces. CI uploads the report for 14 days. Screenshots are review artifacts,
+not pixel-diff baselines. These synthetic checks do not validate database content,
+IIIF/viewer modules, real search results, other browser engines or deployment caches;
+keep using the [release checks](docs/releases.md) for those.
+
+The standalone manual fixture at
+`/themes/ija-omeka-s/tests/fixtures/sidebar-layout.html` remains available on a
+local Omeka host. It should report **PASS: navigation and content use the expected
+responsive layout**.
 
 When upgrading Omeka, compare overridden templates with the matching files in
 the core version, update the pinned CI archive/checksum, and run both PHP suites.

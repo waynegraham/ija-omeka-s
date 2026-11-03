@@ -17,6 +17,7 @@ endif;
 $headingTerm = $this->siteSetting('browse_heading_property_term');
 $bodyTerm = $this->siteSetting('browse_body_property_term');
 $bodyTruncate = $this->themeSetting('truncate_body_property');
+$bodyTruncate = in_array($bodyTruncate, ['fadeout', 'ellipsis', 'full'], true) ? $bodyTruncate : '';
 
 $sortHeadings = [
     [
@@ -68,27 +69,26 @@ $sortHeadings = [
       $recordType = $item->value('ija:record_type');
     ?>
     <div class="col-md-6">
-      <div class="card row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="row"></div>
-        <div class="col p-4 d-flex flex-column position-static">
+      <div class="card browse-card g-0 border rounded overflow-hidden flex-row flex-nowrap mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col browse-card-body p-3 p-lg-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary">
             <?php echo $this->partial('common/record-type-icon', ['recordType' => $recordType]); ?>
-            <?php echo $recordType; ?>
+            <?php echo $escape($recordType); ?>
           </strong>
-          <h3 class="mb-0"><?php echo $heading; ?></h3>
+          <h3 class="mb-0"><?php echo $escape($heading); ?></h3>
           <div class="mb-1 text-muted">
             <?php if($item->value('dcterms:date')): ?>
-              Date: <?php echo $item->value('dcterms:date'); ?>
+              Date: <?php echo $escape($item->value('dcterms:date')); ?>
             <?php endif; ?>
             <?php if($item->value('ija:ija_number')): ?>
               <?php if($item->value('dcterms:date')): ?>
                 &middot;
               <?php endif; ?>
-              IJA Number: <?php echo $item->value('ija:ija_number'); ?>
+              IJA Number: <?php echo $escape($item->value('ija:ija_number')); ?>
             <?php endif; ?>
             <?php if($item->value('dcterms:language')): ?>
               &middot;
-              Language: <?php echo $item->value('dcterms:language'); ?>
+              Language: <?php echo $escape($item->value('dcterms:language')); ?>
             <?php endif; ?>
           </div>
           <div class="card-text mb-auto">
@@ -98,13 +98,13 @@ $sortHeadings = [
               </div>
             <?php endif; ?>
           </div>
-          <?php echo $item->link('View Item', null, ['class' => 'stretched-link']); ?>
+          <?php echo $item->link($translate('View Item'), null, ['class' => 'stretched-link']); ?>
         </div>
-        <div class="col-auto d-none d-lg-block">
-          <?php if ($thumbnail = $this->thumbnail($item, 'medium')): ?>
-            <?php echo $item->linkRaw($thumbnail, null, ['class' => 'img-thumbnail', 'width' => 200, 'height' => 250]); ?>
-          <?php endif; ?>
+        <?php if ($thumbnail = $this->thumbnail($item, 'medium', ['loading' => 'lazy', 'decoding' => 'async'])): ?>
+        <div class="col-auto browse-thumbnail">
+          <?php echo $item->linkRaw($thumbnail, null, ['class' => 'd-block']); ?>
         </div>
+        <?php endif; ?>
       </div>
     </div>
 

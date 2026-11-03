@@ -15,9 +15,10 @@ $ulClass= 'navbar-nav me-auto mb-2 mb-md-0';
             <li class="nav-item">
                 <a
                     class="nav-link<?php if ($page->isActive()) echo ' active' ?>"
-                    href="<?php echo $page->getHref() ?>"
+                    <?php if ($page->isActive()) echo 'aria-current="page"'; ?>
+                    href="<?php echo $this->escapeHtmlAttr($page->getHref()) ?>"
                     <?php if ($page->getTarget() != ""): ?>
-                        target="<?php echo $page->getTarget(); ?>"
+                        target="<?php echo $this->escapeHtmlAttr($page->getTarget()); ?>" rel="noopener"
                     <?php endif; ?>
                     >
                     <?php echo $this->escapeHtml($this->translate($page->getLabel(), $this->navigation($container)->getTranslatorTextDomain())); ?>
@@ -33,28 +34,30 @@ $ulClass= 'navbar-nav me-auto mb-2 mb-md-0';
                 }
             }
             if ($access) :
+                $dropdownId = uniqid("ija-menu-");
                 ?>
                 <li class="nav-item dropdown<?php if ($page->isActive(true)) echo ' active' ?>">
-                    <a id="dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                    <button type="button" id="<?php echo $dropdownId; ?>" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="<?php echo $dropdownId; ?>-items">
                         <?php echo $this->escapeHtml($this->translate($page->getLabel(),$this->navigation($container)->getTranslatorTextDomain())); ?>
-                    </a>
-                    <ul class="dropdown-menu" aria-controlledby="dropdown">
+                    </button>
+                    <ul id="<?php echo $dropdownId; ?>-items" class="dropdown-menu" aria-labelledby="<?php echo $dropdownId; ?>">
                         <?php foreach ($page->getPages() as $child): ?>
                             <?php if (!$this->navigation()->accept($child)) continue; ?>
                             <?php if ($child->get("separator") === true): ?>
-                                <li class="divider"></li>
+                                <li><hr class="dropdown-divider"></li>
                                     <?php
                                     continue;
                                 endif;
                                 ?>
                             <li<?php if ($child->isActive()) echo ' class="active"' ?>>
                                 <a class="dropdown-item"
-                                    href="<?php echo $child->getHref() ?>"
+                                    <?php if ($child->isActive()) echo 'aria-current="page"'; ?>
+                                    href="<?php echo $this->escapeHtmlAttr($child->getHref()) ?>"
                                     <?php if ($child->getTarget() != ""): ?>
-                                        target="<?php echo $child->getTarget(); ?>"
+                                        target="<?php echo $this->escapeHtmlAttr($child->getTarget()); ?>" rel="noopener"
                                     <?php endif; ?> >
-                                        <?php if ($child->get("icon") !== ""): ?>
-                                        <span class="<?php echo $child->get("icon"); ?>"></span>
+                                        <?php if ($child->get("icon")): ?>
+                                        <span class="<?php echo $this->escapeHtmlAttr($child->get("icon")); ?>"></span>
                                     <?php endif; ?>
                                     <?php echo $this->escapeHtml($this->translate($child->getLabel(),$this->navigation($container)->getTranslatorTextDomain())); ?>
                                 </a>
