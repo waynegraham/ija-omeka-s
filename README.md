@@ -15,11 +15,12 @@ sizes and containment of exhibit gallery photographs. Existing saved page conten
 is preserved, with theme settings to restore the original homepage and Recovery
 blocks. See the configuration guides below before deploying.
 
-The upgrade replaces legacy Zend form classes with Laminas, uses Omeka 4's
-`sortConfig` contract and Browse helper, and reads configured advanced-search
-sort options from Omeka. The IJA browse sorts are preserved, including a corrected
-`dcterms:date` option. PDF downloads handle media without filenames or thumbnails,
-and item templates can render repeatedly without declaring global functions.
+Compatibility work retained from 2.0 replaces legacy Zend form classes with
+Laminas, uses Omeka 4's `sortConfig` contract and Browse helper, and reads
+configured advanced-search sort options from Omeka. The IJA browse sorts are
+preserved, including a corrected `dcterms:date` option. PDF downloads handle
+media without filenames or thumbnails, and item templates can render repeatedly
+without declaring global functions.
 
 The custom IJA item display and its `view.show.after` preview integration remain.
 The item display uses its fixed IJA layout rather than the configurable resource
@@ -52,9 +53,10 @@ required. Browse and preview card titles/descriptions honor locale filtering.
 
 ## Asset development
 
-Compiled CSS, fonts, icons and vendor JavaScript are committed, so running the theme and editing
-PHP templates do not require Node.js or an asset build. To change the SCSS or
-refresh vendor assets, install Node.js 20.19 or newer, then run:
+Compiled CSS, fonts, icons and vendor JavaScript are committed, so running the
+theme and editing PHP templates do not require Node.js or an asset build. To
+change the SCSS or refresh vendor assets, install Node.js 20.19 or newer, then
+run:
 
 ```sh
 npm ci
@@ -73,10 +75,10 @@ keeps watching so you can correct them. Refresh the browser manually after edits
 there is no development proxy or automatic browser reload. Commit regenerated
 assets alongside their source changes. Review vendor diffs when updating packages.
 
-The layout appends a content hash to `main.css` URLs, so rebuilding the CSS changes
-its cache key even between version releases. Other assets retain Omeka's versioned
-URLs; deploy matching templates/assets and clear cached HTML or proxy/CDN entries
-when needed.
+The layout appends a content hash to `main.css` URLs, so changing the compiled
+CSS changes its cache key even between version releases. Other assets retain
+Omeka's versioned URLs; deploy matching templates/assets and clear cached HTML
+or proxy/CDN entries when needed.
 
 Only the Bootstrap and Popper minified scripts loaded by the layout and their
 source maps are shipped. Use `npm ci` to reproduce the versions in the lockfile.
@@ -132,10 +134,12 @@ browse-preview components, locale filtering, property-label settings and module
 hooks. They were run locally with Omeka S 4.2.1 on PHP 8.5.12. A complete
 browser/database smoke test is still required for the deployed installation.
 
-Browser regression checks run in Chromium at 1440 × 1000 and 390 × 844:
+Browser regression checks use Chromium with standard viewports of 1440 × 1000
+and 390 × 844, plus narrower and enlarged-text cases:
 
 ```sh
 npm ci
+# On Linux, use: npx playwright install --with-deps chromium
 npx playwright install chromium
 OMEKA_PATH=/path/to/omeka-s npm run test:browser
 npx playwright show-report
@@ -148,16 +152,18 @@ Omeka installation. No database, DDEV or public website is required. The fixture
 generator first runs the PHP integration regressions. CI downloads the same
 checksum-pinned release used by those tests and installs Chromium automatically.
 
-Checks cover desktop/sidebar and phone/stacked layouts, core Media Embed sizing,
-visible browse thumbnails, title escaping, annotation keyboard toggling, dropdown
-keyboard controls, the skip link, search submission and advanced-search row
-addition/removal. The suite also checks homepage hero bounds, unclipped sort text, search summaries,
-empty states and Hebrew/Arabic title direction. JavaScript exceptions and HTTP errors fail tests. Layout
-screenshots are attached to the HTML report on successful runs too; failures also
-retain traces. CI uploads the report for 14 days. Screenshots are review artifacts,
-not pixel-diff baselines. These synthetic checks do not validate database content,
-IIIF/viewer modules, real search results, other browser engines or deployment caches;
-keep using the [release checks](docs/releases.md) for those.
+Checks cover desktop/sidebar and phone/stacked layouts, core Media Embed
+sizing, visible browse thumbnails, title escaping, annotation keyboard
+toggling, dropdown keyboard controls, the skip link, search submission and
+advanced-search row addition/removal. The suite also checks homepage hero
+bounds, unclipped sort text, search summaries, empty states and Hebrew/Arabic
+title direction. Interaction fixtures fail on JavaScript exceptions and HTTP
+errors. Layout screenshots are attached to the HTML report on successful runs
+too; failures also retain traces. CI uploads the report for 14 days.
+Screenshots are review artifacts, not pixel-diff baselines. These synthetic
+checks do not validate database content, IIIF/viewer modules, real search
+results, other browser engines or deployment caches; keep using the [release
+checks](docs/releases.md) for those.
 
 The standalone manual fixture at
 `/themes/ija-omeka-s/tests/fixtures/sidebar-layout.html` remains available on a
@@ -182,13 +188,15 @@ configuration that must be completed in Omeka or its modules.
 
 ## Archive homepage and shared design
 
-The `home` page now uses the approved split introduction/search and page 5 of Personal Letters (IJA 3339), live
-collection highlights, stories and background. Configure its heading, intro,
-optional uploaded image/caption/record link and up to four featured IDs in theme settings.
-Disable **Use the archive homepage design** to restore the saved Home page blocks;
-those blocks are never edited or deleted. Highlights are public and scoped to the
-current site, and missing records are omitted. See the [configuration and content
-guide](docs/design-content-checklist.md) for defaults and publication checks.
+The page with the slug `home` uses a split introduction/search and page 5 of
+Personal Letters (IJA 3339), live collection highlights, stories and
+background. Configure its heading, intro, optional uploaded
+image/caption/record link and up to four featured IDs in theme settings.
+Disable **Use the archive homepage design** to restore the saved Home page
+blocks; those blocks are never edited or deleted. Highlights are public and
+scoped to the current site, and missing records are omitted. See the
+[configuration and content guide](docs/design-content-checklist.md) for
+defaults and publication checks.
 
 The shared archive styles live in `asset/scss/_archive-design.scss`. Its mixin is
 included after the legacy theme rules. Core search, sorting, pagination, locale,
