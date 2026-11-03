@@ -53,6 +53,11 @@ this repository. Keeping this folder alone is not a complete site backup.
   the recognized saved Recovery of Artifacts markup. Unsupported additions fall
   back unchanged. Keep the source-consumption guards, full gallery and persistent
   record links. The supported structure and photo mapping are in `docs/exhibits.md`.
+- **Item metadata stays in the core pipeline.** `common/item-metadata` receives
+  `displayValues` output data, groups every visible term once and delegates to
+  `common/resource-values`. Unknown fields stay in the description group. File
+  labels use source names, not Omeka storage hashes. See `docs/item-view.md` before
+  changing grouping, viewer hooks, citation or same-site result-context handling.
 - **Generated assets are shipped.** Edit SCSS, then build and commit CSS. Vendor
   scripts come from the npm lockfile. Bootstrap's legacy Sass stays inside its
   dependency boundary; theme styles use modules. Do not hand-edit generated files.

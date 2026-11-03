@@ -1,0 +1,27 @@
+<?php $escape = $this->plugin('escapeHtml'); $translate = $this->plugin('translate'); ?>
+<?php if ($files['pdfs']): ?>
+<h3><?php echo $escape($translate('PDF documents')); ?></h3>
+<ul class="item-file-list">
+  <?php foreach ($files['pdfs'] as $file): if (!$file['url']) continue; ?>
+  <li><a href="<?php echo $escape($file['url']); ?>" target="_blank" rel="noopener"><?php echo $escape($translate('View PDF')); ?></a>
+    <span class="item-file-name" dir="auto"><?php echo $escape($file['filename']); ?></span>
+    <span class="item-file-note"><?php echo $escape($translate('PDF; opens in a new tab')); ?></span>
+  </li>
+  <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<?php foreach (['images' => 'Original images', 'other' => 'Other files'] as $type => $label):
+    $available = array_filter($files[$type], static fn ($file) => (bool) $file['url']);
+    if (!$available) continue;
+?>
+<details class="original-files">
+  <summary><?php echo $escape(sprintf($translate($label . ' (%s)'), count($available))); ?></summary>
+  <ol class="item-file-list">
+    <?php $index = 0; foreach ($files[$type] as $file): $index++; if (!$file['url']) continue; ?>
+    <li><a href="<?php echo $escape($file['url']); ?>"><?php echo $escape($type === 'images' ? sprintf($translate('Image %1$s of %2$s'), $index, count($files['images'])) : $translate('Open original file')); ?></a>
+      <span class="item-file-name" dir="auto"><?php echo $escape($file['filename']); ?></span>
+    </li>
+    <?php endforeach; ?>
+  </ol>
+</details>
+<?php endforeach; ?>

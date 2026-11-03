@@ -1,0 +1,29 @@
+<?php
+$escape = $this->plugin('escapeHtml');
+$translate = $this->plugin('translate');
+$hasFiles = false;
+foreach ($files as $group) foreach ($group as $file) if ($file['url']) $hasFiles = true;
+$citation = (string) $title . '. ' . $siteTitle . ($number ? '. IJA ' . (string) $number : '') . '. ' . $recordUrl;
+?>
+<section id="item-tools" class="item-tools" aria-labelledby="item-tools-title">
+  <h2 id="item-tools-title"><?php echo $escape($translate('Files and citation')); ?></h2>
+  <div class="item-tools-grid<?php if (!$hasFiles) echo ' item-tools-grid--single'; ?>">
+    <?php if ($hasFiles): ?><div class="item-files"><?php echo $this->partial('common/item-files', ['files' => $files]); ?></div><?php endif; ?>
+    <div class="item-research-tools">
+      <div class="item-copy-controls" hidden>
+        <button type="button" class="btn btn-outline-primary" data-copy-target="item-record-url" data-copy-success="<?php echo $escape($translate('Record link copied')); ?>"><?php echo $escape($translate('Copy record link')); ?></button>
+      </div>
+      <label for="item-record-url" class="visually-hidden"><?php echo $escape($translate('Record link')); ?></label>
+      <input id="item-record-url" class="form-control copy-fallback" type="url" readonly value="<?php echo $escape($recordUrl); ?>" hidden>
+      <p class="item-record-permalink"><a href="<?php echo $escape($recordUrl); ?>"><?php echo $escape($translate('Record link')); ?></a></p>
+      <details class="item-citation">
+        <summary><?php echo $escape($translate('Cite this item')); ?></summary>
+        <label for="item-citation-text" class="visually-hidden"><?php echo $escape($translate('Suggested citation')); ?></label>
+        <textarea id="item-citation-text" class="form-control" rows="5" readonly><?php echo $escape($citation); ?></textarea>
+        <div class="item-copy-controls" hidden><button type="button" class="btn btn-outline-primary" data-copy-target="item-citation-text" data-copy-success="<?php echo $escape($translate('Citation copied')); ?>"><?php echo $escape($translate('Copy citation')); ?></button></div>
+      </details>
+      <p class="item-copy-status" role="status" data-copy-error="<?php echo $escape($translate('Copy is unavailable. Select and copy the text below.')); ?>"></p>
+      <a href="<?php echo $escape($recordUrl . '?metadata=all#ija_metadata'); ?>"><?php echo $escape($translate('View complete catalogue details')); ?></a>
+    </div>
+  </div>
+</section>

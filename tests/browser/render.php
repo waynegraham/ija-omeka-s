@@ -37,19 +37,42 @@ $site = new class($nav) {
     public function url() { return '/page.html'; }
     public function title() { return 'Iraqi Jewish Archive'; }
 };
-$property = new class { public function label() { return 'Title'; } };
-$value = new class {
+$property = new class {
+    public function __construct(private string $label = 'Title', private int $id = 1) {}
+    public function label() { return $this->label; }
+    public function id() { return $this->id; }
+};
+$value = new class('Catalogued title', true) implements Stringable {
+    public function __construct(private string $text, private bool $annotated = false) {}
+    public function __toString() { return $this->text; }
     public function type() { return 'literal'; }
     public function lang() { return 'en'; }
-    public function valueAnnotation() { return new class { public function displayValues() { return '<p>Annotation text</p>'; } }; }
-    public function asHtml() { return 'Catalogued title'; }
+    public function valueAnnotation() { return $this->annotated ? new class { public function displayValues() { return '<p>Annotation text</p>'; } } : null; }
+    public function asHtml(...$args) { return htmlspecialchars($this->text, ENT_QUOTES); }
     public function isPublic() { return true; }
 };
-$metadata = $view->render('common/resource-values', ['values' => ['dcterms:title' => ['property' => $property, 'values' => [$value]]]]);
+$metadataValues = ['dcterms:title' => ['property' => $property, 'values' => [$value]]];
+foreach ([
+    ['dcterms:description', 'Description', 'A description placed below the viewer.'],
+    ['dcterms:publisher', 'Publisher', 'Example publisher'],
+    ['ija:height', 'Object Height', '19.60 cm'],
+    ['ija:mended', 'Mended', 'No'],
+    ['ija:metadata', 'Keywords', 'Correspondence'],
+    ['dcterms:rights', 'Rights', 'Rights statement supplied by the catalogue'],
+] as $index => [$term, $label, $text]) {
+    $metadataValues[$term] = ['property' => new ($property::class)($label, $index + 2), 'values' => [new ($value::class)($text)]];
+}
+$metadata = $view->render('common/item-metadata', ['values' => $metadataValues]);
+$trigger = new FixtureHelper(static function ($name, $args = []) {
+    if ($name === 'view.show.after') echo '<div class="mirador viewer" style="display:flex;align-items:center;justify-content:center"><img src="/thumbnail.svg" alt="Viewer integration fixture" style="height:90%;max-width:90%;object-fit:contain"></div>';
+    return $args;
+});
+$trigger->setView($view); $helpers->setService('trigger', $trigger);
 $item = new class($metadata) {
     public bool $hasThumbnail = true;
     public int $resourceId = 17159;
     public function id() { return $this->resourceId; }
+    public function url(...$args) { return 'http://127.0.0.1:8766/item.html'; }
     public string $title = '';
 
     public function __construct(private string $metadata) {}
@@ -60,7 +83,20 @@ $item = new class($metadata) {
     }; }
     public function displayTitle(...$args) { return $this->title ?: 'Archive <title> ' . str_repeat('Long title ', 8); }
     public function displayDescription(...$args) { return 'A short description of this archive record.'; }
-    public function media() { return []; }
+    public function media() {
+        $files = [];
+        foreach ([['image/jpeg', 'scan_A.jpg'], ['image/jpeg', 'scan_E.jpg'], ['application/pdf', 'scan.pdf']] as [$type, $filename]) {
+            $files[] = new class($type, $filename) {
+                public function __construct(private string $type, private string $filename) {}
+                public function mediaType() { return $this->type; }
+                public function filename() { return 'storage-hash.' . pathinfo($this->filename, PATHINFO_EXTENSION); }
+                public function source() { return $this->filename; }
+                public function displayTitle() { return $this->filename; }
+                public function originalUrl() { return '/original/' . $this->filename; }
+            };
+        }
+        return $files;
+    }
     public function displayValues() { return $this->metadata; }
     public function displaySubjectValues(...$args) { return ''; }
     public function link($text, ...$args) { return '<a href="/item.html">' . htmlspecialchars((string) $text, ENT_QUOTES) . '</a>'; }

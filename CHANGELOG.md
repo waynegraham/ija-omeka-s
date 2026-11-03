@@ -23,6 +23,13 @@ deployment record to establish publication or installation status.
 
 ### Changed
 
+- Reworked item pages around the existing viewer, grouped catalogue metadata,
+  independent multilingual subtitles and a unified files/citation area.
+- Added image/PDF labels with original source filenames, copy/manual-fallback
+  tools, exact-property research links and actual same-site results navigation.
+- Removed repeated item descriptions while retaining all fields, annotations,
+  locale/module filtering and linked resources through core rendering.
+
 - Reorganized the recognized Recovery of Artifacts content into narrative stages,
   retaining its prose, all photographs and captions, with original-block fallback.
 - Added larger uncropped exhibit images, an accessible keyboard image viewer,

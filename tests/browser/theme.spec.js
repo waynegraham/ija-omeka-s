@@ -236,3 +236,56 @@ test('generic exhibit media retains its record link when an image fails', async 
   await expect(page.locator('.exhibit-lightbox-trigger')).toBeDisabled();
   await expect(page.locator('.image-unavailable')).toBeVisible();
 });
+
+
+test('item view prioritizes the viewer and groups the complete catalogue', async ({ page }, testInfo) => {
+  await page.goto('/item.html');
+  const viewer = await page.locator('#item-viewer').boundingBox();
+  const description = await page.getByText('A description placed below the viewer.', { exact: true }).boundingBox();
+  expect(description.y).toBeGreaterThan(viewer.y + viewer.height);
+  await expect(page.getByText('A description placed below the viewer.', { exact: true })).toHaveCount(1);
+  await expect(page.locator('.item-media-summary')).toHaveText('2 images · 1 PDF');
+  await expect(page.locator('#metadata-physical')).not.toHaveAttribute('open', '');
+  await screenshot(page, testInfo, 'item-initial-layout');
+  await page.getByRole('button', { name: 'Expand all details', exact: true }).click();
+  await expect(page.getByText('19.60 cm')).toBeVisible();
+  await expect(page.locator('.item-metadata-group:not([open])')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Collapse all details', exact: true }).click();
+  await expect(page.locator('.item-metadata-group[open]')).toHaveCount(0);
+  await page.getByText('Original images (2)', { exact: true }).click();
+  await expect(page.getByRole('link', { name: 'Image 2 of 2', exact: true })).toHaveAttribute('href', '/original/scan_E.jpg');
+  await expect(page.getByText('scan_E.jpg', { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.evaluate(() => scrollTo(0, 0));
+  await screenshot(page, testInfo, 'item-research-layout');
+});
+
+test('item tools copy real links and restore the actual results context', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async text => { window.copiedText = text; } } });
+  });
+  await page.goto('/browse.html?fulltext_search=archive&sort_by=date&page=2');
+  await page.locator('.browse-card a').first().click();
+  await expect(page.locator('.item-back-results')).toHaveAttribute('href', 'http://127.0.0.1:8766/browse.html?fulltext_search=archive&sort_by=date&page=2');
+  await page.getByRole('button', { name: 'Copy record link', exact: true }).click();
+  expect(await page.evaluate(() => window.copiedText)).toBe('http://127.0.0.1:8766/item.html');
+  await expect(page.getByRole('status').filter({ hasText: 'Record link copied' })).toBeVisible();
+  await page.getByText('Cite this item', { exact: true }).click();
+  await page.getByRole('button', { name: 'Copy citation', exact: true }).click();
+  expect(await page.evaluate(() => window.copiedText)).toContain('IJA 123');
+  await page.locator('.item-back-results').click();
+  await expect(page).toHaveURL(/browse\.html\?fulltext_search=archive&sort_by=date&page=2$/);
+});
+
+
+test('copy tools provide a manual fallback and reject external results context', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => { throw new Error('Permission denied'); } } });
+    sessionStorage.setItem('ija-result-context', JSON.stringify({ url: 'https://example.org/untrusted', scope: '/', recordPath: '/item.html' }));
+  });
+  await page.goto('/item.html');
+  await expect(page.locator('.item-back-results')).toBeHidden();
+  await page.getByRole('button', { name: 'Copy record link', exact: true }).click();
+  await expect(page.getByRole('textbox', { name: 'Record link', exact: true })).toHaveValue('http://127.0.0.1:8766/item.html');
+  await expect(page.getByRole('status').filter({ hasText: 'Copy is unavailable' })).toBeVisible();
+});

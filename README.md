@@ -192,3 +192,13 @@ sizes. Exhibit pages also gain responsive chapter navigation, named previous/nex
 links and an accessible image viewer with persistent collection-record links.
 See the [exhibit guide](docs/exhibits.md) for supported content structure, settings,
 photo mapping, fallbacks and release checks. No saved page content is changed.
+
+## Item view
+
+Item pages now lead with the existing viewer, followed by files/citation and
+native grouped catalogue sections. Original/transliterated titles retain their
+own direction; image counts exclude PDFs, and original source filenames remain
+available. Research tools provide record-link/citation copying, exact-property
+subject/place/creator search links and a genuine same-site Back to results context.
+All catalogue values remain in Omeka's rendering/filter pipeline. See the
+[item-view guide](docs/item-view.md) for grouping, viewer contracts and release checks.

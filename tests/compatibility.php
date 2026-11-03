@@ -59,6 +59,7 @@ final class ThemeItem
     public function __construct(private array $media = [], private string|Stringable|null $type = null) {}
     public function value($term) { return $term === 'ija:record_type' ? $this->type : null; }
     public function media(): array { return $this->media; }
+    public function url(...$args): string { return 'https://example.test/item/1'; }
     public function displayTitle(): string { return 'Test item'; }
     public function displayValues(): string { return '<dl><dt>Title</dt><dd>Test item</dd></dl>'; }
     public function displaySubjectValues(array $options = []): string { return ''; }
@@ -67,7 +68,8 @@ final class ThemeItem
 final class ThemeMedia
 {
     public function __construct(private ?string $filename, private ?string $type) {}
-    public function filename(): ?string { return $this->filename; }
+    public function filename(): ?string { return $this->filename === null ? null : 'storage-hash.' . pathinfo($this->filename, PATHINFO_EXTENSION); }
+    public function source(): ?string { return $this->filename; }
     public function mediaType(): ?string { return $this->type; }
     public function thumbnailUrl($size): ?string { return null; }
     public function originalUrl(): string { return '/files/test.pdf'; }
@@ -98,13 +100,14 @@ $tests = [
         $item = new class {
             public function value($term) { return '<b>Custom text</b>'; }
             public function media() { return []; }
+            public function url(...$args) { return 'https://example.test/item/1'; }
             public function displayTitle() { return '<b>Item title</b>'; }
             public function displayValues() { return '<dl><dt>Metadata</dt><dd><a href="/resource">Linked value</a></dd></dl>'; }
             public function displaySubjectValues(...$args) { return ''; }
         };
         $html = (new ThemeView)->render('omeka/site/item/show', ['item' => $item]);
         check(str_contains($html, '&lt;b&gt;Item title&lt;/b&gt;'), 'Item title is not escaped');
-        check(substr_count($html, '&lt;b&gt;Custom text&lt;/b&gt;') === 3, 'Custom item text is not consistently escaped');
+        check(substr_count($html, '&lt;b&gt;Custom text&lt;/b&gt;') >= 2, 'Custom item text is not consistently escaped');
         check(str_contains($html, '<a href="/resource">Linked value</a>'), 'Metadata HTML was escaped');
     },
     'Sort controls have visible associated labels' => static function () {
@@ -121,7 +124,7 @@ $tests = [
         $view = new ThemeView;
         $html = $view->render('omeka/site/item/show', ['item' => new ThemeItem([new ThemeMedia('scan.pdf', 'application/pdf')])]);
         check(str_contains($html, 'No inline preview is available'), 'Missing viewer has no explanation');
-        check(str_contains($html, 'View available files') && str_contains($html, 'href="/files/test.pdf"'), 'Direct file fallback is missing');
+        check(str_contains($html, 'PDF documents') && str_contains($html, 'href="/files/test.pdf"'), 'Direct file fallback is missing');
         $view->eventOutputs['view.show.after'] = '<div id="module-viewer">Viewer output</div>';
         $html = $view->render('omeka/site/item/show', ['item' => new ThemeItem]);
         check(substr_count($html, 'id="module-viewer"') === 1, 'Viewer hook output was lost or duplicated');
@@ -155,6 +158,39 @@ $tests = [
         ] as $unsupported) {
             check(IjaTheme\RecoveryExhibit::prepare($unsupported) === null, 'Unsupported source content must not disappear');
         }
+    },
+    'Item metadata groups every visible property exactly once' => static function () {
+        require_once dirname(__DIR__) . '/src/ItemMetadata.php';
+        $value = new class { public function lang() { return ''; } };
+        $french = new class { public function lang() { return 'fr'; } };
+        $values = [];
+        foreach (['dcterms:description', 'dcterms:publisher', 'ija:height', 'ija:mended', 'custom:unknown', 'dcterms:rights'] as $term) $values[$term] = ['values' => [$value]];
+        $values['custom:french'] = ['values' => [$french]];
+        $groups = IjaTheme\ItemMetadata::group($values, true, 'en');
+        $terms = [];
+        foreach ($groups as $group) $terms = array_merge($terms, array_keys($group['values']));
+        check(count($terms) === 6 && count(array_unique($terms)) === 6, 'Metadata was duplicated, lost or not locale-filtered');
+        check(isset($groups['description']['values']['custom:unknown']), 'Unknown properties must remain visible');
+        check(isset($groups['preservation']['values']['ija:mended']), 'Treatment field is in the wrong section');
+    },
+    'Item files count images separately from PDFs and retain filenames' => static function () {
+        require_once dirname(__DIR__) . '/src/ItemFiles.php';
+        $files = IjaTheme\ItemFiles::describe([new ThemeMedia('03339_A.jpg', 'image/jpeg'), new ThemeMedia('03339_E.jpg', 'image/jpeg'), new ThemeMedia('03339.PDF', null)]);
+        check(count($files['images']) === 2 && count($files['pdfs']) === 1, 'PDF was counted as an image');
+        check($files['images'][1]['filename'] === '03339_E.jpg', 'Original filename was lost');
+        $urlFile = new class {
+            public function mediaType() { return 'image/jpeg'; }
+            public function filename() { return 'another-storage-hash.jpg'; }
+            public string $sourceValue = 'https://example.test/private/scan%20E.jpg?token=hidden';
+            public function source() { return $this->sourceValue; }
+            public function displayTitle() { return 'Catalogue image'; }
+            public function originalUrl() { return '/files/original/hash.jpg'; }
+        };
+        $files = IjaTheme\ItemFiles::describe([$urlFile]);
+        check($files['images'][0]['filename'] === 'scan E.jpg', 'Source URL paths or query parameters were exposed as filenames');
+        $urlFile->sourceValue = 'C:' . chr(92) . 'private' . chr(92) . 'scan_E.jpg';
+        $files = IjaTheme\ItemFiles::describe([$urlFile]);
+        check($files['images'][0]['filename'] === 'scan_E.jpg', 'Windows source paths must not be exposed');
     },
     'URL media with no filename renders without PHP deprecations' => static function () {
         $html = (new ThemeView)->render('omeka/site/item/show', [

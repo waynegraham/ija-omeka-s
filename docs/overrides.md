@@ -63,3 +63,8 @@ content; `viewer` provides one native dialog. `common/block-layout/file` preserv
 core attachment/render/link/title/caption behavior while preferring large image
 derivatives. `common/site-page-pagination` now names destinations. See the exhibit
 guide before changing the strict Recovery content adapter.
+
+Item additions: `common/item-metadata` groups filtered catalogue data and delegates
+to the existing value renderer. `item-files` and `item-tools` provide original-file
+labels, canonical links and citation UI. Item descriptions render once in metadata;
+viewer hooks and linked-resource options are preserved. See `docs/item-view.md`.

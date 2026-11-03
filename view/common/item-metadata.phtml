@@ -1,0 +1,49 @@
+<?php
+require_once dirname(__DIR__, 2) . '/src/ItemMetadata.php';
+$escape = $this->plugin('escapeHtml');
+$translate = $this->plugin('translate');
+$groups = \IjaTheme\ItemMetadata::group($values, (bool) $this->siteSetting('filter_locale_values'), (string) $this->lang());
+$openAll = $this->params()->fromQuery('metadata') === 'all';
+?>
+<?php if ($groups): ?>
+<div class="metadata-controls" hidden>
+  <button type="button" class="btn btn-outline-primary" data-metadata-action="expand"><?php echo $escape($translate('Expand all details')); ?></button>
+  <button type="button" class="btn btn-outline-primary" data-metadata-action="collapse"><?php echo $escape($translate('Collapse all details')); ?></button>
+</div>
+<?php foreach ($groups as $key => $group): ?>
+<details class="item-metadata-group" id="metadata-<?php echo $key; ?>"<?php if ($group['open'] || $openAll) echo ' open'; ?>>
+  <summary><?php echo $escape($translate($group['title'])); ?></summary>
+  <div class="metadata-group-content"><?php echo $this->partial('common/resource-values', ['values' => $group['values']]); ?></div>
+</details>
+<?php endforeach; ?>
+<?php
+// Use only public catalogue values to offer explicit, exact-property research paths.
+$research = [];
+$seen = [];
+foreach (['dcterms:subject' => 'Subject', 'ija:metadata' => 'Subject', 'dcterms:spatial' => 'Place', 'ija:place_of_publication' => 'Place', 'dcterms:creator' => 'Creator'] as $term => $label) {
+    foreach ($groups as $group) {
+        if (!isset($group['values'][$term])) continue;
+        $data = $group['values'][$term];
+        foreach ($data['values'] as $value) {
+            if (!$value->isPublic() || str_contains($value->type(), 'resource') || $value->type() === 'uri') continue;
+            $text = trim((string) $value);
+            if ($text === '' || mb_strlen($text) > 120 || isset($seen[$text])) continue;
+            $seen[$text] = true;
+            $research[] = ['label' => $translate($label) . ': ' . $text, 'property' => $data['property']->id(), 'text' => $text];
+            if (count($research) === 6) break 3;
+        }
+    }
+}
+?>
+<?php if ($research): ?>
+<section class="item-research" aria-labelledby="research-title">
+  <h3 id="research-title"><?php echo $escape($translate('Continue exploring')); ?></h3>
+  <p><?php echo $escape($translate('Explore records with these catalogue values.')); ?></p>
+  <ul>
+    <?php foreach ($research as $link): ?>
+    <li><?php echo $this->hyperlink($link['label'], $this->url('site/resource', ['controller' => 'item', 'action' => 'browse'], ['query' => ['property' => [['property' => $link['property'], 'type' => 'eq', 'text' => $link['text']]]]], true)); ?></li>
+    <?php endforeach; ?>
+  </ul>
+</section>
+<?php endif; ?>
+<?php endif; ?>

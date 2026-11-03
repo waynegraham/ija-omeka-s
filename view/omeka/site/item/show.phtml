@@ -3,12 +3,19 @@ $translate = $this->plugin('translate');
 $this->htmlElement('body')->appendAttribute('class', 'item resource show');
 $embedMedia = $this->siteSetting('item_media_embed', false);
 $itemMedia = $item->media();
+require_once dirname(__DIR__, 4) . '/src/ItemFiles.php';
+$files = \IjaTheme\ItemFiles::describe($itemMedia);
+$valueLang = $this->siteSetting('filter_locale_values') ? [$this->lang(), ''] : null;
+$recordTitle = $item->displayTitle(null, $valueLang);
+$recordUrl = $item->url(null, true);
+$number = $item->value('ija:ija_number');
 $isVideo = (string) $item->value('ija:record_type') === 'Video';
 
 ?>
 <?php $this->trigger('view.show.before'); ?>
 
-<div class="row title-bar auto">
+<a class="item-back-results" hidden><?php echo $this->escapeHtml($translate('Back to results')); ?></a>
+<div class="row title-bar auto item-record-header">
   <div class="col-auto item-title-icon">
     <?php echo $this->partial('common/record-type-icon', ['recordType' => $item->value('ija:record_type'), 'large' => true]); ?>
   </div>
@@ -16,18 +23,21 @@ $isVideo = (string) $item->value('ija:record_type') === 'Video';
     <?php if($item->value('ija:ija_number')): ?>
     <span class="small text-muted">IJA Number: <?php echo $this->escapeHtml($item->value('ija:ija_number')); ?></span>
     <?php endif; ?>
-    <div class="item-primary-title" dir="auto"><?php echo $this->pageTitle($item->displayTitle(), 1); ?></div>
+    <div class="item-primary-title" dir="auto"><?php echo $this->pageTitle($recordTitle, 1); ?></div>
     <?php if($item->value('dcterms:alternative')): ?>
-      <h2 class="transliteration" dir="auto"><?php echo $this->escapeHtml($item->value('dcterms:alternative')); ?></h2>
+      <p class="transliteration item-subtitle" dir="auto"><?php echo $this->escapeHtml($item->value('dcterms:alternative')); ?></p>
     <?php endif; ?>
+    <p class="item-key-facts"><?php echo $this->escapeHtml($item->value('ija:record_type')); ?></p>
   </div>
 
-  <p class="lead mb-4 mt-4 item-description" dir="auto">
-    <?php echo $this->escapeHtml($item->value('dcterms:description')); ?>
-  </p>
 </div>
+<nav class="item-section-links" aria-label="<?php echo $this->escapeHtml($translate('On this record')); ?>">
+  <a href="#item-viewer"><?php echo $this->escapeHtml($translate('View item')); ?></a>
+  <a href="#item-tools"><?php echo $this->escapeHtml($translate('Files and citation')); ?></a>
+  <a href="#ija_metadata"><?php echo $this->escapeHtml($translate('Catalogue details')); ?></a>
+</nav>
 
-<section class="item-preview" aria-label="<?php echo $this->escapeHtmlAttr($translate('Item preview')); ?>">
+<section id="item-viewer" class="item-preview" aria-label="<?php echo $this->escapeHtmlAttr($translate('Item preview')); ?>">
     <?php if ($isVideo): ?>
       <h2><?php echo $translate('View'); ?></h2>
       <?php foreach ($itemMedia as $media): ?>
@@ -36,7 +46,8 @@ $isVideo = (string) $item->value('ija:record_type') === 'Video';
         </div>
       <?php endforeach; ?>
     <?php else: ?>
-      <h2><?php echo $translate('Preview'); ?></h2>
+      <h2><?php echo $translate('View item'); ?></h2>
+      <?php if ($files['images']): ?><p class="item-media-summary"><?php echo $this->escapeHtml(sprintf($translate(count($files['images']) === 1 ? '%s image' : '%s images'), count($files['images']))); ?><?php if ($files['pdfs']) echo ' · ' . $this->escapeHtml(sprintf($translate(count($files['pdfs']) === 1 ? '%s PDF' : '%s PDFs'), count($files['pdfs']))); ?></p><?php endif; ?>
       <?php
       // Preserve viewer-module output and placement; provide an honest empty state
       // only when no provider rendered anything into this hook.
@@ -49,56 +60,23 @@ $isVideo = (string) $item->value('ija:record_type') === 'Video';
       echo $previewContent;
       ?>
       <?php if (trim($previewContent) === '' && !$embedMedia): ?>
-      <p><?php echo $this->escapeHtml($translate('No inline preview is available. Item details are provided below.')); ?></p>
+      <p><?php echo $this->escapeHtml($translate('No inline preview is available. Original files and catalogue details are provided below.')); ?></p>
       <?php endif; ?>
     <?php endif; ?>
-    <?php
-    $originalFiles = [];
-    foreach ($itemMedia as $media) {
-        if ($originalUrl = $media->originalUrl()) $originalFiles[] = [$originalUrl, $media->displayTitle()];
-    }
-    ?>
-    <?php if ($originalFiles): ?>
-    <details class="original-files">
-      <summary><?php echo $this->escapeHtml($translate('View available files')); ?></summary>
-      <ul>
-      <?php foreach ($originalFiles as [$originalUrl, $fileTitle]): ?>
-        <li><a href="<?php echo $this->escapeHtmlAttr($originalUrl); ?>" dir="auto"><?php echo $this->escapeHtml($fileTitle ?: $translate('Open original file')); ?></a></li>
-      <?php endforeach; ?>
-      </ul>
-    </details>
+    <?php if ($embedMedia && $itemMedia && !$isVideo): ?>
+    <div class="media-embeds"><?php foreach ($itemMedia as $media) echo $media->render(); ?></div>
     <?php endif; ?>
 </section>
 
+<?php echo $this->partial('common/item-tools', [
+    'files' => $files, 'title' => $recordTitle, 'number' => $number, 'recordUrl' => $recordUrl,
+    'siteTitle' => isset($site) ? $site->title() : $translate('Iraqi Jewish Archive'),
+]); ?>
 
-<section id="ija_metadata" aria-label="<?php echo $this->escapeHtmlAttr($translate('Item details')); ?>">
+<section id="ija_metadata" aria-label="<?php echo $this->escapeHtml($translate('Item details')); ?>">
   <h2><?php echo $this->escapeHtml($translate('Item details')); ?></h2>
-  <div class="row">
-    <?php if (!$embedMedia && $itemMedia): ?>
-    <div class="col col-md-auto">
-      <div class="media-list">
-          <?php foreach ($itemMedia as $media): ?>
-
-              <?php echo $this->partial('common/pdf-download', ['media' => $media]); ?>
-          <?php endforeach; ?>
-      </div>
-    </div>
-    <?php endif; ?>
-    <div class="col col-lg">
-      <?php echo $item->displayValues(); ?>
-    </div>
-
-    </div>
-  </section>
-
-<?php if ($embedMedia && $itemMedia && !$isVideo): ?>
-<div class="media-embeds">
-<?php foreach ($itemMedia as $media):
-    echo $media->render();
-endforeach;
-?>
-</div>
-<?php endif; ?>
+  <?php echo $item->displayValues(['viewName' => 'common/item-metadata']); ?>
+</section>
 
 <?php
    $subjectValues = $item->displaySubjectValues([
@@ -109,7 +87,7 @@ endforeach;
 ?>
 <?php if ($subjectValues): ?>
 <div id="item-linked">
-   <h3><?php echo $translate('Linked resources'); ?></h3>
+   <h2><?php echo $translate('Linked resources'); ?></h2>
    <?php echo $subjectValues; ?>
 </div>
 <?php endif; ?>
