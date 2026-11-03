@@ -144,7 +144,7 @@ $homeContent = '<div class="block block-html"><div class="jumbotron breakout par
 
 $directory = __DIR__ . '/generated';
 if (!is_dir($directory)) mkdir($directory, 0777, true);
-foreach (['page', 'exhibit', 'generic-exhibit', 'home', 'legacy-home', 'browse', 'item', 'rtl', 'arabic', 'results', 'empty-results', 'search'] as $fixture) {
+foreach (['page', 'exhibit', 'generic-exhibit', 'thumbnail-exhibit', 'home', 'legacy-home', 'browse', 'item', 'rtl', 'arabic', 'results', 'empty-results', 'search'] as $fixture) {
     $view->headLink()->getContainer()->exchangeArray([]);
     $view->headScript()->getContainer()->exchangeArray([]);
     $view->htmlElement('body')->setAttribute('class', '');
@@ -152,6 +152,7 @@ foreach (['page', 'exhibit', 'generic-exhibit', 'home', 'legacy-home', 'browse',
     $helper->setView($view);
     $helpers->setService('themeSetting', $helper);
     $content = match ($fixture) {
+        'thumbnail-exhibit' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $page, 'content' => '<div class="media-embed layout-horizontal media-display-thumbnail multiple-attachments">' . str_repeat('<div class="item resource"><a href="/item/288"><img src="/thumbnail.svg" alt="Landscape photograph"></a><h3><a href="/item/288">Landscape photograph</a></h3></div>', 4) . '</div>', 'displayNavigation' => true, 'pageBodyClass' => 'page']),
         'generic-exhibit' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $page, 'content' => '<div class="media-embed"><div class="item resource"><div class="media-render"><a href="/item/288"><img src="/thumbnail.svg" alt=""></a></div><div class="caption"><p>Photograph without a linked item title</p></div></div></div>', 'displayNavigation' => true, 'pageBodyClass' => 'page']),
         'exhibit' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $exhibit, 'content' => $exhibitContent, 'displayNavigation' => true, 'pageBodyClass' => 'page']),
         'page' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $page, 'content' => $gallery, 'displayNavigation' => true, 'pageBodyClass' => 'page']),

@@ -323,3 +323,26 @@ test('printing opens catalogue groups and restores their previous state', async 
   await page.emulateMedia({ media: 'screen' });
   expect(await groups.evaluateAll(nodes => nodes.map(node => node.open))).toEqual(state);
 });
+
+
+test('multi-image exhibit thumbnails stay inside their frames', async ({ page }, testInfo) => {
+  await page.route('**/thumbnail.svg', route => route.fulfill({
+    contentType: 'image/svg+xml',
+    body: '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><rect width="1200" height="800" fill="#73899b"/></svg>',
+  }));
+  await page.goto('/thumbnail-exhibit.html');
+  const images = page.locator('.media-embed .exhibit-photo-image img');
+  await expect(images).toHaveCount(4);
+  for (const image of await images.all()) {
+    const contained = await image.evaluate(img => {
+      const image = img.getBoundingClientRect();
+      const frame = img.closest('.archive-image').getBoundingClientRect();
+      return image.left >= frame.left - 1 && image.right <= frame.right + 1
+        && image.top >= frame.top - 1 && image.bottom <= frame.bottom + 1
+        && getComputedStyle(img).objectFit === 'contain';
+    });
+    expect(contained).toBe(true);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await screenshot(page, testInfo, 'thumbnail-exhibit');
+});

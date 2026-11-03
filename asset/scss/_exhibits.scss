@@ -30,7 +30,9 @@
   .site-page-pagination a { max-width: 35ch; font-size: 1rem; }
   .exhibit-next { margin-inline-start: auto; }
   .exhibit-page .media-embed.layout-horizontal { --grid-item--min-width: min(240px, 100%); }
-  .exhibit-page .media-embed .exhibit-photo-image img { max-height: none; margin-bottom: 0; }
+  // Override core's width:auto on multi-attachment thumbnails, including images
+  // linked directly from the resource rather than wrapped in .media-render.
+  .exhibit-page .media-embed .resource .exhibit-photo-image img { width: 100%; height: 100%; max-width: 100%; max-height: none; object-fit: contain; margin-bottom: 0; }
   .exhibit-page .media-embed .resource h3 { font-size: 1rem; line-height: 1.5; }
   .exhibit-image-viewer { width: min(94vw, 1100px); max-height: 94vh; padding: 1.25rem; border: 0; background: var(--archive-paper); color: var(--archive-ink); overflow: auto; }
   .exhibit-image-viewer::backdrop { background: rgba(0, 24, 52, .85); }
