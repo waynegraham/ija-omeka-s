@@ -111,9 +111,9 @@
     .archive-section { padding-block: 2rem; }
     .archive-section-heading { align-items: start; flex-direction: column; }
     .page-nav { margin-bottom: .5rem; }
-    #ija_metadata .dl-invert > dt { border-bottom: 0; padding-bottom: 0; }
   }
   @media (max-width: 575.98px) {
+    #ija_metadata .dl-invert > dt { border-bottom: 0; padding-bottom: 0; }
     .navbar-brand { max-width: calc(100% - 5rem); }
     .browse-thumbnail { width: 5.5rem; }
     .browse-thumbnail .archive-image { height: 8rem; padding: .5rem; }

@@ -130,6 +130,29 @@ $tests = [
         check(substr_count($html, 'id="module-viewer"') === 1, 'Viewer hook output was lost or duplicated');
         check(!str_contains($html, 'No inline preview is available'), 'Empty message appears with a viewer');
     },
+    'Invisible module output preserves the missing-preview explanation' => static function () {
+        foreach (['<script type="application/ld+json">{"name":"Record"}</script>', '<!-- module metadata -->', '<style>.viewer { color: red; }</style>', '<div hidden><div>Hidden metadata</div></div>'] as $output) {
+            $view = new ThemeView;
+            $view->eventOutputs['view.show.after'] = $output;
+            $html = $view->render('omeka/site/item/show', ['item' => new ThemeItem]);
+            check(str_contains($html, $output), 'Invisible module output was removed');
+            check(str_contains($html, 'No inline preview is available'), 'Invisible output suppresses the preview explanation');
+        }
+        $view = new ThemeView;
+        $view->eventOutputs['view.show.after'] = '<script type="application/ld+json">{}</script><div class="mirador viewer"></div>';
+        $html = $view->render('omeka/site/item/show', ['item' => new ThemeItem]);
+        check(!str_contains($html, 'No inline preview is available'), 'A viewer mount was mistaken for metadata');
+    },
+    'Layout explicitly closes its header before main content' => static function () {
+        $source = file_get_contents(dirname(__DIR__) . '/view/layout/layout.phtml');
+        check(strpos($source, '</header>') !== false && strpos($source, '</header>') < strpos($source, '<main'), 'Header is not explicitly closed before main');
+    },
+    'Archival format uses the physical characteristics group' => static function () {
+        require_once dirname(__DIR__) . '/src/ItemMetadata.php';
+        $value = new class { public function lang() { return ''; } };
+        $groups = IjaTheme\ItemMetadata::group(['ija:archival_materials_format' => ['values' => [$value]]]);
+        check(isset($groups['physical']['values']['ija:archival_materials_format']), 'Actual archival format property is in the wrong group');
+    },
     'Exhibit pagination names and escapes the destination pages' => static function () {
         $previous = new class { public function title() { return 'Preservation <Project>'; } public function siteUrl() { return '/previous'; } };
         $next = new class { public function title() { return 'Assessment and Planning'; } public function siteUrl() { return '/next'; } };

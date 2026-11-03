@@ -47,7 +47,6 @@
   @media (max-width: 767.98px) {
     .item-tools-grid { grid-template-columns: 1fr; gap: 1.5rem; }
     .item-preview .mirador.viewer, .item-preview .universal-viewer { height: 460px; }
-    #ija_metadata .item-metadata-group dl > dt { border-bottom: 0; padding-bottom: 0; }
   }
   @media print {
     .site-header, footer, .item-section-links, .metadata-controls, .item-copy-controls, .item-back-results { display: none !important; }

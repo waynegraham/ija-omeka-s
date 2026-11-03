@@ -3,9 +3,9 @@ $translate = $this->plugin('translate');
 $this->headMeta()->setCharset('utf-8');
 $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1');
 $this->headTitle($this->setting('installation_title', 'Omeka S'))->setSeparator(' · ');
-$this->headLink()->appendStylesheet($this->assetUrl('fonts/fonts.css'));
-$this->headLink()->appendStylesheet($this->assetUrl('css/custom-bootstrap.css'));
-$this->headLink()->appendStylesheet($this->assetUrl('css/main.css'));
+$this->headLink()->appendStylesheet($this->assetUrl('fonts/fonts.css'), 'all');
+$this->headLink()->appendStylesheet($this->assetUrl('css/custom-bootstrap.css'), 'all');
+$this->headLink()->appendStylesheet($this->assetUrl('css/main.css'), 'all');
 $this->headScript()->prependFile($this->assetUrl('vendor/jquery/jquery.min.js', 'Omeka'));
 $this->headScript()->appendFile($this->assetUrl('js/global.js', 'Omeka'));
 $this->headScript()->appendFile($this->assetUrl('js/theme.js'), 'text/javascript', ['defer' => true]);
@@ -70,6 +70,7 @@ $userBar = $this->userBar();
                 </div>
               </div>
             </nav>
+          </header>
         </div>
 
         <main id="content" tabindex="-1">

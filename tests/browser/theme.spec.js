@@ -289,3 +289,37 @@ test('copy tools provide a manual fallback and reject external results context',
   await expect(page.getByRole('textbox', { name: 'Record link', exact: true })).toHaveValue('http://127.0.0.1:8766/item.html');
   await expect(page.getByRole('status').filter({ hasText: 'Copy is unavailable' })).toBeVisible();
 });
+
+
+test('metadata borders align at intermediate widths', async ({ page }) => {
+  for (const width of [575, 576, 600, 767, 768]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/item.html');
+    const row = await page.locator('#metadata-description dt').first().evaluate(dt => {
+      const dd = dt.nextElementSibling;
+      return { label: dt.getBoundingClientRect().toJSON(), value: dd.getBoundingClientRect().toJSON(), border: getComputedStyle(dt).borderBottomWidth };
+    });
+    if (width >= 576) {
+      expect(row.border).toBe('1px');
+      expect(Math.abs(row.label.bottom - row.value.bottom)).toBeLessThan(1);
+    } else {
+      expect(row.border).toBe('0px');
+      expect(row.value.top).toBeGreaterThanOrEqual(row.label.bottom);
+    }
+  }
+});
+
+test('printing opens catalogue groups and restores their previous state', async ({ page }) => {
+  await page.goto('/item.html');
+  const groups = page.locator('.item-metadata-group');
+  const state = await groups.evaluateAll(nodes => nodes.map(node => node.open));
+  await page.emulateMedia({ media: 'print' });
+  await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
+  await expect(page.locator('.item-metadata-group:not([open])')).toHaveCount(0);
+  await expect(page.getByText('19.60 cm')).toBeVisible();
+  await expect(page.locator('.site-header')).toBeHidden();
+  await expect(page.locator('#ija_metadata')).toBeVisible();
+  await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
+  await page.emulateMedia({ media: 'screen' });
+  expect(await groups.evaluateAll(nodes => nodes.map(node => node.open))).toEqual(state);
+});

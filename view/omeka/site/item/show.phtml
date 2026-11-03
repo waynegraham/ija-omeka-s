@@ -4,6 +4,7 @@ $this->htmlElement('body')->appendAttribute('class', 'item resource show');
 $embedMedia = $this->siteSetting('item_media_embed', false);
 $itemMedia = $item->media();
 require_once dirname(__DIR__, 4) . '/src/ItemFiles.php';
+require_once dirname(__DIR__, 4) . '/src/ItemPreview.php';
 $files = \IjaTheme\ItemFiles::describe($itemMedia);
 $valueLang = $this->siteSetting('filter_locale_values') ? [$this->lang(), ''] : null;
 $recordTitle = $item->displayTitle(null, $valueLang);
@@ -50,7 +51,7 @@ $isVideo = (string) $item->value('ija:record_type') === 'Video';
       <?php if ($files['images']): ?><p class="item-media-summary"><?php echo $this->escapeHtml(sprintf($translate(count($files['images']) === 1 ? '%s image' : '%s images'), count($files['images']))); ?><?php if ($files['pdfs']) echo ' · ' . $this->escapeHtml(sprintf($translate(count($files['pdfs']) === 1 ? '%s PDF' : '%s PDFs'), count($files['pdfs']))); ?></p><?php endif; ?>
       <?php
       // Preserve viewer-module output and placement; provide an honest empty state
-      // only when no provider rendered anything into this hook.
+      // when the hook contains only metadata or other invisible output.
       ob_start();
       try {
           $this->trigger('view.show.after');
@@ -59,7 +60,7 @@ $isVideo = (string) $item->value('ija:record_type') === 'Video';
       }
       echo $previewContent;
       ?>
-      <?php if (trim($previewContent) === '' && !$embedMedia): ?>
+      <?php if (!\IjaTheme\ItemPreview::hasContent($previewContent) && !($embedMedia && $itemMedia)): ?>
       <p><?php echo $this->escapeHtml($translate('No inline preview is available. Original files and catalogue details are provided below.')); ?></p>
       <?php endif; ?>
     <?php endif; ?>

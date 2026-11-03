@@ -26,7 +26,7 @@ final class ItemMetadata
             } elseif (preg_match('/mold|dirty|mended|rehoused|flattening|treatment|conservation|preservation/', $local)) {
                 $group = 'preservation';
             } elseif (preg_match('/^(depth|height|width|size|thickness|attachments)$/', $local)
-                || in_array($local, ['book_format', 'cover_material', 'format_of_archival_materials', 'binding', 'binding_type'], true)
+                || in_array($local, ['book_format', 'cover_material', 'archival_materials_format', 'format_of_archival_materials', 'binding', 'binding_type'], true)
                 || in_array($term, ['dcterms:extent', 'dcterms:medium', 'dcterms:format'], true)) {
                 $group = 'physical';
             } elseif (preg_match('/date|publication|publisher|author|creator|contributor|language|oclc/', $local)) {

@@ -14,6 +14,12 @@ Viewer, configure their thumbnail rails, intercept scan controls or create a sec
 item image viewer. Scan navigation and asynchronous loading/error behavior remain
 owned by the selected module. Check the actual provider and files on deployment.
 
+`src/ItemPreview.php` checks hook output for potential preview content without
+changing that output. Scripts, styles, comments and hidden metadata alone do not
+suppress the missing-preview explanation. Empty visible containers count as
+potential viewer mounts; this check does not establish successful module loading.
+Shared styles load for screen and print so print disclosure rules can apply.
+
 ## Catalogue grouping
 
 The item calls `displayValues(['viewName' => 'common/item-metadata'])`, so Omeka's

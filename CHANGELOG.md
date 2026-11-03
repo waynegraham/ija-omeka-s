@@ -7,6 +7,11 @@ deployment record to establish publication or installation status.
 
 ### Fixed
 
+- Aligned metadata borders at intermediate widths and corrected archival-format
+  grouping. Script-only module output no longer hides the missing-preview message.
+- Closed the layout header explicitly and enabled shared styles for printing,
+  with regression coverage for print disclosure state and intermediate widths.
+
 - Replaced the unverified hero letter with page 5 of Personal Letters (IJA 3339),
   linking both image and verified caption to item 16426 in the current site.
 
