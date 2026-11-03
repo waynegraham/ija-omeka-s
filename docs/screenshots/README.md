@@ -1,8 +1,8 @@
 # Reference screenshots
 
 No deployed-site reference images are committed here. `npm run test:browser`
-captures isolated page, browse and item layouts at both sizes and attaches them
-to the Playwright report (see the README). CI retains those artifacts for 14 days;
+captures isolated homepage, exhibit, page, browse and item layouts at both sizes
+and attaches them to the Playwright report (see the README). CI retains those artifacts for 14 days;
 they are not pixel-diff baselines or evidence about deployed content or viewers.
 This directory defines the broader baseline to collect on a running test site.
 Use only the synthetic records from [the fixture guide](../sample-records.md).
@@ -18,6 +18,9 @@ Capture these states at both sizes:
 
 | Name | Content/state |
 | --- | --- |
+| `home` | Split hero, highlights and story panels |
+| `recovery-exhibit` | Chapter navigation, narrative stages and open image dialog |
+| `exhibit-gallery` | Multiple loaded landscape/portrait images contained in their frames |
 | `browse` | Populated cards, metadata, sorting and pagination |
 | `book-pdf` | Book fixture, Preview, PDF download and metadata |
 | `video` | One player with media embedding enabled |
@@ -26,9 +29,12 @@ Capture these states at both sizes:
 
 On mobile, also capture `navigation-open` with the menu expanded. Test playback,
 dropdowns, search submission, PDF downloads and viewer controls interactively;
-screenshots cannot prove those actions work.
+screenshots cannot prove those actions work. Also capture advanced search at 200%
+text size at 960 and 1280 CSS pixels and content at 320 pixels with increased text
+spacing. Record these separately from the standard 100% zoom captures. Scroll
+through galleries and wait for lazy-loaded images before assessing containment.
 
-Store files under `VERSION/`, such as `2.0.1/browse-desktop.png`, alongside a
+Store files under `VERSION/`, such as `2.1.0/browse-desktop.png`, alongside a
 `capture.md` containing:
 
 ```text

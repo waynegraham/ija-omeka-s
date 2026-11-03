@@ -73,4 +73,7 @@ pages are unaffected.
 - Test real exhibit images after file synchronization, at phone widths and 200%
   zoom. Unknown-layout fallback is a deliberate safeguard, not a rendering error.
 - Deploy `src/RecoveryExhibit.php`, the new partials, `asset/js/exhibit.js` and
-  rebuilt CSS together; update the release asset version and clear caches.
+  rebuilt CSS together. `main.css` receives a content-based cache key; update the
+  theme version for other assets and clear stale HTML/proxy/CDN caches as needed.
+- Check multi-image thumbnail galleries with real landscape and portrait images
+  after lazy loading completes. Enhanced images should remain inside their frames.

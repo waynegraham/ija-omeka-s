@@ -83,6 +83,8 @@ and manual fallback, same-site results context and Hebrew/Arabic titles. Real lo
 checks confirmed the same field labels/counts for items 16426, 17159 and 1022.
 
 Deploy the new PHP utilities/partials, `asset/js/item.js` and generated CSS together.
-Increment the release asset version or clear caches. Check real image files and the
+The main stylesheet URL includes a content hash; other assets use the theme
+version. Update matching release versions and clear stale HTML/proxy/CDN caches
+as needed. Check real image files and the
 active viewer on phones and desktop; synthetic tests cannot validate its IIIF
 service or permission to reuse particular scans.

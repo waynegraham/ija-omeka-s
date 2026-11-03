@@ -57,7 +57,8 @@ and error states. Test real PDF, image, video and IIIF records after deployment.
 ## Release verification
 
 - Increment the theme version and matching package/lockfile versions before release
-  to invalidate cached asset URLs. Deploy templates, `asset/js/theme.js`, both new
+  to invalidate versioned asset URLs. The main stylesheet also uses a content hash.
+  Deploy templates, `asset/js/theme.js`, both new
   story images, CSS and the existing `asset/fonts/` directory together. Clear
   proxy/CDN caches and force-reload during local review.
 - Run the README's PHP, asset and browser checks. Inspect home, browse, search,

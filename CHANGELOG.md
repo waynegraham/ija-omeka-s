@@ -3,9 +3,19 @@
 Dates describe recorded development baselines. Check tags/releases and the private
 deployment record to establish publication or installation status.
 
-## Unreleased
+## 2.1.0 — 2026-11-03
 
 ### Fixed
+
+- Improved WCAG 2.1 AA support with named query joiners, higher-contrast focus
+  indicators and control borders, readable footer hover links, and useful keyboard
+  focus after adding/removing search queries. Removed empty pagination links.
+- Allowed advanced-search rows to wrap at every viewport width, including 200%
+  text sizing, and removed narrow-screen overflow on the legacy homepage.
+- Contained landscape thumbnails within multi-image exhibit frames by overriding
+  Omeka's intrinsic image sizing for enhanced exhibit galleries.
+- Added a content hash to the main stylesheet URL to invalidate stale browser/CDN
+  CSS caches when its contents change between theme version releases.
 
 - Aligned metadata borders at intermediate widths and corrected archival-format
   grouping. Script-only module output no longer hides the missing-preview message.
@@ -27,6 +37,10 @@ deployment record to establish publication or installation status.
   migrated Media Embed alignment and block-layout classes receive their styles.
 
 ### Changed
+
+- Softened the site with a cooler mist background, soft-white reading surfaces,
+  blue-gray navigation/supporting panels and slate photograph surrounds.
+- Aligned theme, package and lockfile versions at 2.1.0.
 
 - Reworked item pages around the existing viewer, grouped catalogue metadata,
   independent multilingual subtitles and a unified files/citation area.
@@ -64,6 +78,10 @@ deployment record to establish publication or installation status.
 - Added SVG sprite/license generation to the asset build and reproducibility checks.
 
 ### Added
+
+- WCAG 2.1 AA review with explicit production-content and assistive-technology
+  follow-up checks; expanded the browser suite to 76 desktop/mobile cases,
+  including text enlargement, text spacing and multi-image gallery containment.
 
 - Desktop/mobile Chromium regression checks in CI with screenshots and failure
   traces, using actual templates and synthetic records without a database.

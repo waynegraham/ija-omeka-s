@@ -1,12 +1,19 @@
 # Iraqi Jewish Archive theme
 
-Version 2.0.1 targets **Omeka S 4.x** and **PHP 8.1–8.5**. This is an
+Version 2.1.0 targets **Omeka S 4.x** and **PHP 8.1–8.5**. This is an
 Omeka S theme; it is not for Omeka Classic. Compiled CSS and JavaScript are
-included, so no asset rebuild is needed for this compatibility upgrade.
+included, so installing this release does not require an asset rebuild.
 
 Returning to this project? Start with [MAINTENANCE.md](MAINTENANCE.md) for the
 architecture, setup, sample records, override inventory and release procedures.
 See [CHANGELOG.md](CHANGELOG.md) for recorded changes.
+
+Version 2.1.0 introduces the redesigned archive homepage, cooler blue-gray palette,
+narrative Recovery exhibit and grouped item catalogue with files/citation tools.
+It also improves keyboard access, focus contrast, search reflow at enlarged text
+sizes and containment of exhibit gallery photographs. Existing saved page content
+is preserved, with theme settings to restore the original homepage and Recovery
+blocks. See the configuration guides below before deploying.
 
 The upgrade replaces legacy Zend form classes with Laminas, uses Omeka 4's
 `sortConfig` contract and Browse helper, and reads configured advanced-search
@@ -31,7 +38,7 @@ global settings. Video items render their media once even when embedding is enab
    requirements; its PHP 8.5 checks do not certify the whole installation.
 3. Replace this theme's files in `themes/ija-omeka-s`, preserving the directory name
    so existing site assignments and saved theme settings continue to apply.
-4. Confirm version 2.0.1 appears under the site's Themes settings. Open and save
+4. Confirm version 2.1.0 appears under the site's Themes settings. Open and save
    the theme settings, checking the logo, footer and description truncation.
 5. Check public navigation, site pages, full-text search, advanced property search,
    sorting, pagination, item-set browsing, and linked resources. Test items with
@@ -65,6 +72,12 @@ The watch command also watches SCSS partials. It reports compilation errors and
 keeps watching so you can correct them. Refresh the browser manually after edits;
 there is no development proxy or automatic browser reload. Commit regenerated
 assets alongside their source changes. Review vendor diffs when updating packages.
+
+The layout appends a content hash to `main.css` URLs, so rebuilding the CSS changes
+its cache key even between version releases. Other assets retain Omeka's versioned
+URLs; deploy matching templates/assets and clear cached HTML or proxy/CDN entries
+when needed.
+
 Only the Bootstrap and Popper minified scripts loaded by the layout and their
 source maps are shipped. Use `npm ci` to reproduce the versions in the lockfile.
 When removing or renaming an output, delete the obsolete generated file as well;
@@ -202,3 +215,13 @@ available. Research tools provide record-link/citation copying, exact-property
 subject/place/creator search links and a genuine same-site Back to results context.
 All catalogue values remain in Omeka's rendering/filter pipeline. See the
 [item-view guide](docs/item-view.md) for grouping, viewer contracts and release checks.
+
+## Accessibility
+
+The [WCAG 2.1 AA theme review](docs/accessibility-review-2026-11-03.md) records
+verified fixes and checks still needed on real content and viewer modules.
+The browser suite includes keyboard navigation, focus restoration, contrast,
+320-pixel reflow with increased text spacing, 200% text sizing at 960/1280 pixels,
+and multi-image exhibit containment. Passing these checks does not establish
+full-site WCAG conformance; screen-reader, PDF, video and production-viewer checks
+remain part of release verification.
