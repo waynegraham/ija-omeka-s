@@ -36,6 +36,11 @@ final class ThemeView
     public function escapeHtmlAttr($value): string { return $this->escapeHtml($value); }
     public function partial($template, $variables = []): string { return $this->render($template, $variables); }
     public function assetUrl($path): string { return '/theme/asset/' . $path; }
+    public function hyperlink($text, $url, $attributes = []): string {
+        $html = '<a href="' . $this->escapeHtml($url) . '"';
+        foreach ($attributes as $name => $value) $html .= ' ' . $name . '="' . $this->escapeHtml($value) . '"';
+        return $html . '>' . $this->escapeHtml($text) . '</a>';
+    }
     public function url(...$args): string { return '/search'; }
     public function setting(...$args) { return null; }
     public function siteSetting($name, $default = null) { return $this->siteSettings[$name] ?? $default; }
@@ -121,6 +126,35 @@ $tests = [
         $html = $view->render('omeka/site/item/show', ['item' => new ThemeItem]);
         check(substr_count($html, 'id="module-viewer"') === 1, 'Viewer hook output was lost or duplicated');
         check(!str_contains($html, 'No inline preview is available'), 'Empty message appears with a viewer');
+    },
+    'Exhibit pagination names and escapes the destination pages' => static function () {
+        $previous = new class { public function title() { return 'Preservation <Project>'; } public function siteUrl() { return '/previous'; } };
+        $next = new class { public function title() { return 'Assessment and Planning'; } public function siteUrl() { return '/next'; } };
+        $view = new ThemeView;
+        $html = $view->render('common/site-page-pagination', ['prevPage' => $previous, 'nextPage' => $next]);
+        check(str_contains($html, 'Previous: Preservation &lt;Project&gt;'), 'Previous destination is missing or unsafe');
+        check(str_contains($html, 'Next: Assessment and Planning'), 'Next destination is missing');
+        check(str_contains($html, 'rel="prev"') && str_contains($html, 'rel="next"'), 'Pagination relationships are missing');
+    },
+    'Recovery exhibit preserves prose, photographs and unknown-content fallback' => static function () {
+        require_once dirname(__DIR__) . '/src/RecoveryExhibit.php';
+        $content = file_get_contents(__DIR__ . '/fixtures/recovery-exhibit.html');
+        $result = IjaTheme\RecoveryExhibit::prepare($content);
+        check($result !== null, 'Known saved layout was not recognized');
+        check(str_contains($result['sections'][0]['html'], '<em>original emphasis</em>'), 'Saved narrative HTML was changed');
+        check(count($result['photos']) === 7, 'Original photographs were lost');
+        check(in_array(999, array_column($result['photos'], 'id'), true), 'An uncurated gallery photograph was lost');
+        check($result['documents'][0]['itemId'] === 269 && $result['documents'][1]['itemId'] === 271, 'Document records are incorrect');
+        $changed = preg_replace('~</div>\s*$~', '<div class="block block-html"><p>New editorial material</p></div></div>', $content);
+        check(IjaTheme\RecoveryExhibit::prepare($changed) === null, 'Unexpected added content must fall back unchanged');
+        foreach ([
+            str_replace('<h2>Related Materials</h2>', '<h2>Related Materials</h2><ul><li>UNIQUE_EDITORIAL_NOTE</li></ul>', $content),
+            $content . '<p>Editorial content outside the block wrapper</p>',
+            str_replace('<h2>Recovery of Artifacts</h2>', '<h2>Recovery of Artifacts</h2><p>New title introduction</p>', $content),
+            str_replace('alt=""></a>', 'alt=""><img src="/extra.svg" alt="Additional image"></a>', $content),
+        ] as $unsupported) {
+            check(IjaTheme\RecoveryExhibit::prepare($unsupported) === null, 'Unsupported source content must not disappear');
+        }
     },
     'URL media with no filename renders without PHP deprecations' => static function () {
         $html = (new ThemeView)->render('omeka/site/item/show', [

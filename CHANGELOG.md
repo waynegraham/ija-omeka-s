@@ -23,6 +23,12 @@ deployment record to establish publication or installation status.
 
 ### Changed
 
+- Reorganized the recognized Recovery of Artifacts content into narrative stages,
+  retaining its prose, all photographs and captions, with original-block fallback.
+- Added larger uncropped exhibit images, an accessible keyboard image viewer,
+  responsive chapter navigation and destination-named previous/next links.
+- Moved recovery documents after the story and linked verified PDF item records.
+
 - Implemented the approved archive homepage with a split search/letter introduction,
   public site-scoped collection highlights and concise story/background sections.
 - Added homepage settings, including a switch to restore the original saved blocks.

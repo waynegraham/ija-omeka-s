@@ -6,6 +6,11 @@ $isHome = $page->slug() === 'home';
 $designedHome = $isHome && (bool) $this->themeSetting('home_layout', true);
 if ($isHome) $this->htmlElement('body')->appendAttribute('class', 'site-home');
 $showPagePagination = $this->siteSetting('show_page_pagination', true);
+$recovery = null;
+if ($page->slug() === 'recovery-artifacts' && $this->themeSetting('recovery_story_layout', true)) {
+    require_once dirname(__DIR__, 4) . '/src/RecoveryExhibit.php';
+    $recovery = \IjaTheme\RecoveryExhibit::prepare((string) $this->content);
+}
 
 $nav = $site->publicNav();
 $container = $nav->getContainer();
@@ -31,11 +36,20 @@ switch ($this->siteSetting('subnav_display')) {
     <nav class="breadcrumbs" aria-label="<?php echo $this->escapeHtmlAttr($this->translate('Breadcrumb')); ?>"><?php echo $nav->breadcrumbs()->setPartial('common/bootstrap-breadcrumbs'); ?></nav>
     <?php endif; ?>
 <?php endif; ?>
-<div class="page-layout">
+<div class="page-layout<?php if ($recovery || ($activePage && $displaySubnav)) echo ' exhibit-page'; ?>">
+  <?php if ($recovery): ?>
+  <header class="exhibit-introduction">
+    <h1><?php echo $this->escapeHtml($page->title()); ?></h1>
+    <p><?php echo $this->escapeHtml($this->translate('How waterlogged books and documents were recovered, stabilized and prepared for preservation.')); ?></p>
+  </header>
+  <?php endif; ?>
   <div class="row">
       <?php if ($activePage && $displaySubnav): ?>
         <aside class="col-12 col-md-3 pt-3 light-bg page-nav">
-          <nav class="sub-menu"><?php echo $nav->menu()->renderSubMenu(); ?></nav>
+          <details class="exhibit-chapters" open>
+            <summary><?php echo $this->escapeHtml($this->translate('In this exhibit')); ?></summary>
+            <nav class="sub-menu" aria-label="<?php echo $this->escapeHtml($this->translate('Exhibit chapters')); ?>"><?php echo $nav->menu()->renderSubMenu(); ?></nav>
+          </details>
         </aside>
       <?php endif; ?>
 
@@ -43,7 +57,7 @@ switch ($this->siteSetting('subnav_display')) {
       <?php $this->trigger('view.show.before'); ?>
       <?php if ($isHome) echo $this->partial('common/home-actions'); ?>
       <div class="blocks mt-3<?php if (!$isHome) echo ' ps-2'; ?>">
-          <?php echo $this->content; ?>
+          <?php echo $recovery ? $this->partial('common/exhibit/recovery', ['recovery' => $recovery]) : $this->content; ?>
       </div>
       <?php $this->trigger('view.show.after'); ?>
       <?php if ($showPagePagination): ?>

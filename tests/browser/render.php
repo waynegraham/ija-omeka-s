@@ -98,6 +98,8 @@ $page = new class {
     public function slug() { return $this->slug; }
 };
 $home = new ($page::class)('home');
+$exhibit = new ($page::class)('recovery-artifacts');
+$exhibitContent = file_get_contents(dirname(__DIR__) . '/fixtures/recovery-exhibit.html');
 $rtl = clone $item;
 $rtl->title = 'מחזור לראש השנה — IJA 80';
 $arabic = clone $item;
@@ -106,7 +108,7 @@ $homeContent = '<div class="block block-html"><div class="jumbotron breakout par
 
 $directory = __DIR__ . '/generated';
 if (!is_dir($directory)) mkdir($directory, 0777, true);
-foreach (['page', 'home', 'legacy-home', 'browse', 'item', 'rtl', 'arabic', 'results', 'empty-results', 'search'] as $fixture) {
+foreach (['page', 'exhibit', 'generic-exhibit', 'home', 'legacy-home', 'browse', 'item', 'rtl', 'arabic', 'results', 'empty-results', 'search'] as $fixture) {
     $view->headLink()->getContainer()->exchangeArray([]);
     $view->headScript()->getContainer()->exchangeArray([]);
     $view->htmlElement('body')->setAttribute('class', '');
@@ -114,6 +116,8 @@ foreach (['page', 'home', 'legacy-home', 'browse', 'item', 'rtl', 'arabic', 'res
     $helper->setView($view);
     $helpers->setService('themeSetting', $helper);
     $content = match ($fixture) {
+        'generic-exhibit' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $page, 'content' => '<div class="media-embed"><div class="item resource"><div class="media-render"><a href="/item/288"><img src="/thumbnail.svg" alt=""></a></div><div class="caption"><p>Photograph without a linked item title</p></div></div></div>', 'displayNavigation' => true, 'pageBodyClass' => 'page']),
+        'exhibit' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $exhibit, 'content' => $exhibitContent, 'displayNavigation' => true, 'pageBodyClass' => 'page']),
         'page' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $page, 'content' => $gallery, 'displayNavigation' => true, 'pageBodyClass' => 'page']),
         'home', 'legacy-home' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $home, 'content' => $homeContent, 'displayNavigation' => false, 'pageBodyClass' => 'page']),
         'arabic' => $view->render('omeka/site/item/show', ['item' => $arabic]),

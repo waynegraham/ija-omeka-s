@@ -1,0 +1,11 @@
+<?php $escape = $this->plugin('escapeHtml'); ?>
+<figure class="exhibit-photo">
+  <a class="exhibit-photo-image" href="<?php echo $escape($photo['recordUrl']); ?>" data-lightbox-src="<?php echo $escape($photo['src']); ?>" data-lightbox-caption="<?php echo $escape($photo['title']); ?>" data-record-url="<?php echo $escape($photo['recordUrl']); ?>">
+    <span class="archive-image has-image"><img src="<?php echo $escape($photo['thumbnail']); ?>" alt="<?php echo $escape($photo['title']); ?>" loading="lazy" decoding="async"><span class="image-unavailable"><?php echo $escape($this->translate('Image unavailable')); ?></span></span>
+    <span class="image-enlarge-label"><?php echo $escape($this->translate('Enlarge image')); ?></span>
+  </a>
+  <figcaption>
+    <?php echo $photo['captionHtml'] ?: $escape($photo['title']); ?>
+    <?php echo $this->hyperlink($this->translate('View collection record'), $photo['recordUrl'], ['class' => 'exhibit-record-link']); ?>
+  </figcaption>
+</figure>

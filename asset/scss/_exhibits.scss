@@ -1,0 +1,60 @@
+@use 'variables' as *;
+@mixin styles {
+  .exhibit-introduction { border: 0; margin-bottom: 2rem; max-width: 75ch; }
+  .exhibit-introduction h1 { margin-bottom: .75rem; }
+  .exhibit-introduction p { font-size: 1.15rem; line-height: 1.65; max-width: 65ch; }
+  .exhibit-chapters summary { font-weight: 600; color: var(--archive-navy); padding-block: .35rem; }
+  .exhibit-chapters nav { padding-top: .75rem; }
+  .exhibit-stages { display: flex; flex-wrap: wrap; gap: .65rem 1.25rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--archive-rule); font-size: .9rem; }
+  .recovery-stage { padding-block: 2rem; border-bottom: 1px solid var(--archive-rule); scroll-margin-top: 1rem; }
+  .recovery-stage h2 { margin-bottom: 1rem; }
+  .exhibit-prose { max-width: 70ch; line-height: 1.75; }
+  .exhibit-photo-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; margin-top: 1.5rem; }
+  .exhibit-photo { min-width: 0; margin: 0; }
+  .exhibit-photo-image { display: block; width: 100%; padding: 0; border: 0; background: transparent; color: var(--archive-navy); font: inherit; text-align: start; text-decoration: none; }
+  button.exhibit-photo-image { cursor: zoom-in; }
+  .exhibit-photo-image .archive-image { height: 260px; padding: .75rem; }
+  .exhibit-photo-image img { width: 100%; height: 100%; object-fit: contain; }
+  .image-enlarge-label { display: block; font-size: .85rem; text-decoration: underline; text-underline-offset: .2em; padding-block: .5rem; }
+  a.exhibit-photo-image .image-enlarge-label { display: none; }
+  .exhibit-photo figcaption { font-size: .95rem; line-height: 1.6; }
+  .exhibit-photo figcaption p { margin-bottom: .5rem; }
+  .exhibit-record-link { display: block; font-size: .85rem; margin-top: .5rem; }
+  .exhibit-complete-gallery { padding-block: 1.5rem; border-bottom: 1px solid var(--archive-rule); }
+  .exhibit-complete-gallery summary { font-size: 1.1rem; color: var(--archive-navy); cursor: pointer; }
+  .exhibit-complete-gallery .archive-image { height: 210px; }
+  .exhibit-resources { padding-block: 2rem; }
+  .exhibit-resources li { margin-block: 1rem; }
+  .exhibit-resource-format { display: block; font-size: .85rem; color: var(--archive-muted); }
+  .site-page-pagination { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem 2rem; padding-block: 1.5rem; border-top: 1px solid var(--archive-rule); }
+  .site-page-pagination a { max-width: 35ch; font-size: 1rem; }
+  .exhibit-next { margin-inline-start: auto; }
+  .exhibit-page .media-embed.layout-horizontal { --grid-item--min-width: min(240px, 100%); }
+  .exhibit-page .media-embed .exhibit-photo-image img { max-height: none; margin-bottom: 0; }
+  .exhibit-page .media-embed .resource h3 { font-size: 1rem; line-height: 1.5; }
+  .exhibit-image-viewer { width: min(94vw, 1100px); max-height: 94vh; padding: 1.25rem; border: 0; background: #fff; color: var(--archive-ink); overflow: auto; }
+  .exhibit-image-viewer::backdrop { background: rgba(0, 24, 52, .85); }
+  .exhibit-viewer-open { overflow: hidden; }
+  .exhibit-viewer-top, .exhibit-viewer-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; }
+  .exhibit-image-viewer button { font: inherit; background: var(--archive-image); color: var(--archive-navy); border: 1px solid var(--archive-rule); padding: .5rem .8rem; }
+  .exhibit-image-viewer button:disabled { opacity: .5; }
+  .exhibit-image-viewer figure { margin-block: 1rem; }
+  .exhibit-viewer-image { display: flex; justify-content: center; align-items: center; min-height: 150px; background: var(--archive-image); }
+  .exhibit-viewer-image img { max-width: 100%; max-height: 65vh; object-fit: contain; }
+  .exhibit-image-viewer figcaption { margin-top: .75rem; line-height: 1.6; }
+  .exhibit-viewer-status:empty { display: none; }
+  @media (min-width: 768px) {
+    #recovery-discovery .exhibit-photo-grid { grid-template-columns: 1.5fr 1fr; }
+    #recovery-discovery .exhibit-photo:first-child .archive-image { height: 340px; }
+    .exhibit-page .page-nav.is-sticky { position: sticky; top: 1rem; }
+    .exhibit-chapters summary { display: none; }
+    .exhibit-chapters nav { padding-top: 0; }
+  }
+  @media (max-width: 575.98px) {
+    .exhibit-photo-grid { grid-template-columns: 1fr; }
+    .exhibit-photo-image .archive-image { height: 260px; }
+    .site-page-pagination { flex-direction: column; }
+    .exhibit-next { margin-inline-start: 0; }
+    .exhibit-image-viewer { padding: 1rem; }
+  }
+}

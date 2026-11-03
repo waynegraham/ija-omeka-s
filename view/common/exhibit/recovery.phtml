@@ -1,0 +1,37 @@
+<?php $escape = $this->plugin('escapeHtml'); ?>
+<div class="recovery-story" data-exhibit-gallery="story">
+  <nav class="exhibit-stages" aria-label="<?php echo $escape($this->translate('On this page')); ?>">
+    <?php foreach ($recovery['sections'] as $section): ?>
+      <?php echo $this->hyperlink($this->translate($section['title']), '#recovery-' . $section['id']); ?>
+    <?php endforeach; ?>
+  </nav>
+  <?php foreach ($recovery['sections'] as $section): ?>
+  <section class="recovery-stage" id="recovery-<?php echo $section['id']; ?>">
+    <h2><?php echo $escape($this->translate($section['title'])); ?></h2>
+    <div class="exhibit-prose"><?php echo $section['html']; ?></div>
+    <?php if ($section['photos']): ?>
+    <div class="exhibit-photo-grid">
+      <?php foreach ($section['photos'] as $photo) echo $this->partial('common/exhibit/photo', ['photo' => $photo]); ?>
+    </div>
+    <?php endif; ?>
+  </section>
+  <?php endforeach; ?>
+</div>
+<details class="exhibit-complete-gallery" data-exhibit-gallery="complete">
+  <summary><?php echo $escape(sprintf($this->translate('View all photographs (%s)'), count($recovery['photos']))); ?></summary>
+  <div class="exhibit-photo-grid">
+    <?php foreach ($recovery['photos'] as $photo) echo $this->partial('common/exhibit/photo', ['photo' => $photo]); ?>
+  </div>
+</details>
+<section class="exhibit-resources" aria-labelledby="exhibit-resources-title">
+  <h2 id="exhibit-resources-title"><?php echo $escape($this->translate('Related materials')); ?></h2>
+  <ul>
+    <?php foreach ($recovery['documents'] as $document):
+      $href = $document['itemId'] ? $this->url('site/resource-id', ['controller' => 'item', 'id' => $document['itemId']], true) : $document['href'];
+    ?>
+    <li><?php echo $this->hyperlink($document['title'], $href); ?>
+      <?php if ($document['isPdf']): ?><span class="exhibit-resource-format"><?php echo $escape($this->translate($document['itemId'] ? 'PDF — view item record' : 'PDF')); ?></span><?php endif; ?>
+    </li>
+    <?php endforeach; ?>
+  </ul>
+</section>

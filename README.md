@@ -99,7 +99,7 @@ as failures:
 ```sh
 php tests/compatibility.php
 # Or: composer test
-find view tests -type f \( -name '*.php' -o -name '*.phtml' \) -print0 | xargs -0 -n 1 php -l
+find src view tests -type f \( -name '*.php' -o -name '*.phtml' \) -print0 | xargs -0 -n 1 php -l
 ```
 
 CI runs syntax, standalone and integration checks on PHP 8.1 and 8.5. Integration
@@ -182,3 +182,13 @@ included after the legacy theme rules. Core search, sorting, pagination, locale,
 annotations and preview hooks remain in use. `asset/js/theme.js` supplies the
 unavailable-image state when migrated thumbnails cannot be loaded. Sync the actual
 Omeka files to restore those images; the theme does not substitute production URLs.
+
+## Exhibits
+
+The Recovery of Artifacts page now presents its existing text and photographs in
+four narrative stages, followed by the full gallery and related PDF records.
+Theme settings can restore the original blocks or their configured thumbnail
+sizes. Exhibit pages also gain responsive chapter navigation, named previous/next
+links and an accessible image viewer with persistent collection-record links.
+See the [exhibit guide](docs/exhibits.md) for supported content structure, settings,
+photo mapping, fallbacks and release checks. No saved page content is changed.

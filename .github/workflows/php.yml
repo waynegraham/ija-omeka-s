@@ -16,7 +16,7 @@ jobs:
           extensions: mbstring, pdo_mysql, xml
           coverage: none
       - name: Check PHP and template syntax
-        run: find view tests -type f \( -name '*.php' -o -name '*.phtml' \) -print0 | xargs -0 -n 1 php -l
+        run: find src view tests -type f \( -name '*.php' -o -name '*.phtml' \) -print0 | xargs -0 -n 1 php -l
       - name: Run template regression tests with E_ALL
         run: php tests/compatibility.php
       - name: Download pinned Omeka S integration fixture

@@ -57,3 +57,9 @@ visual appearance. Use the sample records and screenshots for those checks.
 
 `common/home.phtml` supplies the configurable homepage, `common/home-highlights.phtml` renders site-scoped records and `common/archive-image.phtml` supplies shared image frames. `common/home-actions.phtml` remains in the legacy homepage mode.
 See `docs/design-content-checklist.md` for its known page-slug contract.
+
+Exhibit additions: `common/exhibit/recovery` and `photo` present recognized saved
+content; `viewer` provides one native dialog. `common/block-layout/file` preserves
+core attachment/render/link/title/caption behavior while preferring large image
+derivatives. `common/site-page-pagination` now names destinations. See the exhibit
+guide before changing the strict Recovery content adapter.

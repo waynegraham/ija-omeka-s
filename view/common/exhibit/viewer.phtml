@@ -1,0 +1,11 @@
+<?php $escape = $this->plugin('escapeHtml'); $translate = $this->plugin('translate'); ?>
+<dialog class="exhibit-image-viewer" aria-label="<?php echo $escape($translate('Image viewer')); ?>" aria-describedby="exhibit-viewer-caption" data-loading="<?php echo $escape($translate('Loading image')); ?>" data-error="<?php echo $escape($translate('Image could not be loaded. You can still view its collection record.')); ?>" data-enlarge="<?php echo $escape($translate('Enlarge image')); ?>" data-record-label="<?php echo $escape($translate('View collection record')); ?>" data-unavailable="<?php echo $escape($translate('Image unavailable')); ?>">
+  <div class="exhibit-viewer-top"><span class="exhibit-viewer-position" aria-live="polite"></span><button type="button" data-viewer="close" autofocus><?php echo $escape($translate('Close image viewer')); ?></button></div>
+  <figure><div class="exhibit-viewer-image"><img alt="" hidden></div><figcaption id="exhibit-viewer-caption"></figcaption></figure>
+  <p class="exhibit-viewer-status" role="status"></p>
+  <div class="exhibit-viewer-controls">
+    <button type="button" data-viewer="previous"><?php echo $escape($translate('Previous photograph')); ?></button>
+    <button type="button" data-viewer="next"><?php echo $escape($translate('Next photograph')); ?></button>
+    <a class="exhibit-viewer-record" hidden><?php echo $escape($translate('View collection record')); ?></a>
+  </div>
+</dialog>

@@ -176,3 +176,63 @@ test('search summaries, empty states and mixed-direction titles are readable', a
   await expect(page.locator('.item-primary-title h1')).toContainText('IJA 238');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+
+
+test('exhibit preserves the narrative, responsive chapters and full gallery', async ({ page }, testInfo) => {
+  await page.goto('/exhibit.html');
+  await expect(page.locator('main h1')).toHaveCount(1);
+  await expect(page.locator('.recovery-stage')).toHaveCount(4);
+  await expect(page.getByText('On May 6, 2003, discovery narrative with', { exact: false })).toBeVisible();
+  const title = await page.locator('.exhibit-introduction').boundingBox();
+  const nav = await page.locator('.page-nav').boundingBox();
+  expect(title.y + title.height).toBeLessThanOrEqual(nav.y + 1);
+  const chapters = page.locator('.exhibit-chapters');
+  if (page.viewportSize().width < 768) {
+    await expect(chapters).not.toHaveAttribute('open', '');
+    await chapters.locator('summary').click();
+    await expect(chapters).toHaveAttribute('open', '');
+  } else {
+    await expect(chapters).toHaveAttribute('open', '');
+    await expect(page.locator('.page-nav')).toHaveCSS('position', 'sticky');
+  }
+  await page.locator('.exhibit-complete-gallery summary').click();
+  await expect(page.locator('.exhibit-complete-gallery .exhibit-photo')).toHaveCount(7);
+  await expect(page.getByText('Additional photograph retained in full gallery')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.evaluate(() => scrollTo(0, 0));
+  await screenshot(page, testInfo, 'exhibit-layout');
+});
+
+test('exhibit image viewer supports next, previous, Escape and focus restoration', async ({ page }) => {
+  await page.goto('/exhibit.html');
+  const trigger = page.locator('.recovery-story .exhibit-lightbox-trigger').first();
+  await trigger.click();
+  const dialog = page.getByRole('dialog', { name: 'Image viewer' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('figcaption')).toContainText('Flooded basement');
+  await page.keyboard.press('ArrowRight');
+  await expect(dialog.locator('figcaption')).toContainText('Military entering');
+  await page.keyboard.press('ArrowLeft');
+  await expect(dialog.locator('figcaption')).toContainText('Flooded basement');
+  await page.keyboard.press('Tab');
+  expect(await dialog.evaluate(el => el.contains(document.activeElement))).toBe(true);
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible();
+  await expect(trigger).toBeFocused();
+  await page.route('**/failed-image.svg', route => route.fulfill({ status: 200, contentType: 'image/svg+xml', body: '' }));
+  await trigger.evaluate(el => { el.dataset.lightboxSrc = '/failed-image.svg'; });
+  await trigger.click();
+  await expect(dialog.getByRole('status')).toContainText('Image could not be loaded');
+  await expect(dialog.getByRole('link', { name: 'View collection record' })).toHaveAttribute('href', '/item/288');
+  await dialog.getByRole('button', { name: 'Close image viewer' }).click();
+  await expect(trigger).toBeFocused();
+});
+
+
+test('generic exhibit media retains its record link when an image fails', async ({ page }) => {
+  await page.route('**/thumbnail.svg', route => route.fulfill({ status: 200, contentType: 'image/svg+xml', body: '' }));
+  await page.goto('/generic-exhibit.html');
+  await expect(page.getByRole('link', { name: 'View collection record', exact: true })).toHaveAttribute('href', '/item/288');
+  await expect(page.locator('.exhibit-lightbox-trigger')).toBeDisabled();
+  await expect(page.locator('.image-unavailable')).toBeVisible();
+});

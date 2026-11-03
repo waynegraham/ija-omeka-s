@@ -9,6 +9,7 @@ $this->headLink()->appendStylesheet($this->assetUrl('css/main.css'));
 $this->headScript()->prependFile($this->assetUrl('vendor/jquery/jquery.min.js', 'Omeka'));
 $this->headScript()->appendFile($this->assetUrl('js/global.js', 'Omeka'));
 $this->headScript()->appendFile($this->assetUrl('js/theme.js'), 'text/javascript', ['defer' => true]);
+$this->headScript()->appendFile($this->assetUrl('js/exhibit.js'), 'text/javascript', ['defer' => true]);
 $this->headScript()->appendFile($this->assetUrl('js/vendor/bootstrap/popper.min.js'));
 $this->headScript()->appendFile($this->assetUrl('js/vendor/bootstrap/bootstrap.min.js'));
 
@@ -76,6 +77,8 @@ $userBar = $this->userBar();
               <?php echo $this->content; ?>
           </div>
         </main>
+
+        <?php echo $this->partial('common/exhibit/viewer'); ?>
 
         <footer class="mb-footer mt-4 bg-dark text-white">
           <div class="container py-5">

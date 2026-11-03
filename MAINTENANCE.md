@@ -49,6 +49,10 @@ this repository. Keeping this folder alone is not a complete site backup.
 - **Archive components share one design module.** Edit `_archive-design.scss`,
   included after legacy SCSS. `asset/js/theme.js` handles missing image files in
   `.archive-image` frames; keep the visible fallback and accessible record links.
+- **Exhibit curation is a presentation adapter.** `src/RecoveryExhibit.php` reads
+  the recognized saved Recovery of Artifacts markup. Unsupported additions fall
+  back unchanged. Keep the source-consumption guards, full gallery and persistent
+  record links. The supported structure and photo mapping are in `docs/exhibits.md`.
 - **Generated assets are shipped.** Edit SCSS, then build and commit CSS. Vendor
   scripts come from the npm lockfile. Bootstrap's legacy Sass stays inside its
   dependency boundary; theme styles use modules. Do not hand-edit generated files.
