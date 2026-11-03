@@ -178,6 +178,24 @@ $renderingTests = [
         verify(str_contains($html, 'aria-labelledby=') && !str_contains($html, 'aria-controlledby='), 'Invalid dropdown ARIA');
         verify(str_contains($html, '&lt;First&gt;') && !str_contains($html, 'href="/a?x="quoted"'), 'Navigation output is not escaped');
     },
+    'Search prioritizes records, escapes snippets and offers empty-state recovery' => static function () use ($view) {
+        $resource = new class {
+            public function title() { return 'Information page title'; }
+            public function displayTitle(...$args) { return 'Record title'; }
+            public function displayDescription(...$args) { return '<b>Record description</b>'; }
+            public function link($text, ...$args) { return '<a>' . htmlspecialchars((string) $text, ENT_QUOTES) . '</a>'; }
+            public function linkRaw($text, ...$args) { return '<a>' . $text . '</a>'; }
+        };
+        $html = $view->render('omeka/site/index/search', ['query' => 'book', 'results' => [
+            'site_pages' => ['resources' => [$resource], 'total' => 1],
+            'items' => ['resources' => [$resource], 'total' => 12],
+        ]]);
+        verify(strpos($html, 'Record title') < strpos($html, 'Information page title'), 'Collection records should precede pages');
+        verify(str_contains($html, '&lt;b&gt;Record description&lt;/b&gt;'), 'Search descriptions missing or unescaped');
+        verify(str_contains($html, 'dir="auto"'), 'Search titles need automatic text direction');
+        $html = $view->render('omeka/site/index/search', ['query' => 'book', 'results' => ['items' => ['resources' => [], 'total' => 0]]]);
+        verify(str_contains($html, 'Try fewer words') && str_contains($html, 'Browse the collection'), 'Empty search has no recovery actions');
+    },
     'Browse cards have valid description containers and preserve module hooks' => static function () use ($view, $helpers, $siteSettings) {
         $siteSettings->values = [];
         $events = [];

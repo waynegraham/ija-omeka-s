@@ -20,6 +20,13 @@ deployment record to establish publication or installation status.
 
 ### Changed
 
+- Refined the responsive homepage hero, reading widths, type scale, browse toolbar
+  and item metadata layout while retaining the IJA palette and type families.
+- Added visible sort labels, collection-first search summaries and useful empty
+  states, independently directed multilingual titles and clearer PDF actions.
+- Added homepage/footer discovery links and direct-file/preview fallback controls.
+- Replaced Google Fonts requests with reproducibly built local fonts and licenses.
+
 - Stack page navigation on phones, keep compact browse thumbnails visible and
   scale item title icons to the viewport.
 - Use named dropdown buttons with unique relationships, meaningful logo text

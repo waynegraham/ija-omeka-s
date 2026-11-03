@@ -1,2 +1,2 @@
-// Plain CSS import; remains in the generated stylesheet.
-@import 'https://fonts.googleapis.com/css2?family=Merriweather&family=Source+Sans+Pro&display=swap';
+// Font faces are generated in asset/fonts/fonts.css by npm run build:fonts.
+// The layout queues them before the theme styles; no remote requests are needed.

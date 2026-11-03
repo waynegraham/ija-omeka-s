@@ -9,20 +9,23 @@
     "node": ">=20.19.0"
   },
   "scripts": {
-    "build": "npm run build:css && npm run vendor && npm run build:icons",
+    "build": "npm run build:css && npm run vendor && npm run build:icons && npm run build:fonts",
     "build:icons": "node scripts/assets.js icons",
     "check:assets": "node scripts/check-assets.js",
     "test": "node --test tests/assets.test.js",
     "build:css": "node scripts/assets.js css",
     "watch": "node scripts/assets.js watch",
     "vendor": "node scripts/assets.js vendor",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "build:fonts": "node scripts/assets.js fonts"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8"
   },
   "devDependencies": {
+    "@fontsource/merriweather": "5.3.0",
+    "@fontsource/source-sans-pro": "5.3.0",
     "@fortawesome/fontawesome-free": "6.7.2",
     "@playwright/test": "1.64.1",
     "autoprefixer": "^10.6.2",

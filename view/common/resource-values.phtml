@@ -58,7 +58,7 @@ if ($this->status()->isSiteRequest()) {
                 <?php if ($showLocale && $valueLang): ?>
                 <span class="language"><?php echo $escape($valueLang); ?></span>
                 <?php endif; ?>
-                <span class="value-content"><?php echo $filterLocale ? $value->asHtml($lang) : $value->asHtml(); ?></span>
+                <span class="value-content" dir="auto"><?php echo $filterLocale ? $value->asHtml($lang) : $value->asHtml(); ?></span>
                 <?php if(!$value->isPublic()): ?>
                     <span role="img" title="<?php echo $escape($translate('Private')); ?>" aria-label="<?php echo $escape($translate('Private')); ?>"><?php echo $this->partial('common/icon', ['icon' => 'private']); ?></span>
                 <?php endif; ?>

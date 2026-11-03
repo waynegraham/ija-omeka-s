@@ -8,10 +8,10 @@ every core feature is implemented. Recheck behavior as well as markup on upgrade
 | Override | Purpose / intentional difference | Contract to preserve |
 | --- | --- | --- |
 | `layout/layout.phtml` | Bootstrap header/footer, IJA branding and assets | Core jQuery/global script, queued assets, messages, content, `view.layout`, skip link to focusable main |
-| `omeka/site/item/show.phtml` | IJA title, preview, PDF downloads, metadata and linked resources; fixed layout instead of resource page blocks | Before-show hook; special non-video after-show placement; one video render; subject-value options array |
+| `omeka/site/item/show.phtml` | IJA title, preview/direct-file fallback, PDF actions, metadata and linked resources; fixed layout instead of resource page blocks | Before-show hook; special non-video after-show placement; one video render; subject-value options array |
 | `omeka/site/item/browse.phtml` | Two-column cards and fixed IJA property sorts | Both browse hooks, item-set query context, locale filtering, Browse helper sort contract |
 | `omeka/site/item/search.phtml` | Bootstrap advanced-search form | GET submission, browse action, resource type and query propagation |
-| `omeka/site/index/search.phtml` | Sitewide results grouped by resource kind | Page title versus resource display title; full-text links and totals |
+| `omeka/site/index/search.phtml` | Collection-first sitewide result summaries and recovery actions | Page title versus resource display title; full-text links and totals |
 | `omeka/site/page/show.phtml` | Bootstrap content/sidebar layout and breadcrumbs | Responsive sidebar (stack below 768px), core `page-blocks.css`, shrinkable `site-page-content` column for wide galleries, supplied page body classes, navigation visibility, content, hooks and page pagination |
 | `common/advanced-search.phtml` | Styled search assembly; resource-class partial intentionally omitted | Partial exclude list, resource-type branches, `view.advanced_search` filtering and core search JS |
 | `common/advanced-search/fulltext.phtml` | Bootstrap full-text input | Query value, escaping and input name |
@@ -54,3 +54,6 @@ inventory's baseline only after comparing all listed overrides.
 PHP regressions cover selected rendering contracts. They do not cover all
 navigation/search JavaScript, every module listener, production settings or
 visual appearance. Use the sample records and screenshots for those checks.
+
+`common/home-actions.phtml` supplies theme-owned discovery links on the `home` page.
+See `docs/design-content-checklist.md` for its known page-slug contract.

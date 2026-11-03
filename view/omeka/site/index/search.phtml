@@ -1,53 +1,57 @@
 <?php
 $translate = $this->plugin('translate');
-$hyperlink = $this->plugin('hyperlink');
-$url = $this->plugin('url');
+$escape = $this->plugin('escapeHtml');
 $this->htmlElement('body')->appendAttribute('class', 'index search');
-?>
-
-<!-- omeka/site/index/search.pthml -->
-<?php echo $this->pageTitle(sprintf($translate('Search results for “%s”'), $query)); ?>
-
-<?php if (empty($results)): ?>
-    <p><?php echo $translate('No result found'); ?></p>
-<?php else: ?>
-<?php
 $resourceLabels = [
-    'site_pages' => 'Site pages', // @translate
-    'items' => 'Items', // @translate
-    'item_sets' => 'Item sets', // @translate
+    'items' => 'Collection records', // @translate
+    'item_sets' => 'Collections', // @translate
     'media' => 'Media', // @translate
+    'site_pages' => 'Site pages', // @translate
 ];
-$resourceControllers = [
-    'site_pages' => 'page',
-    'items' => 'item',
-    'item_sets' => 'item-set',
-    'media' => 'media',
-];
+$resourceControllers = ['items' => 'item', 'item_sets' => 'item-set', 'media' => 'media', 'site_pages' => 'page'];
+$valueLang = $this->siteSetting('filter_locale_values') ? [$this->lang(), ''] : null;
+$hasResults = false;
+foreach ($resourceLabels as $name => $label) {
+    if (!empty($results[$name]['resources'])) $hasResults = true;
+}
 ?>
-<!-- view/omeka/site/index/search.phtml -->
-
-<?php foreach ($results as $resourceName => $result): ?>
-<div class="<?php echo $resourceName; ?> results">
-    <h2><?php echo $translate($resourceLabels[$resourceName]); ?></h2>
-
-        <?php $titleMethod = $resourceName === 'site_pages' ? 'title' : 'displayTitle'; ?>
-    <ul>
-        <?php foreach ($result['resources'] as $resource): ?>
-        <li>
-            <?php echo $resource->link($resource->$titleMethod()); ?>
-        </li>
-        <?php endforeach; ?>
-    </ul>
-        <?php echo $hyperlink(
-            sprintf($translate('View all results (%s total)'), $result['total']),
-            $url(
-                'site/resource',
-                ['controller' => $resourceControllers[$resourceName], 'action' => 'browse'],
-                ['query' => ['fulltext_search' => $query]],
-                true
-            )
-        ); ?>
+<?php echo $this->pageTitle(sprintf($translate('Search results for “%s”'), $query)); ?>
+<?php if (!$hasResults): ?>
+<div class="search-empty">
+    <p><?php echo $escape($translate('No results found. Try fewer words, a different spelling, or an IJA number.')); ?></p>
+    <div class="search-actions">
+        <?php echo $this->hyperlink($translate('Advanced search'), $this->url('site/resource', ['controller' => 'item', 'action' => 'search'], true), ['class' => 'btn btn-primary']); ?>
+        <?php echo $this->hyperlink($translate('Browse the collection'), $this->url('site/resource', ['controller' => 'item', 'action' => 'browse'], true), ['class' => 'btn btn-outline-primary']); ?>
+    </div>
 </div>
+<?php else: ?>
+<?php foreach ($resourceLabels as $resourceName => $label):
+    if (empty($results[$resourceName]['resources'])) continue;
+    $result = $results[$resourceName];
+    $isPage = $resourceName === 'site_pages';
+?>
+<section class="search-results-group">
+    <h2><?php echo $escape($translate($label)); ?> <span class="result-count">(<?php echo $escape($result['total']); ?>)</span></h2>
+    <ul class="search-results-list">
+    <?php foreach ($result['resources'] as $resource):
+        $title = $isPage ? $resource->title() : $resource->displayTitle(null, $valueLang);
+        $description = $isPage ? null : $resource->displayDescription(null, $valueLang);
+        $thumbnail = $isPage ? null : $this->thumbnail($resource, 'medium', ['loading' => 'lazy', 'decoding' => 'async']);
+    ?>
+        <li class="search-result">
+            <?php if ($thumbnail): ?>
+            <div class="search-result-thumbnail"><?php echo $resource->linkRaw($thumbnail); ?></div>
+            <?php endif; ?>
+            <div class="search-result-text">
+                <h3 dir="auto"><?php echo $resource->link($title); ?></h3>
+                <?php if ($description): ?>
+                <p dir="auto"><?php echo $escape(mb_strimwidth((string) $description, 0, 240, '…', 'UTF-8')); ?></p>
+                <?php endif; ?>
+            </div>
+        </li>
     <?php endforeach; ?>
+    </ul>
+    <?php echo $this->hyperlink(sprintf($translate('View all results (%s total)'), $result['total']), $this->url('site/resource', ['controller' => $resourceControllers[$resourceName], 'action' => 'browse'], ['query' => ['fulltext_search' => $query]], true)); ?>
+</section>
+<?php endforeach; ?>
 <?php endif; ?>

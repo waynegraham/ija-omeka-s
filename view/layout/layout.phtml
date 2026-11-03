@@ -3,6 +3,7 @@ $translate = $this->plugin('translate');
 $this->headMeta()->setCharset('utf-8');
 $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1');
 $this->headTitle($this->setting('installation_title', 'Omeka S'))->setSeparator(' · ');
+$this->headLink()->appendStylesheet($this->assetUrl('fonts/fonts.css'));
 $this->headLink()->appendStylesheet($this->assetUrl('css/custom-bootstrap.css'));
 $this->headLink()->appendStylesheet($this->assetUrl('css/main.css'));
 $this->headScript()->prependFile($this->assetUrl('vendor/jquery/jquery.min.js', 'Omeka'));
@@ -77,8 +78,12 @@ $userBar = $this->userBar();
 
         <footer class="mb-footer mt-4 bg-dark text-white">
           <div class="container py-5">
-            <div class="row">
-
+            <nav class="footer-navigation" aria-label="<?php echo $this->escapeHtmlAttr($translate('Footer')); ?>">
+              <?php echo $this->hyperlink($translate('Home'), $site->url()); ?>
+              <?php echo $this->hyperlink($translate('Browse the collection'), $this->url('site/resource', ['controller' => 'item', 'action' => 'browse'], true)); ?>
+              <?php echo $this->hyperlink($translate('Advanced search'), $this->url('site/resource', ['controller' => 'item', 'action' => 'search'], true)); ?>
+            </nav>
+            <div class="footer-content">
             <?php if ($footerContent = $this->themeSetting('footer')): ?>
               <?php echo $footerContent; ?>
             <?php else: ?>

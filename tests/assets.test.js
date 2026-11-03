@@ -27,7 +27,7 @@ test('asset check detects stale and missing files without rewriting them', () =>
     fs.cpSync(path.join(root, 'scripts'), path.join(directory, 'scripts'), { recursive: true });
     fs.cpSync(path.join(root, 'asset/scss'), path.join(directory, 'asset/scss'), { recursive: true });
     fs.symlinkSync(path.join(root, 'node_modules'), path.join(directory, 'node_modules'), 'junction');
-    for (const command of ['css', 'vendor', 'icons']) {
+    for (const command of ['css', 'vendor', 'icons', 'fonts']) {
       const result = run('scripts/assets.js', command);
       assert.equal(result.status, 0, result.stderr);
     }
@@ -46,6 +46,11 @@ test('asset check detects stale and missing files without rewriting them', () =>
     result = run('scripts/check-assets.js');
     assert.equal(result.status, 1);
     assert.match(result.stdout + result.stderr, /popper\.min\.js/);
+
+    fs.unlinkSync(path.join(directory, 'asset/fonts/source-sans-pro-latin-400-normal.woff2'));
+    result = run('scripts/check-assets.js');
+    assert.equal(result.status, 1);
+    assert.match(result.stdout + result.stderr, /source-sans-pro-latin-400-normal/);
 
     fs.appendFileSync(path.join(directory, 'asset/icons/fontawesome.svg'), '<!-- stale -->');
     result = run('scripts/check-assets.js');

@@ -1,0 +1,6 @@
+<?php $translate = $this->plugin('translate'); ?>
+<nav class="home-actions" aria-label="<?php echo $this->escapeHtmlAttr($translate('Explore the archive')); ?>">
+    <?php echo $this->hyperlink($translate('Search the archive'), $this->url('site/resource', ['controller' => 'item', 'action' => 'search'], true), ['class' => 'btn btn-primary']); ?>
+    <?php echo $this->hyperlink($translate('Browse the collection'), $this->url('site/resource', ['controller' => 'item', 'action' => 'browse'], true), ['class' => 'btn btn-outline-primary']); ?>
+    <?php echo $this->hyperlink($translate('Explore the preservation project'), $this->url('site/page', ['page-slug' => 'preservation-project'], true), ['class' => 'btn btn-outline-primary']); ?>
+</nav>

@@ -14,7 +14,8 @@ $isPdf = $media->mediaType() === 'application/pdf'
         <?php endif; ?>
         <div class="card-body">
             <p class="card-text">
-                <span class="btn btn-outline-primary"><?php echo $escape($translate('Download Full Text')); ?></span>
+                <span class="btn btn-outline-primary"><?php echo $escape($translate('View PDF')); ?></span>
+                <span class="small d-block mt-2"><?php echo $escape($translate('PDF; opens in a new tab')); ?></span>
             </p>
         </div>
     </a>

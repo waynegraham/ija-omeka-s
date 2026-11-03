@@ -40,7 +40,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
-      - name: Verify committed CSS and vendor JavaScript
+      - name: Verify committed CSS, fonts, icons and vendor JavaScript
         run: npm run check:assets
 
   browser:

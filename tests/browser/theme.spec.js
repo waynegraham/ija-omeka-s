@@ -101,3 +101,52 @@ test('advanced search adds and removes indexed query rows', async ({ page }) => 
   await page.getByRole('button', { name: 'Remove value', exact: true }).last().click();
   await expect(rows).toHaveCount(1);
 });
+
+
+test('homepage hero and reading text fit the viewport', async ({ page }, testInfo) => {
+  await page.goto('/home.html');
+  await expect(page.getByRole('navigation', { name: 'Explore the archive' })).toBeVisible();
+  const hero = await page.locator('.parallax').boundingBox();
+  expect({ left: Math.round(hero.x), right: Math.round(hero.x + hero.width) }).toEqual({ left: 0, right: page.viewportSize().width });
+  expect(hero.height).toBeLessThan(700);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await expect(page.locator('.parallax')).toHaveCSS('background-attachment', /^scroll(, scroll)*$/);
+  await expect.poll(() => page.evaluate(() => Array.from(document.fonts).some(face => face.family.includes('Source Sans Pro') && face.status === 'loaded'))).toBe(true);
+  await screenshot(page, testInfo, 'home-layout');
+});
+
+test('sort controls have visible labels and enough room for selected text', async ({ page }) => {
+  await page.goto('/browse.html');
+  for (const name of ['Sort by', 'Sort order']) {
+    const select = page.getByRole('combobox', { name, exact: true });
+    await expect(select.locator('..').locator('span')).toBeVisible();
+    const fits = await select.evaluate(el => {
+      const style = getComputedStyle(el);
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+      return context.measureText(el.selectedOptions[0].text).width + parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + 4 <= el.clientWidth;
+    });
+    expect(fits).toBe(true);
+  }
+});
+
+test('search summaries, empty states and mixed-direction titles are readable', async ({ page }, testInfo) => {
+  await page.goto('/results.html');
+  await expect(page.getByRole('heading', { name: 'Collection records (24)' })).toBeVisible();
+  await expect(page.locator('.search-result').first().locator('p')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await screenshot(page, testInfo, 'search-results');
+  await page.goto('/empty-results.html');
+  await expect(page.getByText(/Try fewer words/)).toBeVisible();
+  await expect(page.locator('.search-empty').getByRole('link', { name: 'Browse the collection' })).toBeVisible();
+  await page.goto('/rtl.html');
+  await expect(page.locator('.item-primary-title h1')).toHaveCSS('direction', 'rtl');
+  await expect(page.locator('.item-title-text h1')).toContainText('IJA 80');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await screenshot(page, testInfo, 'mixed-direction-title');
+  await page.goto('/arabic.html');
+  await expect(page.locator('.item-primary-title h1')).toHaveCSS('direction', 'rtl');
+  await expect(page.locator('.item-primary-title h1')).toContainText('IJA 238');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});

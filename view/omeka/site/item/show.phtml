@@ -16,33 +16,62 @@ $isVideo = (string) $item->value('ija:record_type') === 'Video';
     <?php if($item->value('ija:ija_number')): ?>
     <span class="small text-muted">IJA Number: <?php echo $this->escapeHtml($item->value('ija:ija_number')); ?></span>
     <?php endif; ?>
-    <?php echo $this->pageTitle($item->displayTitle(), 1); ?>
+    <div class="item-primary-title" dir="auto"><?php echo $this->pageTitle($item->displayTitle(), 1); ?></div>
     <?php if($item->value('dcterms:alternative')): ?>
-      <h2 class="transliteration"><?php echo $this->escapeHtml($item->value('dcterms:alternative')); ?></h2>
+      <h2 class="transliteration" dir="auto"><?php echo $this->escapeHtml($item->value('dcterms:alternative')); ?></h2>
     <?php endif; ?>
   </div>
 
-  <p class="lead mb-4 mt-4">
+  <p class="lead mb-4 mt-4 item-description" dir="auto">
     <?php echo $this->escapeHtml($item->value('dcterms:description')); ?>
   </p>
 </div>
 
-<div class="row">
+<section class="item-preview" aria-label="<?php echo $this->escapeHtmlAttr($translate('Item preview')); ?>">
     <?php if ($isVideo): ?>
-      <h2>View</h2>
+      <h2><?php echo $translate('View'); ?></h2>
       <?php foreach ($itemMedia as $media): ?>
         <div class="ratio ratio-16x9">
           <?php echo $media->render(['width' => '100%', 'height' => '100%']); ?>
         </div>
       <?php endforeach; ?>
     <?php else: ?>
-      <h2>Preview</h2>
-      <?php $this->trigger('view.show.after'); ?>
+      <h2><?php echo $translate('Preview'); ?></h2>
+      <?php
+      // Preserve viewer-module output and placement; provide an honest empty state
+      // only when no provider rendered anything into this hook.
+      ob_start();
+      try {
+          $this->trigger('view.show.after');
+      } finally {
+          $previewContent = ob_get_clean();
+      }
+      echo $previewContent;
+      ?>
+      <?php if (trim($previewContent) === '' && !$embedMedia): ?>
+      <p><?php echo $this->escapeHtml($translate('No inline preview is available. Item details are provided below.')); ?></p>
+      <?php endif; ?>
     <?php endif; ?>
-</div>
+    <?php
+    $originalFiles = [];
+    foreach ($itemMedia as $media) {
+        if ($originalUrl = $media->originalUrl()) $originalFiles[] = [$originalUrl, $media->displayTitle()];
+    }
+    ?>
+    <?php if ($originalFiles): ?>
+    <details class="original-files">
+      <summary><?php echo $this->escapeHtml($translate('View available files')); ?></summary>
+      <ul>
+      <?php foreach ($originalFiles as [$originalUrl, $fileTitle]): ?>
+        <li><a href="<?php echo $this->escapeHtmlAttr($originalUrl); ?>" dir="auto"><?php echo $this->escapeHtml($fileTitle ?: $translate('Open original file')); ?></a></li>
+      <?php endforeach; ?>
+      </ul>
+    </details>
+    <?php endif; ?>
+</section>
 
 
-<div id="ija_metadata">
+<section id="ija_metadata" aria-label="<?php echo $this->escapeHtmlAttr($translate('Item details')); ?>">
   <div class="row">
     <?php if (!$embedMedia && $itemMedia): ?>
     <div class="col col-md-auto">
@@ -59,7 +88,7 @@ $isVideo = (string) $item->value('ija:record_type') === 'Video';
     </div>
 
     </div>
-  </div>
+  </section>
 
 <?php if ($embedMedia && $itemMedia && !$isVideo): ?>
 <div class="media-embeds">

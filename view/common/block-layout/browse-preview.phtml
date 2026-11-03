@@ -25,10 +25,10 @@ foreach ($this->resources as $resource):
         <?php echo $resource->linkRaw($this->thumbnail($resource, 'medium')); ?>
         <?php endif; ?>
         <?php if ($showHeading): ?>
-        <h4><?php echo $resource->link($heading); ?></h4>
+        <h4 dir="auto"><?php echo $resource->link($heading); ?></h4>
         <?php endif; ?>
         <?php if ($showBody && $body): ?>
-        <div class="description"><?php echo $escape($body); ?></div>
+        <div class="description" dir="auto"><?php echo $escape($body); ?></div>
         <?php endif; ?>
     </li>
 <?php endforeach; ?>

@@ -38,6 +38,13 @@ this repository. Keeping this folder alone is not a complete site backup.
   description truncation. Site settings control subnavigation, locale filtering,
   preview components and media embedding; property labels use site/global fallback.
   Header Image and Browse Layout were retired because they had no effect.
+- **Fonts are self-hosted.** `npm run build:fonts` copies curated WOFF2 subsets
+  and licenses from pinned Fontsource packages. Keep `asset/fonts/fonts.css` and
+  the font files together; the layout loads them before theme CSS. Adjust the
+  variants in `scripts/assets.js` when changing font weights or language coverage.
+- **Homepage actions are theme-owned.** The `home` slug activates the action bar;
+  its preservation link uses `preservation-project`. Stored page HTML and legal/
+  institutional footer links need editorial updates; see the content checklist.
 - **Generated assets are shipped.** Edit SCSS, then build and commit CSS. Vendor
   scripts come from the npm lockfile. Bootstrap's legacy Sass stays inside its
   dependency boundary; theme styles use modules. Do not hand-edit generated files.

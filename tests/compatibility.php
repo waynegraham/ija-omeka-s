@@ -9,6 +9,7 @@ final class ThemeView
 {
     public array $hiddenExclusions = [];
     public array $events = [];
+    public array $eventOutputs = [];
     public array $siteSettings = [];
 
     public function render(string $template, array $variables = []): string
@@ -44,7 +45,7 @@ final class ThemeView
     public function pageTitle($title, $level = 2): string { return "<h$level>" . $this->escapeHtml($title) . "</h$level>"; }
     public function params(): self { return $this; }
     public function fromQuery($key = null, $default = null) { return $key === null ? [] : $default; }
-    public function trigger($name, ...$args): void { $this->events[] = $name; }
+    public function trigger($name, ...$args): void { $this->events[] = $name; echo $this->eventOutputs[$name] ?? ''; }
     public function queryToHiddenInputs($exclude): string { $this->hiddenExclusions = $exclude; return ''; }
 }
 
@@ -101,18 +102,38 @@ $tests = [
         check(substr_count($html, '&lt;b&gt;Custom text&lt;/b&gt;') === 3, 'Custom item text is not consistently escaped');
         check(str_contains($html, '<a href="/resource">Linked value</a>'), 'Metadata HTML was escaped');
     },
+    'Sort controls have visible associated labels' => static function () {
+        $html = (new ThemeView)->render('common/sort-selector', ['sortConfig' => ['title' => 'Title'], 'sortByQuery' => 'title', 'sortOrderQuery' => 'desc']);
+        check(str_contains($html, '<label'), 'Sort controls have no visible labels');
+        check(str_contains($html, '>Sort by</span>') && str_contains($html, '>Sort order</span>'), 'Sort labels are missing');
+    },
+    'PDF action describes the actual new-tab behavior' => static function () {
+        $html = (new ThemeView)->render('common/pdf-download', ['media' => new ThemeMedia('scan.pdf', 'application/pdf')]);
+        check(str_contains($html, 'View PDF'), 'PDF action incorrectly promises a download');
+        check(str_contains($html, 'opens in a new tab'), 'PDF new-tab behavior is unannounced');
+    },
+    'Preview empty states preserve real module markup and direct file links' => static function () {
+        $view = new ThemeView;
+        $html = $view->render('omeka/site/item/show', ['item' => new ThemeItem([new ThemeMedia('scan.pdf', 'application/pdf')])]);
+        check(str_contains($html, 'No inline preview is available'), 'Missing viewer has no explanation');
+        check(str_contains($html, 'View available files') && str_contains($html, 'href="/files/test.pdf"'), 'Direct file fallback is missing');
+        $view->eventOutputs['view.show.after'] = '<div id="module-viewer">Viewer output</div>';
+        $html = $view->render('omeka/site/item/show', ['item' => new ThemeItem]);
+        check(substr_count($html, 'id="module-viewer"') === 1, 'Viewer hook output was lost or duplicated');
+        check(!str_contains($html, 'No inline preview is available'), 'Empty message appears with a viewer');
+    },
     'URL media with no filename renders without PHP deprecations' => static function () {
         $html = (new ThemeView)->render('omeka/site/item/show', [
             'item' => new ThemeItem([new ThemeMedia(null, null)]),
         ]);
         check(str_contains($html, 'Test item'), 'Item did not render');
-        check(!str_contains($html, 'Download Full Text'), 'URL media treated as a PDF');
+        check(!str_contains($html, 'View PDF'), 'URL media treated as a PDF');
     },
     'PDF media identified by MIME type with nullable filename and thumbnail' => static function () {
         $html = (new ThemeView)->render('omeka/site/item/show', [
             'item' => new ThemeItem([new ThemeMedia(null, 'application/pdf')]),
         ]);
-        check(str_contains($html, 'Download Full Text'), 'PDF download is missing');
+        check(str_contains($html, 'View PDF'), 'PDF download is missing');
         check(!str_contains($html, 'src=""'), 'Missing thumbnail rendered as broken image');
     },
     'Templates may render multiple items in one request' => static function () {
@@ -150,7 +171,7 @@ $tests = [
         $html = (new ThemeView)->render('omeka/site/item/show', [
             'item' => new ThemeItem([new ThemeMedia('scan.PDF', null)]),
         ]);
-        check(str_contains($html, 'Download Full Text'), 'Uppercase PDF download is missing');
+        check(str_contains($html, 'View PDF'), 'Uppercase PDF download is missing');
     },
     'Video media renders once without executing hidden legacy embeds' => static function () {
         $html = (new ThemeView)->render('omeka/site/item/show', [

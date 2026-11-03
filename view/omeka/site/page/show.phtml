@@ -2,6 +2,8 @@
 $this->headLink()->appendStylesheet($this->assetUrl('css/page-blocks.css', 'Omeka'));
 $this->htmlElement('body')->appendAttribute('class', $pageBodyClass);
 $this->pageTitle($page->title(), 2);
+$isHome = $page->slug() === 'home';
+if ($isHome) $this->htmlElement('body')->appendAttribute('class', 'site-home');
 $showPagePagination = $this->siteSetting('show_page_pagination', true);
 
 $nav = $site->publicNav();
@@ -33,7 +35,8 @@ switch ($this->siteSetting('subnav_display')) {
 
     <div class="col-12 col-md site-page-content">
       <?php $this->trigger('view.show.before'); ?>
-      <div class="blocks mt-3 ps-2">
+      <?php if ($isHome) echo $this->partial('common/home-actions'); ?>
+      <div class="blocks mt-3<?php if (!$isHome) echo ' ps-2'; ?>">
           <?php echo $this->content; ?>
       </div>
       <?php $this->trigger('view.show.after'); ?>

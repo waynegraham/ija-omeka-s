@@ -47,16 +47,12 @@ $sortHeadings = [
 
 <?php echo $this->searchFilters(); ?>
 
-<div class="row mt-5 mb-5">
-  <div class="col-md-4 col-sm-6">
+<div class="browse-toolbar">
+  <div class="browse-toolbar-summary">
     <?php echo $this->pagination(); ?>
-  </div>
-  <div class="col-md-4 col-sm-6 text-center">
     <?php echo $this->hyperlink($translate('Advanced search'), $this->url('site/resource', ['controller' => 'item', 'action' => 'search'], ['query' => $query], true), ['class' => 'advanced-search']); ?>
   </div>
-  <div class="col-md-4 col-sm-6">
-    <?php echo $this->browse()->renderSortSelector(array_column($sortHeadings, 'label', 'value')); ?>
-  </div>
+  <?php echo $this->browse()->renderSortSelector(array_column($sortHeadings, 'label', 'value')); ?>
 </div>
 
 <?php $this->trigger('view.browse.before'); ?>
@@ -75,7 +71,7 @@ $sortHeadings = [
             <?php echo $this->partial('common/record-type-icon', ['recordType' => $recordType]); ?>
             <?php echo $escape($recordType); ?>
           </strong>
-          <h3 class="mb-0"><?php echo $escape($heading); ?></h3>
+          <h3 class="mb-0" dir="auto"><?php echo $escape($heading); ?></h3>
           <div class="mb-1 text-muted">
             <?php if($item->value('dcterms:date')): ?>
               Date: <?php echo $escape($item->value('dcterms:date')); ?>
@@ -93,7 +89,7 @@ $sortHeadings = [
           </div>
           <div class="card-text mb-auto">
             <?php if($body): ?>
-              <div class="description <?php echo ($bodyTruncate) ? $bodyTruncate : ''; ?>">
+              <div dir="auto" class="description <?php echo ($bodyTruncate) ? $bodyTruncate : ''; ?>">
                 <?php echo nl2br($escape($body)); ?>
               </div>
             <?php endif; ?>

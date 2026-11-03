@@ -71,7 +71,31 @@ function buildIcons(destination = path.join(root, 'asset/icons')) {
   console.log('Built local Font Awesome SVG sprite');
 }
 
-module.exports = { buildCss, copyVendor, buildIcons };
+function buildFonts(destination = path.join(root, 'asset/fonts')) {
+  fs.mkdirSync(destination, { recursive: true });
+  const rules = [];
+  for (const [family, variants] of [
+    ['merriweather', [[400, 'normal'], [400, 'italic'], [700, 'normal']]],
+    ['source-sans-pro', [[400, 'normal'], [400, 'italic'], [600, 'normal'], [700, 'normal']]],
+  ]) {
+    const source = path.dirname(require.resolve(`@fontsource/${family}/package.json`));
+    fs.copyFileSync(path.join(source, 'LICENSE'), path.join(destination, `${family}-LICENSE.txt`));
+    for (const [weight, style] of variants) {
+      const css = fs.readFileSync(path.join(source, `${weight}${style === 'italic' ? '-italic' : ''}.css`), 'utf8');
+      for (const subset of ['latin', 'latin-ext']) {
+        const file = `${family}-${subset}-${weight}-${style}.woff2`;
+        const rule = css.match(/@font-face\s*\{[^}]+\}/g).find(rule => rule.includes(`${file})`));
+        if (!rule) throw new Error(`Missing font face: ${file}`);
+        fs.copyFileSync(path.join(source, 'files', file), path.join(destination, file));
+        rules.push(rule.replace(/src:[^;]+;/, `src: url('./${file}') format('woff2');`));
+      }
+    }
+  }
+  fs.writeFileSync(path.join(destination, 'fonts.css'), '/* Generated from pinned Fontsource packages. See accompanying licenses. */\n' + rules.join('\n') + '\n');
+  console.log('Copied local fonts and licenses');
+}
+
+module.exports = { buildCss, copyVendor, buildIcons, buildFonts };
 
 if (require.main === module) switch (process.argv[2]) {
   case 'css':
@@ -82,6 +106,9 @@ if (require.main === module) switch (process.argv[2]) {
     break;
   case 'icons':
     buildIcons();
+    break;
+  case 'fonts':
+    buildFonts();
     break;
   case 'watch': {
     const rebuild = () => {
@@ -102,6 +129,6 @@ if (require.main === module) switch (process.argv[2]) {
     break;
   }
   default:
-    console.error('Usage: node scripts/assets.js <css|vendor|icons|watch>');
+    console.error('Usage: node scripts/assets.js <css|vendor|icons|fonts|watch>');
     process.exitCode = 1;
 }

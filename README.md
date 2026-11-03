@@ -45,17 +45,18 @@ required. Browse and preview card titles/descriptions honor locale filtering.
 
 ## Asset development
 
-Compiled CSS and vendor JavaScript are committed, so running the theme and editing
+Compiled CSS, fonts, icons and vendor JavaScript are committed, so running the theme and editing
 PHP templates do not require Node.js or an asset build. To change the SCSS or
 refresh vendor assets, install Node.js 20.19 or newer, then run:
 
 ```sh
 npm ci
 npm run build:css  # Compile SCSS to compressed CSS and apply Autoprefixer
+npm run build:fonts # Copy local font subsets, generated font CSS and licenses
 npm run build:icons # Generate the local Font Awesome SVG sprite and license
 npm run watch      # Build CSS and rebuild when SCSS files change
 npm run vendor     # Copy installed Bootstrap and Popper JavaScript into asset/js/vendor/bootstrap
-npm run build      # Build CSS, vendor JavaScript and SVG icons
+npm run build      # Build CSS, vendor JavaScript, SVG icons and fonts
 npm run check:assets # Verify committed assets match a clean build without changing them
 npm test           # Test Sass compilation and asset-drift detection
 ```
@@ -67,7 +68,7 @@ assets alongside their source changes. Review vendor diffs when updating package
 Only the Bootstrap and Popper minified scripts loaded by the layout and their
 source maps are shipped. Use `npm ci` to reproduce the versions in the lockfile.
 When removing or renaming an output, delete the obsolete generated file as well;
-the asset check rejects extra files in the generated CSS/vendor/icon directories.
+the asset check rejects extra files in the generated CSS/vendor/icon/font directories.
 
 Icons use a local SVG sprite generated from the pinned Font Awesome Free package.
 There is no remote Font Awesome kit, icon font or runtime icon-replacement script.
@@ -76,6 +77,13 @@ SVGs inherit text color and are decorative; keep an accessible name on their
 surrounding control or indicator. The generated sprite retains attribution and
 ships with `asset/icons/LICENSE.txt`. Update the curated icon list in
 `scripts/assets.js`, then rebuild when adding an icon.
+
+The existing Merriweather and Source Sans Pro families are self-hosted from pinned
+Fontsource packages. `npm run build:fonts` copies Latin/Latin Extended WOFF2 files,
+used regular/bold/italic weights and their licenses into `asset/fonts/`. The layout
+loads generated `fonts.css` before the theme styles, using `font-display: swap`.
+Deploy the entire fonts directory with the CSS. Hebrew/Arabic glyphs currently
+use system fallbacks; keep real-device multilingual checks in the release process.
 
 Theme-owned SCSS uses `@use` and the Sass color module. Bootstrap's internal legacy
 imports remain isolated behind `custom-bootstrap.scss`; dependency deprecations
@@ -130,7 +138,8 @@ checksum-pinned release used by those tests and installs Chromium automatically.
 Checks cover desktop/sidebar and phone/stacked layouts, core Media Embed sizing,
 visible browse thumbnails, title escaping, annotation keyboard toggling, dropdown
 keyboard controls, the skip link, search submission and advanced-search row
-addition/removal. JavaScript exceptions and HTTP errors fail tests. Layout
+addition/removal. The suite also checks homepage hero bounds, unclipped sort text, search summaries,
+empty states and Hebrew/Arabic title direction. JavaScript exceptions and HTTP errors fail tests. Layout
 screenshots are attached to the HTML report on successful runs too; failures also
 retain traces. CI uploads the report for 14 days. Screenshots are review artifacts,
 not pixel-diff baselines. These synthetic checks do not validate database content,
@@ -153,3 +162,7 @@ the existing IJA preview module; moving it can change where that module renders.
 Default templates live in `application/view/common` and `application/view/omeka/site`.
 See [theme development documentation](https://omeka.org/s/docs/developer/themes/theme_modifications/)
 and [Omeka 4 changes](https://omeka.org/s/docs/developer/whatsnew/).
+
+See the [content and deployment checklist](docs/design-content-checklist.md) for
+homepage prose/link changes, institutional footer links, search facets and viewer
+configuration that must be completed in Omeka or its modules.

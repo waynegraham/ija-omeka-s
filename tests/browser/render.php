@@ -46,13 +46,15 @@ $value = new class {
 $metadata = $view->render('common/resource-values', ['values' => ['dcterms:title' => ['property' => $property, 'values' => [$value]]]]);
 $item = new class($metadata) {
     public bool $hasThumbnail = true;
+    public string $title = '';
+
     public function __construct(private string $metadata) {}
     public function value($term, ...$options) { return match ($term) {
         'ija:record_type' => 'Books', 'ija:ija_number' => '123',
         'dcterms:alternative' => 'Alternative <title>',
         'dcterms:description' => 'A record from the archive.', default => null,
     }; }
-    public function displayTitle(...$args) { return 'Archive <title> ' . str_repeat('Long title ', 8); }
+    public function displayTitle(...$args) { return $this->title ?: 'Archive <title> ' . str_repeat('Long title ', 8); }
     public function displayDescription(...$args) { return 'A short description of this archive record.'; }
     public function media() { return []; }
     public function displayValues() { return $this->metadata; }
@@ -67,15 +69,30 @@ for ($i = 0; $i < 6; $i++) {
     $gallery .= '<div class="item resource"><div class="media-render"><img src="/thumbnail.svg" alt="Recovered artifact"></div><h3>Recovered artifact</h3></div>';
 }
 $gallery .= '</div></div></div>';
-$page = new class { public function title() { return 'Recovery of artifacts'; } };
+$page = new class {
+    public function __construct(private string $slug = 'example') {}
+    public function title() { return 'Recovery of artifacts'; }
+    public function slug() { return $this->slug; }
+};
+$home = new ($page::class)('home');
+$rtl = clone $item;
+$rtl->title = 'מחזור לראש השנה — IJA 80';
+$arabic = clone $item;
+$arabic->title = 'وثائق من الأرشيف — IJA 238';
+$homeContent = '<div class="block block-html"><div class="jumbotron breakout parallax parallax1"><h1>The Iraqi Mukhabarat<br>Archive of Jewish Materials</h1><p>Chronicling Iraqi Jewish Heritage</p></div></div><div class="block block-html"><h2>Preserving the Iraqi Jewish Archive</h2><p>' . str_repeat('The archive preserves a record of Jewish life in Iraq. ', 12) . '</p></div>';
+
 $directory = __DIR__ . '/generated';
 if (!is_dir($directory)) mkdir($directory, 0777, true);
-foreach (['page', 'browse', 'item', 'search'] as $fixture) {
+foreach (['page', 'home', 'browse', 'item', 'rtl', 'arabic', 'results', 'empty-results', 'search'] as $fixture) {
     $view->headLink()->getContainer()->exchangeArray([]);
     $view->headScript()->getContainer()->exchangeArray([]);
     $view->htmlElement('body')->setAttribute('class', '');
     $content = match ($fixture) {
         'page' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $page, 'content' => $gallery, 'displayNavigation' => true, 'pageBodyClass' => 'page']),
+        'home' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $home, 'content' => $homeContent, 'displayNavigation' => false, 'pageBodyClass' => 'page']),
+        'arabic' => $view->render('omeka/site/item/show', ['item' => $arabic]),
+        'rtl' => $view->render('omeka/site/item/show', ['item' => $rtl]),
+        'results', 'empty-results' => $view->render('omeka/site/index/search', ['query' => 'archive', 'results' => $fixture === 'results' ? ['items' => ['resources' => [$item, $rtl], 'total' => 24]] : []]),
         'browse' => $view->render('omeka/site/item/browse', ['items' => [$item, $withoutThumbnail]]),
         'item' => $view->render('omeka/site/item/show', ['item' => $item]),
         'search' => '<h1>Advanced search</h1><form id="advanced-search">' . $view->render('common/advanced-search/properties', ['query' => []]) . '</form>',
