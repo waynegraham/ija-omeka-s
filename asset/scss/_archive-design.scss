@@ -5,12 +5,15 @@
   :root {
     --archive-navy: #002b5c;
     --archive-ink: #263b46;
-    --archive-paper: #fff;
-    --archive-image: #f8f9fa;
-    --archive-rule: #dce2e6;
+    --archive-canvas: #edf2f5;
+    --archive-paper: #fafcfd;
+    --archive-panel: #dfe8ee;
+    --archive-image: #e3e9ed;
+    --archive-rule: #c7d3dc;
     --archive-muted: #53636f;
   }
-  body { color: var(--archive-ink); }
+  body { color: var(--archive-ink); background: var(--archive-canvas); }
+  .site-header, .site-shell { background: var(--archive-paper); }
   a { text-underline-offset: .2em; }
   a:hover { text-decoration-thickness: .12em; }
   :is(a, button, input, select, summary):focus-visible { outline: 3px solid #57b8ff; outline-offset: 3px; }
@@ -53,7 +56,7 @@
   .archive-object h3 { font-size: 1.05rem; line-height: 1.5; overflow-wrap: anywhere; }
   .archive-object h3 a { text-decoration: none; }
   .archive-object h3 a:hover { text-decoration: underline; }
-  .archive-stories { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; background: var(--archive-image); }
+  .archive-stories { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; background: var(--archive-panel); }
   .archive-stories article { min-width: 0; }
   .archive-stories h2 { font-size: 1.5rem; }
   .archive-stories p { max-width: 44ch; line-height: 1.65; }
@@ -61,7 +64,7 @@
   .archive-background { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
   .archive-background h2 { font-size: 1.3rem; }
   .archive-background p { max-width: 65ch; line-height: 1.7; margin: 0; }
-  .page-nav { background: var(--archive-image); padding: 1.25rem; border-inline-start: 3px solid var(--archive-rule); }
+  .page-nav { background: var(--archive-panel); padding: 1.25rem; border-inline-start: 3px solid var(--archive-rule); }
   .page-nav .active > a { color: var(--archive-navy); }
   .page-nav ul { margin-bottom: 0; padding-bottom: 1rem; background: none; }
   .breadcrumbs { font-size: .9rem; margin-bottom: 1.5rem; }
@@ -87,7 +90,7 @@
   .item-title-icon .ija-icon--large { font-size: clamp(2.25rem, 5vw, 3.5rem); }
   .item-primary-title h1 { max-width: 34ch; }
   .item-description { font-size: 1.1rem; line-height: 1.7; }
-  .item-preview { background: var(--archive-image); border: 1px solid var(--archive-rule); padding: clamp(1rem, 3vw, 2rem); }
+  .item-preview { background: var(--archive-panel); border: 1px solid var(--archive-rule); padding: clamp(1rem, 3vw, 2rem); }
   .item-preview > h2 { margin-bottom: 1rem; font-size: 1.5rem; }
   .item-preview > :last-child { margin-bottom: 0; }
   #ija_metadata { border-top: 0; padding-top: .5rem; }

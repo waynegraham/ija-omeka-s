@@ -1,6 +1,6 @@
 @use 'variables' as *;
 @mixin styles {
-  .exhibit-introduction { border: 0; margin-bottom: 2rem; max-width: 75ch; }
+  .exhibit-introduction { border: 0; margin-bottom: 2rem; max-width: 75ch; background: var(--archive-panel); padding: clamp(1rem, 3vw, 2rem); }
   .exhibit-introduction h1 { margin-bottom: .75rem; }
   .exhibit-introduction p { font-size: 1.15rem; line-height: 1.65; max-width: 65ch; }
   .exhibit-chapters summary { font-weight: 600; color: var(--archive-navy); padding-block: .35rem; }
@@ -23,7 +23,7 @@
   .exhibit-complete-gallery { padding-block: 1.5rem; border-bottom: 1px solid var(--archive-rule); }
   .exhibit-complete-gallery summary { font-size: 1.1rem; color: var(--archive-navy); cursor: pointer; }
   .exhibit-complete-gallery .archive-image { height: 210px; }
-  .exhibit-resources { padding-block: 2rem; }
+  .exhibit-resources { padding: clamp(1rem, 3vw, 2rem); background: var(--archive-panel); }
   .exhibit-resources li { margin-block: 1rem; }
   .exhibit-resource-format { display: block; font-size: .85rem; color: var(--archive-muted); }
   .site-page-pagination { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem 2rem; padding-block: 1.5rem; border-top: 1px solid var(--archive-rule); }
@@ -32,7 +32,7 @@
   .exhibit-page .media-embed.layout-horizontal { --grid-item--min-width: min(240px, 100%); }
   .exhibit-page .media-embed .exhibit-photo-image img { max-height: none; margin-bottom: 0; }
   .exhibit-page .media-embed .resource h3 { font-size: 1rem; line-height: 1.5; }
-  .exhibit-image-viewer { width: min(94vw, 1100px); max-height: 94vh; padding: 1.25rem; border: 0; background: #fff; color: var(--archive-ink); overflow: auto; }
+  .exhibit-image-viewer { width: min(94vw, 1100px); max-height: 94vh; padding: 1.25rem; border: 0; background: var(--archive-paper); color: var(--archive-ink); overflow: auto; }
   .exhibit-image-viewer::backdrop { background: rgba(0, 24, 52, .85); }
   .exhibit-viewer-open { overflow: hidden; }
   .exhibit-viewer-top, .exhibit-viewer-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; }
