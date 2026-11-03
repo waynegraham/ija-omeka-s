@@ -1,10 +1,14 @@
-#advanced-search .inputs select, #advanced-search .inputs input, #advanced-search .inputs button, #advanced-search .inputs a.button {
-    min-width: fit-content;
-  }
-
-// Core search rows stay nowrap; allow controls to reflow at narrow/zoomed widths.
-@media (max-width: 767.98px) {
-  #advanced-search #property-queries .value, #advanced-search #item-sets .value { flex-wrap: wrap; min-width: 0; max-width: 100%; }
-  #advanced-search .inputs { min-width: 0; max-width: 100%; }
-  #advanced-search .inputs :is(select, input, button, a.button) { min-width: 0; max-width: 100%; }
+// Text enlargement can exhaust a query row even above the mobile breakpoint.
+#advanced-search #property-queries .value, #advanced-search #item-sets .value {
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
 }
+#advanced-search .inputs { min-width: 0; max-width: 100%; }
+#advanced-search .inputs :is(select, input, button, a.button) { min-width: 0; max-width: 100%; }
+#advanced-search #property-queries .value > :is(select, input) {
+  flex: 1 1 12rem;
+  width: auto;
+}
+#advanced-search #property-queries .value > .query-text { flex-basis: 16rem; }
+#advanced-search #property-queries .value > .joiner { flex: 0 0 auto; }

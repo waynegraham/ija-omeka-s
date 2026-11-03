@@ -79,11 +79,14 @@ test('adding and removing advanced queries keeps keyboard focus in the form', as
 });
 
 for (const path of ['home', 'search', 'item', 'exhibit']) {
-  test(`${path} supports 200 percent text resizing`, async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 900 });
-    await page.goto(`/${path}.html`);
-    await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await expect(page.locator('main')).toBeVisible();
-  });
+  for (const width of [960, 1280]) {
+    test(`${path} supports 200 percent text resizing at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/${path}.html`);
+      await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+      await page.evaluate(() => document.fonts.ready);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await expect(page.locator('main')).toBeVisible();
+    });
+  }
 }
