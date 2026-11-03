@@ -164,6 +164,7 @@ foreach (['page', 'exhibit', 'generic-exhibit', 'home', 'legacy-home', 'browse',
         'search' => '<h1>Advanced search</h1><form id="advanced-search">' . $view->render('common/advanced-search/properties', ['query' => []]) . '</form>',
     };
     if ($fixture === 'search') {
+        $view->headLink()->prependStylesheet($view->assetUrl('css/advanced-search.css', 'Omeka'));
         $view->headScript()->appendFile($view->assetUrl('js/advanced-search.js', 'Omeka'));
         $view->headScript()->appendScript('jQuery(function(){ Omeka.prepareSearchForm(jQuery("#advanced-search")); });');
     }

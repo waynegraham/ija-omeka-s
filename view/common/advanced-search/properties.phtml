@@ -53,7 +53,7 @@ $queryText = function(array $search, $index) {
             ?>
             <div class="value mb-2">
 
-                    <select class="joiner form-select form-control" name="<?php echo $this->escapeHtml($stem . '[joiner]'); ?>">
+                    <select class="joiner form-select form-control" name="<?php echo $this->escapeHtml($stem . '[joiner]'); ?>" aria-label="<?php echo $this->escapeHtmlAttr($translate('Combine with previous query')); ?>">
                         <?php echo $queryOption('and', $property, 'joiner', $translate('AND')); ?>
                         <?php echo $queryOption('or', $property, 'joiner', $translate('OR')); ?>
                     </select>

@@ -5,13 +5,12 @@ $translate = $this->plugin('translate');
 <!-- view/common/pagination.phtml -->
 <div class="container">
 <?php if ($totalCount): ?>
-  <nav class="pagination nav">
+  <nav class="pagination nav" aria-label="<?php echo $this->escapeHtmlAttr($translate('Pagination')); ?>">
     <div class="page-links">
       <?php if ($currentPage != 1): ?>
           <?php echo $this->hyperlink('« Previous', $previousPageUrl, ['class' => '', 'title' => $translate('Previous'), 'aria-label' => $translate('Previous'), 'rel' => 'previous']); ?>
       <?php else: ?>
         « Previous
-            <a class="" disabled rel="previous" href="#" tabindex="-1" aria-disabled="true"></a>
       <?php endif; ?>
       |
       <?php

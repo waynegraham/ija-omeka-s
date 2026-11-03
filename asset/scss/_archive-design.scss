@@ -11,12 +11,16 @@
     --archive-image: #e3e9ed;
     --archive-rule: #c7d3dc;
     --archive-muted: #53636f;
+    --archive-control: #667e8f;
   }
   body { color: var(--archive-ink); background: var(--archive-canvas); }
   .site-header, .site-shell { background: var(--archive-paper); }
   a { text-underline-offset: .2em; }
   a:hover { text-decoration-thickness: .12em; }
-  :is(a, button, input, select, summary):focus-visible { outline: 3px solid #57b8ff; outline-offset: 3px; }
+  // White separates the navy ring from dark surfaces; navy remains visible on pale ones.
+  :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 3px solid var(--archive-navy); outline-offset: 3px; box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--archive-navy); }
+  .form-control, .form-select, .navbar-toggler { border-color: var(--archive-control); }
+  footer a:hover, footer a:focus-visible { color: #fff; }
   h1, h2, h3 { font-weight: 400; }
   .site-header { border-bottom: 4px solid var(--archive-navy); }
   .site-header .navbar { padding-block: 1rem; }
@@ -27,6 +31,7 @@
   .navbar #search-form { max-width: 17rem; }
   .site-shell { padding-block: 1.5rem; }
   .site-home .site-shell { padding: 0; margin-top: 0 !important; }
+  .site-home .page-layout > .row { margin-inline: 0; }
   .archive-home { padding-bottom: 1rem; }
   .archive-hero { display: grid; grid-template-columns: 1.05fr 1fr; background: var(--archive-navy); }
   .archive-hero-intro { padding: clamp(1.5rem, 4vw, 3.5rem); display: flex; flex-direction: column; justify-content: center; gap: 1.4rem; color: #fff; min-width: 0; }
