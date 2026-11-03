@@ -42,9 +42,13 @@ this repository. Keeping this folder alone is not a complete site backup.
   and licenses from pinned Fontsource packages. Keep `asset/fonts/fonts.css` and
   the font files together; the layout loads them before theme CSS. Adjust the
   variants in `scripts/assets.js` when changing font weights or language coverage.
-- **Homepage actions are theme-owned.** The `home` slug activates the action bar;
-  its preservation link uses `preservation-project`. Stored page HTML and legal/
-  institutional footer links need editorial updates; see the content checklist.
+- **Homepage design is configurable.** The `home` page defaults to the approved
+  split introduction and site-scoped highlights. Disable the homepage design in
+  theme settings to restore saved blocks; no database edits are involved. See
+  `docs/design-content-checklist.md` for settings, IDs, destinations and image sources.
+- **Archive components share one design module.** Edit `_archive-design.scss`,
+  included after legacy SCSS. `asset/js/theme.js` handles missing image files in
+  `.archive-image` frames; keep the visible fallback and accessible record links.
 - **Generated assets are shipped.** Edit SCSS, then build and commit CSS. Vendor
   scripts come from the npm lockfile. Bootstrap's legacy Sass stays inside its
   dependency boundary; theme styles use modules. Do not hand-edit generated files.

@@ -45,6 +45,7 @@ $sortHeadings = [
 ?>
 <!-- view/omeka/site/item/browse.phtml -->
 
+<?php echo $this->pageTitle($itemSetShow ? $itemSet->displayTitle(null, $valueLang) : $translate('Browse the collection')); ?>
 <?php echo $this->searchFilters(); ?>
 
 <div class="browse-toolbar">
@@ -65,27 +66,19 @@ $sortHeadings = [
       $recordType = $item->value('ija:record_type');
     ?>
     <div class="col-md-6">
-      <div class="card browse-card g-0 border rounded overflow-hidden flex-row flex-nowrap mb-4 shadow-sm h-md-250 position-relative">
+      <div class="card browse-card flex-row flex-nowrap mb-4 position-relative">
         <div class="col browse-card-body p-3 p-lg-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary">
             <?php echo $this->partial('common/record-type-icon', ['recordType' => $recordType]); ?>
             <?php echo $escape($recordType); ?>
           </strong>
           <h3 class="mb-0" dir="auto"><?php echo $escape($heading); ?></h3>
-          <div class="mb-1 text-muted">
-            <?php if($item->value('dcterms:date')): ?>
-              Date: <?php echo $escape($item->value('dcterms:date')); ?>
-            <?php endif; ?>
-            <?php if($item->value('ija:ija_number')): ?>
-              <?php if($item->value('dcterms:date')): ?>
-                &middot;
+          <div class="record-facts text-muted">
+            <?php foreach (['dcterms:date' => 'Date', 'ija:ija_number' => 'IJA Number', 'dcterms:language' => 'Language'] as $term => $label): ?>
+              <?php if ($fact = $item->value($term)): ?>
+                <span><?php echo $escape($translate($label)); ?>: <bdi><?php echo $escape($fact); ?></bdi></span>
               <?php endif; ?>
-              IJA Number: <?php echo $escape($item->value('ija:ija_number')); ?>
-            <?php endif; ?>
-            <?php if($item->value('dcterms:language')): ?>
-              &middot;
-              Language: <?php echo $escape($item->value('dcterms:language')); ?>
-            <?php endif; ?>
+            <?php endforeach; ?>
           </div>
           <div class="card-text mb-auto">
             <?php if($body): ?>
@@ -94,11 +87,11 @@ $sortHeadings = [
               </div>
             <?php endif; ?>
           </div>
-          <?php echo $item->link($translate('View Item'), null, ['class' => 'stretched-link']); ?>
+          <?php echo $item->link($translate('View record'), null, ['class' => 'stretched-link', 'aria-label' => sprintf($translate('View record: %s'), (string) $heading)]); ?>
         </div>
         <?php if ($thumbnail = $this->thumbnail($item, 'medium', ['loading' => 'lazy', 'decoding' => 'async'])): ?>
         <div class="col-auto browse-thumbnail">
-          <?php echo $item->linkRaw($thumbnail, null, ['class' => 'd-block']); ?>
+          <?php echo $item->linkRaw($this->partial('common/archive-image', ['image' => $thumbnail]), null, ['class' => 'd-block', 'aria-label' => (string) $heading]); ?>
         </div>
         <?php endif; ?>
       </div>

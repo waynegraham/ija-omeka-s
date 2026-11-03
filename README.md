@@ -166,3 +166,19 @@ and [Omeka 4 changes](https://omeka.org/s/docs/developer/whatsnew/).
 See the [content and deployment checklist](docs/design-content-checklist.md) for
 homepage prose/link changes, institutional footer links, search facets and viewer
 configuration that must be completed in Omeka or its modules.
+
+## Archive homepage and shared design
+
+The `home` page now uses the approved split introduction/search and letter, live
+collection highlights, stories and background. Configure its heading, intro,
+optional uploaded image/caption and up to four featured IDs in theme settings.
+Disable **Use the archive homepage design** to restore the saved Home page blocks;
+those blocks are never edited or deleted. Highlights are public and scoped to the
+current site, and missing records are omitted. See the [configuration and content
+guide](docs/design-content-checklist.md) for defaults and publication checks.
+
+The shared archive styles live in `asset/scss/_archive-design.scss`. Its mixin is
+included after the legacy theme rules. Core search, sorting, pagination, locale,
+annotations and preview hooks remain in use. `asset/js/theme.js` supplies the
+unavailable-image state when migrated thumbnails cannot be loaded. Sync the actual
+Omeka files to restore those images; the theme does not substitute production URLs.

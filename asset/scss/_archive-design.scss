@@ -1,0 +1,122 @@
+@use 'variables' as *;
+
+// Include after legacy overrides. These rules own the shared archive components.
+@mixin styles {
+  :root {
+    --archive-navy: #002b5c;
+    --archive-ink: #263b46;
+    --archive-paper: #fff;
+    --archive-image: #f8f9fa;
+    --archive-rule: #dce2e6;
+    --archive-muted: #53636f;
+  }
+  body { color: var(--archive-ink); }
+  a { text-underline-offset: .2em; }
+  a:hover { text-decoration-thickness: .12em; }
+  :is(a, button, input, select, summary):focus-visible { outline: 3px solid #57b8ff; outline-offset: 3px; }
+  h1, h2, h3 { font-weight: 400; }
+  .site-header { border-bottom: 4px solid var(--archive-navy); }
+  .site-header .navbar { padding-block: 1rem; }
+  .site-header .container, .site-shell, footer > .container { max-width: 1200px; }
+  .navbar-brand { font-family: $font-family-serif; font-size: 1.25rem; white-space: normal; max-width: 20rem; }
+  .ija-logo { width: auto; max-width: 200px; max-height: 64px; }
+  .navbar .nav-link { font-size: 1rem; padding-inline: .75rem; }
+  .navbar #search-form { max-width: 17rem; }
+  .site-shell { padding-block: 1.5rem; }
+  .site-home .site-shell { padding: 0; margin-top: 0 !important; }
+  .archive-home { padding-bottom: 1rem; }
+  .archive-hero { display: grid; grid-template-columns: 1.05fr 1fr; background: var(--archive-navy); }
+  .archive-hero-intro { padding: clamp(1.5rem, 4vw, 3.5rem); display: flex; flex-direction: column; justify-content: center; gap: 1.4rem; color: #fff; min-width: 0; }
+  .archive-hero h1 { color: #fff; max-width: 14ch; font-size: clamp(2rem, 3.7vw, 3rem); line-height: 1.25; margin: 0; letter-spacing: -.025em; }
+  .archive-hero-description { max-width: 35ch; line-height: 1.6; margin: 0; font-size: 1.1rem; }
+  #home-search label { display: block; margin-bottom: .5rem; font-size: .95rem; }
+  #home-search input { min-width: 0; }
+  .archive-hero-links { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; font-size: .95rem; }
+  .archive-hero-links a { color: #fff; }
+  .archive-hero-object { margin: 0; min-width: 0; background: var(--archive-image); display: flex; flex-direction: column; }
+  .archive-hero-object > img { display: block; width: 100%; height: clamp(360px, 35vw, 470px); object-fit: contain; padding: 1.25rem; flex-grow: 1; }
+  .archive-hero-object figcaption { padding: .75rem 1.25rem; font-size: .85rem; color: var(--archive-muted); background: var(--archive-paper); border-bottom: 1px solid var(--archive-rule); }
+  .archive-section { padding: 3rem clamp(1.25rem, 4vw, 3.5rem); }
+  .archive-section-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; }
+  .archive-section-heading h2 { margin: 0; }
+  .archive-section-heading > a { font-size: .95rem; }
+  .archive-object-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
+  .archive-object { min-width: 0; }
+  .archive-object-image { display: block; text-decoration: none; margin-bottom: .85rem; }
+  .archive-image { background: var(--archive-image); min-width: 0; display: flex; align-items: center; justify-content: center; position: relative; }
+  .archive-object .archive-image { height: 210px; padding: .75rem; }
+  .archive-image img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .image-unavailable { padding: 1rem; font-size: .85rem; color: var(--archive-muted); text-align: center; }
+  .archive-image.has-image .image-unavailable { display: none; }
+  .archive-object-type { font-size: .8rem; color: var(--archive-muted); margin-bottom: .4rem; }
+  .archive-object h3 { font-size: 1.05rem; line-height: 1.5; overflow-wrap: anywhere; }
+  .archive-object h3 a { text-decoration: none; }
+  .archive-object h3 a:hover { text-decoration: underline; }
+  .archive-stories { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; background: var(--archive-image); }
+  .archive-stories article { min-width: 0; }
+  .archive-stories h2 { font-size: 1.5rem; }
+  .archive-stories p { max-width: 44ch; line-height: 1.65; }
+  .archive-story-image { width: 105px; height: 150px; object-fit: cover; float: left; margin: 0 1.25rem .75rem 0; }
+  .archive-background { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
+  .archive-background h2 { font-size: 1.3rem; }
+  .archive-background p { max-width: 65ch; line-height: 1.7; margin: 0; }
+  .page-nav { background: var(--archive-image); padding: 1.25rem; border-inline-start: 3px solid var(--archive-rule); }
+  .page-nav .active > a { color: var(--archive-navy); }
+  .page-nav ul { margin-bottom: 0; padding-bottom: 1rem; background: none; }
+  .breadcrumbs { font-size: .9rem; margin-bottom: 1.5rem; }
+  .site-page-content .blocks { margin-top: 0 !important; }
+  .browse-toolbar { border-block: 1px solid var(--archive-rule); padding-block: 1.25rem; margin-block: .5rem 2rem; }
+  .browse-card { border: 0; border-bottom: 1px solid var(--archive-rule); border-radius: 0; box-shadow: none; padding-bottom: 1.5rem; background: transparent; }
+  .browse-card h3 { font-size: 1.25rem; line-height: 1.45; }
+  .browse-card strong { font-size: .85rem; font-weight: 600; }
+  .browse-card .record-facts { font-size: .9rem; display: flex; flex-wrap: wrap; gap: .25rem 1rem; margin-bottom: .75rem; }
+  .browse-card .description { font-size: 1rem; line-height: 1.65; }
+  .browse-thumbnail { order: -1; width: 7.5rem; padding: 0; align-self: flex-start; }
+  .browse-thumbnail .archive-image { height: 11rem; padding: .75rem; }
+  .browse-thumbnail img { height: 100%; }
+  .browse-card-body > .stretched-link { margin-top: 1rem; font-size: .95rem; }
+  .search-results-group { margin-bottom: 3rem; }
+  .search-result { padding-block: 1.5rem; }
+  .search-result-thumbnail { flex-basis: 7rem; }
+  .search-result-thumbnail .archive-image { height: 9rem; padding: .5rem; }
+  .search-result-thumbnail img { height: 100%; }
+  .search-result-text h3 { font-size: 1.25rem; }
+  .search-result-text p { font-size: 1rem; line-height: 1.65; }
+  .title-bar { margin-bottom: 2rem; }
+  .item-title-icon .ija-icon--large { font-size: clamp(2.25rem, 5vw, 3.5rem); }
+  .item-primary-title h1 { max-width: 34ch; }
+  .item-description { font-size: 1.1rem; line-height: 1.7; }
+  .item-preview { background: var(--archive-image); border: 1px solid var(--archive-rule); padding: clamp(1rem, 3vw, 2rem); }
+  .item-preview > h2 { margin-bottom: 1rem; font-size: 1.5rem; }
+  .item-preview > :last-child { margin-bottom: 0; }
+  #ija_metadata { border-top: 0; padding-top: .5rem; }
+  #ija_metadata .dl-invert > :is(dt, dd) { padding-block: .75rem; border-bottom: 1px solid var(--archive-rule); line-height: 1.7; font-size: 1rem; }
+  #ija_metadata .dl-invert > dt { font-weight: 600; color: var(--archive-muted); }
+  .footer-brand { font-family: $font-family-serif; font-size: 1.35rem; margin-bottom: 1.25rem; }
+  footer .footer-navigation { font-size: 1rem; }
+  footer .footer-content { font-size: .9rem; }
+  @media (max-width: 991.98px) {
+    .navbar-collapse { padding-top: 1rem; }
+    .navbar #search-form { max-width: none; margin-top: .75rem; }
+  }
+  @media (max-width: 767.98px) {
+    .archive-hero { grid-template-columns: 1fr; }
+    .archive-hero h1 { font-size: 2rem; max-width: 17ch; }
+    .archive-hero-intro { padding: 1.5rem; gap: 1.15rem; }
+    .archive-hero-object > img { height: 260px; flex-grow: 0; }
+    .archive-object-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 1rem; }
+    .archive-object .archive-image { height: 185px; }
+    .archive-stories, .archive-background { grid-template-columns: 1fr; gap: 2rem; }
+    .archive-section { padding-block: 2rem; }
+    .archive-section-heading { align-items: start; flex-direction: column; }
+    .page-nav { margin-bottom: .5rem; }
+    #ija_metadata .dl-invert > dt { border-bottom: 0; padding-bottom: 0; }
+  }
+  @media (max-width: 575.98px) {
+    .navbar-brand { max-width: calc(100% - 5rem); }
+    .browse-thumbnail { width: 5.5rem; }
+    .browse-thumbnail .archive-image { height: 8rem; padding: .5rem; }
+    .search-result-thumbnail { flex-basis: 5rem; }
+    .search-result-thumbnail .archive-image { height: 7rem; }
+  }
+}

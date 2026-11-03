@@ -1,0 +1,8 @@
+<?php
+// The caller supplies trusted HTML from Omeka's thumbnail helper.
+$hasImage = !empty($image);
+?>
+<div class="archive-image<?php echo $hasImage ? ' has-image' : ''; ?>">
+  <?php if ($hasImage) echo $image; ?>
+  <span class="image-unavailable"><?php echo $this->escapeHtml($this->translate('Image unavailable')); ?></span>
+</div>

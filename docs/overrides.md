@@ -55,5 +55,5 @@ PHP regressions cover selected rendering contracts. They do not cover all
 navigation/search JavaScript, every module listener, production settings or
 visual appearance. Use the sample records and screenshots for those checks.
 
-`common/home-actions.phtml` supplies theme-owned discovery links on the `home` page.
+`common/home.phtml` supplies the configurable homepage, `common/home-highlights.phtml` renders site-scoped records and `common/archive-image.phtml` supplies shared image frames. `common/home-actions.phtml` remains in the legacy homepage mode.
 See `docs/design-content-checklist.md` for its known page-slug contract.

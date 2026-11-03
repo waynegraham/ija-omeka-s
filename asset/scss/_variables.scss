@@ -14,7 +14,7 @@ $light: #F8F9FA;
 $dark: $primary;
 
 // https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss#L52
-$font-size-base: 1.25rem; // builds up difference between Helvetica and Source Code
+$font-size-base: 1.125rem; // 18px reading/UI scale; editorial copy uses generous leading.
 
 $font-family-sans-serif: 'Source Sans Pro', sans-serif;
 $font-family-serif: 'Merriweather', serif;

@@ -83,6 +83,12 @@ foreach (['truncate_body_property'] as $name) {
     $form->add($config['config']['elements'][$name]);
     verify($form->get($name) instanceof Laminas\Form\Element\Select, 'Theme setting must resolve to a Laminas select');
 }
+foreach (['home_layout', 'home_heading', 'home_intro', 'home_featured_items', 'home_image_caption'] as $name) {
+    $form->add($config['config']['elements'][$name]);
+}
+verify($form->get('home_layout') instanceof Laminas\Form\Element\Checkbox, 'Homepage opt-out must be a checkbox');
+$form->get('home_layout')->setValue(0);
+verify(!$form->get('home_layout')->isChecked(), 'Homepage opt-out cannot be unchecked');
 verify(Composer\Semver\Semver::satisfies('4.0.0', $config['info']['omeka_version_constraint']), 'Omeka S 4.0 cannot select this theme');
 verify(Composer\Semver\Semver::satisfies('4.2.1', $config['info']['omeka_version_constraint']), 'Omeka S 4.2 cannot select this theme');
 echo "PASS: Theme metadata and configuration work with Omeka 4 and Laminas\n";
@@ -114,13 +120,14 @@ $navigation = new Laminas\View\Helper\Navigation;
 $navigation->setPluginManager(new Laminas\View\Helper\Navigation\PluginManager(new Laminas\ServiceManager\ServiceManager));
 $helpers->setService('navigation', $navigation);
 $helpers->setService('thumbnail', new FixtureHelper(static fn (...$args) => '<img src="thumbnail.jpg">'));
-$helpers->setService('themeSetting', new FixtureHelper(static fn ($id) => null));
+$helpers->setService('themeSetting', new Omeka\View\Helper\ThemeSetting([]));
+$helpers->setService('themeSettingAssetUrl', new FixtureHelper(static fn (...$args) => null));
 $helpers->setService('searchFilters', new FixtureHelper(static fn () => ''));
 $helpers->setService('pagination', new FixtureHelper(static fn () => ''));
 $helpers->setService('url', new FixtureHelper(static fn (...$args) => '/items/search'));
 $helpers->setService('assetUrl', new FixtureHelper(static fn ($file, $module = null) => ($module === 'Omeka' ? '/application/asset/' : '/theme/asset/') . $file));
 $helpers->setService('propertySelect', new FixtureHelper(static fn (...$args) => '<select></select>'));
-foreach (['fallbackSetting', 'setting', 'siteSetting', 'lang', 'pageTitle', 'htmlElement', 'hyperlink', 'navigation', 'thumbnail', 'themeSetting', 'searchFilters', 'pagination', 'url', 'assetUrl', 'propertySelect'] as $name) {
+foreach (['fallbackSetting', 'setting', 'siteSetting', 'lang', 'pageTitle', 'htmlElement', 'hyperlink', 'navigation', 'thumbnail', 'themeSetting', 'themeSettingAssetUrl', 'searchFilters', 'pagination', 'url', 'assetUrl', 'propertySelect'] as $name) {
     $helpers->get($name)->setView($view);
 }
 
@@ -195,6 +202,69 @@ $renderingTests = [
         verify(str_contains($html, 'dir="auto"'), 'Search titles need automatic text direction');
         $html = $view->render('omeka/site/index/search', ['query' => 'book', 'results' => ['items' => ['resources' => [], 'total' => 0]]]);
         verify(str_contains($html, 'Try fewer words') && str_contains($html, 'Browse the collection'), 'Empty search has no recovery actions');
+    },
+    'Designed homepage uses site-scoped ordered highlights and can restore stored blocks' => static function () use ($view, $helpers, $siteSettings) {
+        $siteSettings->values = ['show_page_pagination' => false];
+        $settings = ['home_featured_items' => '2, 99, invalid, 1, 2, -4'];
+        $helpers->setAllowOverride(true);
+        $helper = new Omeka\View\Helper\ThemeSetting($settings);
+        $helper->setView($view);
+        $helpers->setService('themeSetting', $helper);
+        $requests = [];
+        $api = new class($requests) {
+            public function __construct(public array &$requests) {}
+            public function search($resource, $query, $options = []) {
+                $this->requests[] = [$resource, $query];
+                $items = [];
+                foreach ([1, 2] as $id) $items[] = new class($id) {
+                    public function __construct(private int $id) {}
+                    public function id() { return $this->id; }
+                    public function displayTitle(...$args) { return 'Featured record ' . $this->id; }
+                    public function value(...$args) { return null; }
+                    public function link($text, ...$args) { return '<a>' . htmlspecialchars((string) $text, ENT_QUOTES) . '</a>'; }
+                    public function linkRaw($html, ...$args) { return '<a>' . $html . '</a>'; }
+                };
+                return new class($items) { public function __construct(private array $items) {} public function getContent() { return $this->items; } };
+            }
+        };
+        $apiHelper = new FixtureHelper(static fn () => $api);
+        $apiHelper->setView($view);
+        $helpers->setService('api', $apiHelper);
+        $nav = $view->navigation(new Laminas\Navigation\Navigation);
+        $site = new class($nav) {
+            public function __construct(private object $nav) {}
+            public function id() { return 7; }
+            public function publicNav() { return $this->nav; }
+        };
+        $page = new class { public function slug() { return 'home'; } public function title() { return 'Home'; } };
+        $variables = ['site' => $site, 'page' => $page, 'content' => 'Stored editorial blocks', 'displayNavigation' => false, 'pageBodyClass' => 'page'];
+        $html = $view->render('omeka/site/page/show', $variables);
+        verify(str_contains($html, 'class="archive-hero"'), 'Approved split hero is missing');
+        verify(str_contains($html, 'id="home-search"') && str_contains($html, 'name="fulltext_search"'), 'Hero search is not functional');
+        verify(!str_contains($html, 'Stored editorial blocks'), 'Legacy homepage duplicates the new layout');
+        verify($requests[0][1]['site_id'] === 7 && $requests[0][1]['id'] === [2, 99, 1] && $requests[0][1]['is_public'] === true, 'Featured query ignores site scope or validated IDs');
+        verify(strpos($html, 'Featured record 2') < strpos($html, 'Featured record 1'), 'Curator ordering was lost');
+        verify(substr_count($html, '<article class="archive-object">') === 2 && !str_contains($html, 'Featured record 99'), 'Missing or inaccessible records must be omitted');
+        $imageHelper = new FixtureHelper(static fn ($id) => $id === 'home_image' ? '/uploaded/hero.jpg' : null);
+        $imageHelper->setView($view); $helpers->setService('themeSettingAssetUrl', $imageHelper);
+        $helper = new Omeka\View\Helper\ThemeSetting(['home_featured_items' => '', 'home_heading' => '<Custom heading>', 'home_intro' => '<Custom introduction>', 'home_image_caption' => '<Custom caption>']);
+        $helper->setView($view); $helpers->setService('themeSetting', $helper);
+        $customHtml = $view->render('omeka/site/page/show', $variables);
+        verify(str_contains(html_entity_decode($customHtml, ENT_QUOTES, 'UTF-8'), 'src="/uploaded/hero.jpg"'), 'Custom hero image is ignored');
+        verify(str_contains($customHtml, '&lt;Custom heading&gt;') && str_contains($customHtml, '&lt;Custom introduction&gt;') && str_contains($customHtml, '&lt;Custom caption&gt;'), 'Custom homepage text must be escaped');
+        $imageHelper = new FixtureHelper(static fn (...$args) => null);
+        $imageHelper->setView($view); $helpers->setService('themeSettingAssetUrl', $imageHelper);
+        $helper = new Omeka\View\Helper\ThemeSetting(['home_layout' => false]);
+        $helper->setView($view); $helpers->setService('themeSetting', $helper);
+        $html = $view->render('omeka/site/page/show', $variables);
+        verify(str_contains($html, 'Stored editorial blocks') && !str_contains($html, 'class="archive-hero"'), 'Homepage opt-out does not restore stored content');
+        $helper = new Omeka\View\Helper\ThemeSetting(['home_featured_items' => '']);
+        $helper->setView($view); $helpers->setService('themeSetting', $helper);
+        $html = $view->render('omeka/site/page/show', $variables);
+        verify(!str_contains($html, 'archive-highlights'), 'Empty featured selection should omit the section');
+        verify(count($requests) === 1, 'Empty/disabled highlights still query the API');
+        $helpers->setService('themeSetting', new Omeka\View\Helper\ThemeSetting([]));
+        $helpers->get('themeSetting')->setView($view);
     },
     'Browse cards have valid description containers and preserve module hooks' => static function () use ($view, $helpers, $siteSettings) {
         $siteSettings->values = [];

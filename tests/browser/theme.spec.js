@@ -37,6 +37,7 @@ test('sidebar and viewport-width media gallery stay within the responsive layout
 
 test('browse thumbnails remain visible and titles are plain text', async ({ page }, testInfo) => {
   await page.goto('/browse.html');
+  await expect(page.getByRole('heading', { name: 'Browse the collection', exact: true })).toBeVisible();
   await expect(page.locator('.browse-thumbnail img').first()).toBeVisible();
   await expect(page.locator('.browse-card').last().locator('.browse-thumbnail')).toHaveCount(0);
   await expect(page.locator('.browse-card h3').first()).toContainText('Archive <title>');
@@ -103,16 +104,37 @@ test('advanced search adds and removes indexed query rows', async ({ page }) => 
 });
 
 
-test('homepage hero and reading text fit the viewport', async ({ page }, testInfo) => {
+test('homepage has a split hero, ordered highlights and functional search', async ({ page }, testInfo) => {
   await page.goto('/home.html');
-  await expect(page.getByRole('navigation', { name: 'Explore the archive' })).toBeVisible();
-  const hero = await page.locator('.parallax').boundingBox();
-  expect({ left: Math.round(hero.x), right: Math.round(hero.x + hero.width) }).toEqual({ left: 0, right: page.viewportSize().width });
-  expect(hero.height).toBeLessThan(700);
+  const intro = await page.locator('.archive-hero-intro').boundingBox();
+  const object = await page.locator('.archive-hero-object').boundingBox();
+  if (page.viewportSize().width >= 768) {
+    expect(Math.abs(intro.y - object.y)).toBeLessThan(2);
+    expect(object.x).toBeGreaterThanOrEqual(intro.x + intro.width - 1);
+  } else {
+    expect(object.y).toBeGreaterThanOrEqual(intro.y + intro.height - 1);
+  }
+  await expect(page.locator('.archive-object')).toHaveCount(4);
+  await expect(page.locator('.archive-object h3').first()).toHaveText('מחזור לראש השנה');
+  await expect(page.locator('.parallax')).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await expect(page.locator('.parallax')).toHaveCSS('background-attachment', /^scroll(, scroll)*$/);
   await expect.poll(() => page.evaluate(() => Array.from(document.fonts).some(face => face.family.includes('Source Sans Pro') && face.status === 'loaded'))).toBe(true);
   await screenshot(page, testInfo, 'home-layout');
+  await page.getByRole('searchbox', { name: 'Search the collection', exact: true }).fill('archive books');
+  await page.locator('#home-search').getByRole('button', { name: 'Search', exact: true }).click();
+  await expect(page).toHaveURL(/fulltext_search=archive\+books$/);
+});
+
+test('stored homepage blocks remain available and broken highlight images have a fallback', async ({ page }) => {
+  await page.goto('/legacy-home.html');
+  await expect(page.locator('.parallax')).toBeVisible();
+  await expect(page.locator('.archive-hero')).toHaveCount(0);
+  await page.route('**/thumbnail.svg', route => route.fulfill({ status: 200, contentType: 'image/svg+xml', body: '' }));
+  await page.goto('/home.html');
+  await page.locator('.archive-highlights').scrollIntoViewIfNeeded();
+  await expect(page.locator('.archive-object .image-unavailable').first()).toBeVisible();
+  await expect(page.locator('.archive-object img')).toHaveCount(0);
+  await expect(page.locator('.archive-object h3 a').first()).toBeVisible();
 });
 
 test('sort controls have visible labels and enough room for selected text', async ({ page }) => {

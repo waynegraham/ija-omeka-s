@@ -72,6 +72,7 @@ $isVideo = (string) $item->value('ija:record_type') === 'Video';
 
 
 <section id="ija_metadata" aria-label="<?php echo $this->escapeHtmlAttr($translate('Item details')); ?>">
+  <h2><?php echo $this->escapeHtml($translate('Item details')); ?></h2>
   <div class="row">
     <?php if (!$embedMedia && $itemMedia): ?>
     <div class="col col-md-auto">

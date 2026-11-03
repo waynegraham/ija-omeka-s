@@ -3,6 +3,7 @@ $this->headLink()->appendStylesheet($this->assetUrl('css/page-blocks.css', 'Omek
 $this->htmlElement('body')->appendAttribute('class', $pageBodyClass);
 $this->pageTitle($page->title(), 2);
 $isHome = $page->slug() === 'home';
+$designedHome = $isHome && (bool) $this->themeSetting('home_layout', true);
 if ($isHome) $this->htmlElement('body')->appendAttribute('class', 'site-home');
 $showPagePagination = $this->siteSetting('show_page_pagination', true);
 
@@ -20,12 +21,17 @@ switch ($this->siteSetting('subnav_display')) {
         $displaySubnav = $this->displayNavigation && $activePage && $activePage['page']->hasPages();
 }
 ?>
+<?php if ($designedHome): ?>
+  <?php $this->trigger('view.show.before'); ?>
+  <?php echo $this->partial('common/home', ['site' => $site]); ?>
+  <?php $this->trigger('view.show.after'); ?>
+<?php else: ?>
 <?php if ($activePage): ?>
     <?php if ($activePage['depth'] !== 0): ?>
     <nav class="breadcrumbs" aria-label="<?php echo $this->escapeHtmlAttr($this->translate('Breadcrumb')); ?>"><?php echo $nav->breadcrumbs()->setPartial('common/bootstrap-breadcrumbs'); ?></nav>
     <?php endif; ?>
 <?php endif; ?>
-<div class="container">
+<div class="page-layout">
   <div class="row">
       <?php if ($activePage && $displaySubnav): ?>
         <aside class="col-12 col-md-3 pt-3 light-bg page-nav">
@@ -46,3 +52,5 @@ switch ($this->siteSetting('subnav_display')) {
     </div>
   </div>
 </div>
+
+<?php endif; ?>

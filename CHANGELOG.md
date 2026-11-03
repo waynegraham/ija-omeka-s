@@ -20,6 +20,12 @@ deployment record to establish publication or installation status.
 
 ### Changed
 
+- Implemented the approved archive homepage with a split search/letter introduction,
+  public site-scoped collection highlights and concise story/background sections.
+- Added homepage settings, including a switch to restore the original saved blocks.
+- Extended the archive design to header/footer, browse/search images, record cards,
+  content navigation and item details; added a missing-image fallback.
+
 - Refined the responsive homepage hero, reading widths, type scale, browse toolbar
   and item metadata layout while retaining the IJA palette and type families.
 - Added visible sort labels, collection-first search summaries and useful empty

@@ -8,6 +8,7 @@ $this->headLink()->appendStylesheet($this->assetUrl('css/custom-bootstrap.css'))
 $this->headLink()->appendStylesheet($this->assetUrl('css/main.css'));
 $this->headScript()->prependFile($this->assetUrl('vendor/jquery/jquery.min.js', 'Omeka'));
 $this->headScript()->appendFile($this->assetUrl('js/global.js', 'Omeka'));
+$this->headScript()->appendFile($this->assetUrl('js/theme.js'), 'text/javascript', ['defer' => true]);
 $this->headScript()->appendFile($this->assetUrl('js/vendor/bootstrap/popper.min.js'));
 $this->headScript()->appendFile($this->assetUrl('js/vendor/bootstrap/bootstrap.min.js'));
 
@@ -49,7 +50,7 @@ $userBar = $this->userBar();
         <a class="skip-link visually-hidden-focusable" href="#content"><?php echo $this->escapeHtml($translate('Skip to content')); ?></a>
         <?php echo $userBar; ?>
         <div class="">
-          <header>
+          <header class="site-header">
             <nav class="navbar navbar-expand-lg navbar-light">
               <div class="container">
                 <a href="<?php echo $this->escapeHtmlAttr($site->url()); ?>" class="navbar-brand">
@@ -70,7 +71,7 @@ $userBar = $this->userBar();
         </div>
 
         <main id="content" tabindex="-1">
-          <div class="container mt-3">
+          <div class="container mt-3 site-shell">
               <?php echo $this->messages(); ?>
               <?php echo $this->content; ?>
           </div>
@@ -78,6 +79,7 @@ $userBar = $this->userBar();
 
         <footer class="mb-footer mt-4 bg-dark text-white">
           <div class="container py-5">
+            <p class="footer-brand"><?php echo $this->escapeHtml($site->title()); ?></p>
             <nav class="footer-navigation" aria-label="<?php echo $this->escapeHtmlAttr($translate('Footer')); ?>">
               <?php echo $this->hyperlink($translate('Home'), $site->url()); ?>
               <?php echo $this->hyperlink($translate('Browse the collection'), $this->url('site/resource', ['controller' => 'item', 'action' => 'browse'], true)); ?>

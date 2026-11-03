@@ -32,6 +32,7 @@ $nav = $view->navigation($container);
 $site = new class($nav) {
     public function __construct(private object $nav) {}
     public function publicNav() { return $this->nav; }
+    public function id() { return 7; }
     public function url() { return '/page.html'; }
     public function title() { return 'Iraqi Jewish Archive'; }
 };
@@ -46,6 +47,8 @@ $value = new class {
 $metadata = $view->render('common/resource-values', ['values' => ['dcterms:title' => ['property' => $property, 'values' => [$value]]]]);
 $item = new class($metadata) {
     public bool $hasThumbnail = true;
+    public int $resourceId = 17159;
+    public function id() { return $this->resourceId; }
     public string $title = '';
 
     public function __construct(private string $metadata) {}
@@ -64,6 +67,25 @@ $item = new class($metadata) {
 };
 $withoutThumbnail = clone $item;
 $withoutThumbnail->hasThumbnail = false;
+$featured = [];
+foreach ([17159, 1022, 284, 269] as $index => $id) {
+    $resource = clone $item;
+    $resource->resourceId = $id;
+    $resource->title = ['מחזור לראש השנה', 'Map: The World Series 1145', 'Books awaiting preservation', '2003 Memorandum of Agreement'][$index];
+    $featured[] = $resource;
+}
+$api = new class($featured) {
+    public function __construct(private array $items) {}
+    public function search(...$args) {
+        return new class($this->items) {
+            public function __construct(private array $items) {}
+            public function getContent() { return $this->items; }
+        };
+    }
+};
+$helper = new FixtureHelper(static fn () => $api);
+$helper->setView($view);
+$helpers->setService('api', $helper);
 $gallery = '<h1>Recovery of artifacts</h1><div class="blocks-inner page-layout-normal"><div class="block block-media"><div class="media-embed layout-horizontal multiple-attachments">';
 for ($i = 0; $i < 6; $i++) {
     $gallery .= '<div class="item resource"><div class="media-render"><img src="/thumbnail.svg" alt="Recovered artifact"></div><h3>Recovered artifact</h3></div>';
@@ -83,13 +105,16 @@ $homeContent = '<div class="block block-html"><div class="jumbotron breakout par
 
 $directory = __DIR__ . '/generated';
 if (!is_dir($directory)) mkdir($directory, 0777, true);
-foreach (['page', 'home', 'browse', 'item', 'rtl', 'arabic', 'results', 'empty-results', 'search'] as $fixture) {
+foreach (['page', 'home', 'legacy-home', 'browse', 'item', 'rtl', 'arabic', 'results', 'empty-results', 'search'] as $fixture) {
     $view->headLink()->getContainer()->exchangeArray([]);
     $view->headScript()->getContainer()->exchangeArray([]);
     $view->htmlElement('body')->setAttribute('class', '');
+    $helper = new Omeka\View\Helper\ThemeSetting($fixture === 'legacy-home' ? ['home_layout' => false] : []);
+    $helper->setView($view);
+    $helpers->setService('themeSetting', $helper);
     $content = match ($fixture) {
         'page' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $page, 'content' => $gallery, 'displayNavigation' => true, 'pageBodyClass' => 'page']),
-        'home' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $home, 'content' => $homeContent, 'displayNavigation' => false, 'pageBodyClass' => 'page']),
+        'home', 'legacy-home' => $view->render('omeka/site/page/show', ['site' => $site, 'page' => $home, 'content' => $homeContent, 'displayNavigation' => false, 'pageBodyClass' => 'page']),
         'arabic' => $view->render('omeka/site/item/show', ['item' => $arabic]),
         'rtl' => $view->render('omeka/site/item/show', ['item' => $rtl]),
         'results', 'empty-results' => $view->render('omeka/site/index/search', ['query' => 'archive', 'results' => $fixture === 'results' ? ['items' => ['resources' => [$item, $rtl], 'total' => 24]] : []]),

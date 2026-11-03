@@ -1,0 +1,25 @@
+<?php if ($items): ?>
+<section class="archive-highlights archive-section" aria-labelledby="highlights-title">
+  <div class="archive-section-heading">
+    <h2 id="highlights-title"><?php echo $this->escapeHtml($this->translate('Discover the collection')); ?></h2>
+    <?php echo $this->hyperlink($this->translate('Browse all records'), $this->url('site/resource', ['controller' => 'item', 'action' => 'browse'], true)); ?>
+  </div>
+  <div class="archive-object-grid">
+    <?php foreach ($items as $item):
+      $title = $item->displayTitle(null, $valueLang);
+      $recordType = $item->value('ija:record_type');
+      $number = $item->value('ija:ija_number');
+      $image = $this->thumbnail($item, 'medium', ['loading' => 'lazy', 'decoding' => 'async']);
+    ?>
+    <article class="archive-object">
+      <?php echo $item->linkRaw($this->partial('common/archive-image', ['image' => $image]), null, ['class' => 'archive-object-image', 'aria-label' => (string) $title]); ?>
+      <p class="archive-object-type">
+        <?php echo $this->escapeHtml($recordType ?: $this->translate('Collection record')); ?>
+        <?php if ($number): ?> · IJA <bdi><?php echo $this->escapeHtml($number); ?></bdi><?php endif; ?>
+      </p>
+      <h3 dir="auto"><?php echo $item->link($title); ?></h3>
+    </article>
+    <?php endforeach; ?>
+  </div>
+</section>
+<?php endif; ?>

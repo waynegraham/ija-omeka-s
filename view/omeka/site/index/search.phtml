@@ -40,7 +40,7 @@ foreach ($resourceLabels as $name => $label) {
     ?>
         <li class="search-result">
             <?php if ($thumbnail): ?>
-            <div class="search-result-thumbnail"><?php echo $resource->linkRaw($thumbnail); ?></div>
+            <div class="search-result-thumbnail"><?php echo $resource->linkRaw($this->partial('common/archive-image', ['image' => $thumbnail]), null, ['aria-label' => (string) $title]); ?></div>
             <?php endif; ?>
             <div class="search-result-text">
                 <h3 dir="auto"><?php echo $resource->link($title); ?></h3>

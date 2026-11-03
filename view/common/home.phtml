@@ -1,0 +1,64 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+$ids = [];
+foreach (preg_split('/[\s,]+/', (string) $this->themeSetting('home_featured_items', '17159,1022,284,269'), -1, PREG_SPLIT_NO_EMPTY) as $id) {
+    if (ctype_digit($id) && (int) $id > 0) $ids[] = (int) $id;
+}
+$ids = array_slice(array_values(array_unique($ids)), 0, 4);
+$featured = [];
+if ($ids) {
+    // One public, site-scoped request; never substitute unrelated records.
+    $resources = $this->api()->search('items', ['id' => $ids, 'site_id' => $site->id(), 'is_public' => true, 'limit' => 4], ['countQuery' => false])->getContent();
+    $byId = [];
+    foreach ($resources as $resource) $byId[$resource->id()] = $resource;
+    foreach ($ids as $id) if (isset($byId[$id])) $featured[] = $byId[$id];
+}
+$valueLang = $this->siteSetting('filter_locale_values') ? [$this->lang(), ''] : null;
+$imageUrl = $this->themeSettingAssetUrl('home_image') ?: $this->assetUrl('images/siegfreid-wolff-letter-lg.jpg');
+$searchAction = $this->siteSetting('search_type', 'sitewide') === 'cross-site'
+    ? $this->url('site/cross-site-search', ['action' => 'results'], true)
+    : $this->url('site/resource', ['controller' => 'index', 'action' => 'search'], true);
+?>
+<div class="archive-home">
+  <section class="archive-hero" aria-labelledby="home-title">
+    <div class="archive-hero-intro">
+      <h1 id="home-title" dir="auto"><?php echo $escape($this->themeSetting('home_heading', $translate('Explore the Iraqi Jewish Archive'))); ?></h1>
+      <p class="archive-hero-description" dir="auto"><?php echo $escape($this->themeSetting('home_intro', $translate('Discover books, documents and photographs that illuminate Jewish life in Iraq.'))); ?></p>
+      <form id="home-search" action="<?php echo $this->escapeHtmlAttr($searchAction); ?>" method="get" role="search" aria-label="<?php echo $this->escapeHtmlAttr($translate('Search the collection')); ?>">
+        <label for="home-search-query"><?php echo $escape($translate('Search the collection')); ?></label>
+        <div class="input-group">
+          <input id="home-search-query" class="form-control" name="fulltext_search" type="search" placeholder="<?php echo $this->escapeHtmlAttr($translate('Enter a word or phrase')); ?>">
+          <button class="btn btn-light" type="submit"><?php echo $escape($translate('Search')); ?></button>
+        </div>
+      </form>
+      <nav class="archive-hero-links" aria-label="<?php echo $this->escapeHtmlAttr($translate('Explore the archive')); ?>">
+        <?php echo $this->hyperlink($translate('Browse the collection'), $this->url('site/resource', ['controller' => 'item', 'action' => 'browse'], true)); ?>
+        <?php echo $this->hyperlink($translate('Advanced search'), $this->url('site/resource', ['controller' => 'item', 'action' => 'search'], true)); ?>
+      </nav>
+    </div>
+    <figure class="archive-hero-object">
+      <img src="<?php echo $this->escapeHtmlAttr($imageUrl); ?>" alt="<?php echo $this->escapeHtmlAttr($this->themeSetting('home_image_caption', $translate('Handwritten letter from the Iraqi Jewish Archive'))); ?>" fetchpriority="high" decoding="async">
+      <figcaption><?php echo $escape($this->themeSetting('home_image_caption', $translate('Handwritten letter from the Iraqi Jewish Archive'))); ?></figcaption>
+    </figure>
+  </section>
+  <?php echo $this->partial('common/home-highlights', ['items' => $featured, 'valueLang' => $valueLang]); ?>
+  <section class="archive-stories archive-section" aria-label="<?php echo $this->escapeHtmlAttr($translate('Explore the stories')); ?>">
+    <article>
+      <img class="archive-story-image" src="<?php echo $this->escapeHtmlAttr($this->assetUrl('images/boating-on-tigris.jpg')); ?>" alt="<?php echo $this->escapeHtmlAttr($translate('Boating on the Tigris')); ?>" loading="lazy" width="105" height="150">
+      <h2><?php echo $escape($translate('Jewish life in Iraq')); ?></h2>
+      <p><?php echo $escape($translate('Explore the history and heritage of a community with roots stretching back more than 2,500 years.')); ?></p>
+      <?php echo $this->hyperlink($translate('Explore the exhibit'), 'https://exhibit.ijarchive.org/'); ?>
+    </article>
+    <article>
+      <img class="archive-story-image" src="<?php echo $this->escapeHtmlAttr($this->assetUrl('images/materials-awaiting-preservation.jpg')); ?>" alt="<?php echo $this->escapeHtmlAttr($translate('Books and documents awaiting preservation')); ?>" loading="lazy" width="105" height="150">
+      <h2><?php echo $escape($translate('Rescued and preserved')); ?></h2>
+      <p><?php echo $escape($translate('Follow the work to recover, conserve and digitize materials discovered in a flooded basement in Baghdad in 2003.')); ?></p>
+      <?php echo $this->hyperlink($translate('Explore the preservation project'), $this->url('site/page', ['page-slug' => 'preservation-project'], true)); ?>
+    </article>
+  </section>
+  <section class="archive-background archive-section" aria-labelledby="archive-background-title">
+    <h2 id="archive-background-title"><?php echo $escape($translate('A remarkable survival')); ?></h2>
+    <p><?php echo $escape($translate('Discovered in 2003, over 2,700 books and tens of thousands of documents offer a window into Iraqi Jewish life. The preservation project has made these fragile materials accessible to researchers, families and visitors around the world.')); ?></p>
+  </section>
+</div>

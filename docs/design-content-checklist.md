@@ -1,56 +1,80 @@
-# Content and deployment follow-up for the visual refresh
+# Archive design: configuration and content
 
-The theme supplies responsive hero styles and an action bar on the `home` page,
-reading widths, search summaries, footer discovery links and multilingual title
-isolation. The following changes belong to Omeka content or module configuration.
+The approved homepage design now runs on the page with slug `home`. It uses a
+split introduction/search and archival letter, up to four collection highlights,
+two story introductions and a short background section. The shared design extends
+to navigation, catalogue cards, search, content sidebars, item details and footer.
 
-## Homepage HTML blocks
+## Configure the homepage
 
-Edit the Home page in the Omeka admin, retaining its existing media and attribution:
+Open the site's theme settings. Existing installations use the defaults until
+these settings are saved:
 
-- Shorten the repeated discovery/history paragraphs. Keep one concise introduction
-  and let each subsequent section introduce its own subject.
-- Change the preservation section's “View Exhibit” link text to
-  **Explore the preservation project**. Use the internal site page link rather
-  than an absolute production-domain URL on beta.
-- Change the Jewish Life section's “View Exhibit” text to
-  **Explore Jewish life in Iraq**. Preserve its intended external exhibit URL.
-- Review the heading's “Mukharabat” versus the body's “Mukhabarat” transliteration
-  with the content owner before changing historical wording.
-- Correct the embedded video's `widht` attribute to `width` (the existing ratio
-  wrapper determines responsive sizing).
+| Setting | Behavior |
+| --- | --- |
+| Use the archive homepage design | Enabled by default. Disable to render the original saved Home page blocks. The theme does not edit/delete those blocks or modify the database. |
+| Homepage heading / introduction | Plain text; HTML is escaped. |
+| Homepage featured item IDs | Up to four comma-separated IDs in display order. Defaults: `17159,1022,284,269`, the records used in the reviewed concept. Clear to omit highlights. |
+| Homepage image | Optional uploaded Omeka asset; otherwise uses the existing shipped handwritten letter. |
+| Homepage image caption and alternative text | Describe the selected image accurately; update when replacing it. |
 
-The action bar targets the existing `preservation-project` page. If that page's
-slug changes, update `view/common/home-actions.phtml`. A homepage with a different
-slug needs its detection updated in `view/omeka/site/page/show.phtml`.
+Highlights come from one public, site-scoped API query. Deleted, private,
+unavailable or unassigned records are omitted; no unrelated records are substituted.
+Titles and types come from the catalogue, respecting the locale filter. Original
+collection images stay in Omeka's file storage; missing files show an accessible
+fallback rather than a broken-image graphic. Sync the files to restore photographs.
 
-## Footer and search
+The new introduction is in `view/common/home.phtml` and the highlights renderer in
+`view/common/home-highlights.phtml`. Story/background copy is theme-owned in this
+mode. The preservation route assumes the `preservation-project` slug; the Jewish
+Life exhibit points to `https://exhibit.ijarchive.org/`. Update these if destinations
+change. A homepage with a different slug needs its detection adjusted in
+`view/omeka/site/page/show.phtml`.
 
-Use the existing **Footer Content** theme setting to add approved About, Contact,
-Rights and Reuse, Accessibility and institutional attribution text/links. The
-new Home/Browse/Advanced search links appear separately and preserve that setting.
-No institutional/legal statements or destinations are invented by the theme.
+## Stored Home page blocks
 
-True language/date/record-type facets require evaluating and configuring a search
-module and its index. The theme now improves summaries and empty states using
-core search; it does not implement a separate search backend.
+These remain intact and can be restored with the homepage setting. If maintaining
+that alternative layout, shorten repeated history, use descriptive exhibit links,
+correct the iframe's `widht` typo and review “Mukharabat” versus “Mukhabarat” with
+the content owner. Editing those saved blocks affects the alternative layout,
+not the new theme-owned homepage.
 
-## Preview provider
+## Footer, search and preview provider
 
-The item template retains `view.show.after`. When a provider renders no markup,
-it explains that no inline preview is available; original file links remain
-available when the media exposes an original URL. Providers that render their
-own shell must supply loading/error behavior for asynchronous failures. Validate
-real PDF, image, video and IIIF records on the deployed installation.
+The existing Footer Content setting is preserved below the brand and discovery
+links. Add approved Contact, Rights and Reuse, Accessibility and institutional
+attribution there; the theme does not invent institutional/legal statements.
+
+True language/date/record-type facets still require a search module and index.
+Core search routes, summaries, query propagation and empty states are preserved.
+
+Item previews retain `view.show.after`. If no provider emits markup, an inline
+preview explanation appears. Original file links remain available when the media
+exposes a URL. Providers that render an asynchronous shell still own their loading
+and error states. Test real PDF, image, video and IIIF records after deployment.
 
 ## Release verification
 
-- Increment the theme version and matching package/lockfile version before release
-  so Omeka's versioned asset URLs invalidate cached CSS/fonts. Rebuild and deploy
-  `asset/fonts/`, CSS and templates together. Clear any proxy/CDN caches.
-- Run PHP, asset and browser checks from the README. Review screenshots with the
-  local fonts loaded. Latin and Latin Extended subsets are shipped; Hebrew/Arabic
-  glyphs use the browser/system fallback fonts and need real-device review.
-- Check home, browse, search and representative Hebrew/Arabic records at phone
-  widths and 200% zoom. Confirm hero contrast with the actual background image.
-- Verify footer destinations, beta links, direct files and the real viewer.
+- Increment the theme version and matching package/lockfile versions before release
+  to invalidate cached asset URLs. Deploy templates, `asset/js/theme.js`, both new
+  story images, CSS and the existing `asset/fonts/` directory together. Clear
+  proxy/CDN caches and force-reload during local review.
+- Run the README's PHP, asset and browser checks. Inspect home, browse, search,
+  content navigation and item pages at phone widths and 200% zoom.
+- Test representative Hebrew/Arabic records and the active viewer on real devices.
+  Latin/Latin Extended fonts are shipped; other scripts use system fallbacks.
+- Verify all homepage IDs, image descriptions, links, institutional footer content,
+  direct files and image permissions/attribution before publication.
+
+## Shipped story image provenance
+
+Reused unchanged from existing public IJA content for the approved design:
+
+- `asset/images/boating-on-tigris.jpg`: existing homepage photograph labelled
+  “Boating on the Tigris”, `https://ijarchive.org/files/medium/09085a22169470ed0812c1ada608afc006bff06a.jpg`.
+- `asset/images/materials-awaiting-preservation.jpg`: public item 284,
+  `https://ijarchive.org/files/medium/1cd70dc0c7df1a2dcfd470598c9f083439f907b9.jpg`.
+
+These static thumbnails illustrate the stories; featured collection thumbnails
+continue to use the live catalogue. No original collection files were copied or
+changed by this theme update.
