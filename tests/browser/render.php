@@ -6,6 +6,7 @@ require dirname(__DIR__) . '/omeka-integration.php';
 $view->doctype('HTML5');
 $helpers->setAllowOverride(true);
 foreach ([
+    'url' => new FixtureHelper(static fn ($route = null, $params = [], ...$args) => $route === 'site/resource-id' ? '/items/' . $params['id'] : '/items/search'),
     'pageTitle' => new Omeka\View\Helper\PageTitle,
     'userBar' => new FixtureHelper(static fn () => ''),
     'messages' => new FixtureHelper(static fn () => ''),

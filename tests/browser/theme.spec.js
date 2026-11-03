@@ -106,6 +106,10 @@ test('advanced search adds and removes indexed query rows', async ({ page }) => 
 
 test('homepage has a split hero, ordered highlights and functional search', async ({ page }, testInfo) => {
   await page.goto('/home.html');
+  await expect(page.locator('.archive-hero-image')).toHaveAttribute('href', '/items/16426');
+  await expect(page.locator('.archive-hero-object figcaption a')).toHaveAttribute('href', '/items/16426');
+  await expect(page.locator('.archive-hero-object figcaption')).toContainText('Page 5');
+  await expect(page.locator('.archive-hero-object img')).toHaveAttribute('src', /personal-letters-3339-page-5\.jpg$/);
   const intro = await page.locator('.archive-hero-intro').boundingBox();
   const object = await page.locator('.archive-hero-object').boundingBox();
   if (page.viewportSize().width >= 768) {

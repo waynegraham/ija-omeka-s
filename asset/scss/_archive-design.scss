@@ -34,7 +34,8 @@
   .archive-hero-links { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; font-size: .95rem; }
   .archive-hero-links a { color: #fff; }
   .archive-hero-object { margin: 0; min-width: 0; background: var(--archive-image); display: flex; flex-direction: column; }
-  .archive-hero-object > img { display: block; width: 100%; height: clamp(360px, 35vw, 470px); object-fit: contain; padding: 1.25rem; flex-grow: 1; }
+  .archive-hero-object img { display: block; width: 100%; height: clamp(360px, 35vw, 470px); object-fit: contain; padding: 1.25rem; flex-grow: 1; }
+  .archive-hero-image { display: block; flex-grow: 1; }
   .archive-hero-object figcaption { padding: .75rem 1.25rem; font-size: .85rem; color: var(--archive-muted); background: var(--archive-paper); border-bottom: 1px solid var(--archive-rule); }
   .archive-section { padding: 3rem clamp(1.25rem, 4vw, 3.5rem); }
   .archive-section-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; }
@@ -103,7 +104,7 @@
     .archive-hero { grid-template-columns: 1fr; }
     .archive-hero h1 { font-size: 2rem; max-width: 17ch; }
     .archive-hero-intro { padding: 1.5rem; gap: 1.15rem; }
-    .archive-hero-object > img { height: 260px; flex-grow: 0; }
+    .archive-hero-object img { height: 260px; flex-grow: 0; }
     .archive-object-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 1rem; }
     .archive-object .archive-image { height: 185px; }
     .archive-stories, .archive-background { grid-template-columns: 1fr; gap: 2rem; }

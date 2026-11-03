@@ -15,7 +15,17 @@ if ($ids) {
     foreach ($ids as $id) if (isset($byId[$id])) $featured[] = $byId[$id];
 }
 $valueLang = $this->siteSetting('filter_locale_values') ? [$this->lang(), ''] : null;
-$imageUrl = $this->themeSettingAssetUrl('home_image') ?: $this->assetUrl('images/siegfreid-wolff-letter-lg.jpg');
+$customImage = $this->themeSettingAssetUrl('home_image');
+$imageUrl = $customImage ?: $this->assetUrl('images/personal-letters-3339-page-5.jpg');
+// Keep the built-in image and its attribution coupled, including on installations
+// that saved the old generic caption. Custom images need their own attribution.
+$imageCaption = $customImage
+    ? $this->themeSetting('home_image_caption', $translate('Featured collection image'))
+    : $translate('Personal Letters · IJA 3339 · Page 5');
+$recordId = $customImage ? (string) $this->themeSetting('home_image_item_id', '') : '16426';
+$recordUrl = ctype_digit($recordId) && (int) $recordId > 0
+    ? $this->url('site/resource-id', ['controller' => 'item', 'id' => (int) $recordId], true)
+    : null;
 $searchAction = $this->siteSetting('search_type', 'sitewide') === 'cross-site'
     ? $this->url('site/cross-site-search', ['action' => 'results'], true)
     : $this->url('site/resource', ['controller' => 'index', 'action' => 'search'], true);
@@ -38,8 +48,10 @@ $searchAction = $this->siteSetting('search_type', 'sitewide') === 'cross-site'
       </nav>
     </div>
     <figure class="archive-hero-object">
-      <img src="<?php echo $this->escapeHtmlAttr($imageUrl); ?>" alt="<?php echo $this->escapeHtmlAttr($this->themeSetting('home_image_caption', $translate('Handwritten letter from the Iraqi Jewish Archive'))); ?>" fetchpriority="high" decoding="async">
-      <figcaption><?php echo $escape($this->themeSetting('home_image_caption', $translate('Handwritten letter from the Iraqi Jewish Archive'))); ?></figcaption>
+      <?php if ($recordUrl): ?><a class="archive-hero-image" href="<?php echo $this->escapeHtmlAttr($recordUrl); ?>"><?php endif; ?>
+      <img src="<?php echo $this->escapeHtmlAttr($imageUrl); ?>" alt="<?php echo $escape($imageCaption); ?>" fetchpriority="high" decoding="async">
+      <?php if ($recordUrl): ?></a><?php endif; ?>
+      <figcaption><?php echo $recordUrl ? $this->hyperlink($imageCaption, $recordUrl) : $escape($imageCaption); ?></figcaption>
     </figure>
   </section>
   <?php echo $this->partial('common/home-highlights', ['items' => $featured, 'valueLang' => $valueLang]); ?>

@@ -7,6 +7,9 @@ deployment record to establish publication or installation status.
 
 ### Fixed
 
+- Replaced the unverified hero letter with page 5 of Personal Letters (IJA 3339),
+  linking both image and verified caption to item 16426 in the current site.
+
 - Honored hidden, collapsed and expanded annotation modes with native keyboard
   disclosure controls that avoid Bootstrap's `.collapse` class conflict.
 - Omitted metadata property rows when locale filtering removes all their values.

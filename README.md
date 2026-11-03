@@ -169,9 +169,9 @@ configuration that must be completed in Omeka or its modules.
 
 ## Archive homepage and shared design
 
-The `home` page now uses the approved split introduction/search and letter, live
+The `home` page now uses the approved split introduction/search and page 5 of Personal Letters (IJA 3339), live
 collection highlights, stories and background. Configure its heading, intro,
-optional uploaded image/caption and up to four featured IDs in theme settings.
+optional uploaded image/caption/record link and up to four featured IDs in theme settings.
 Disable **Use the archive homepage design** to restore the saved Home page blocks;
 those blocks are never edited or deleted. Highlights are public and scoped to the
 current site, and missing records are omitted. See the [configuration and content

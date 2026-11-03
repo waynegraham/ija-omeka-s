@@ -15,8 +15,9 @@ these settings are saved:
 | Use the archive homepage design | Enabled by default. Disable to render the original saved Home page blocks. The theme does not edit/delete those blocks or modify the database. |
 | Homepage heading / introduction | Plain text; HTML is escaped. |
 | Homepage featured item IDs | Up to four comma-separated IDs in display order. Defaults: `17159,1022,284,269`, the records used in the reviewed concept. Clear to omit highlights. |
-| Homepage image | Optional uploaded Omeka asset; otherwise uses the existing shipped handwritten letter. |
-| Homepage image caption and alternative text | Describe the selected image accurately; update when replacing it. |
+| Homepage image | Optional uploaded Omeka asset; otherwise uses page 5 of Personal Letters (IJA 3339), linked to item 16426. |
+| Uploaded homepage image caption and alternative text | Describe an uploaded image accurately. The built-in image has fixed, verified record/page attribution. |
+| Uploaded homepage image item ID | Optional record link for an uploaded image. The built-in image always links to item 16426 on the current site. |
 
 Highlights come from one public, site-scoped API query. Deleted, private,
 unavailable or unassigned records are omitted; no unrelated records are substituted.
@@ -65,6 +66,22 @@ and error states. Test real PDF, image, video and IIIF records after deployment.
   Latin/Latin Extended fonts are shipped; other scripts use system fallbacks.
 - Verify all homepage IDs, image descriptions, links, institutional footer content,
   direct files and image permissions/attribution before publication.
+
+## Hero image provenance
+
+`asset/images/personal-letters-3339-page-5.jpg` is an unchanged copy of the large
+image for media **16453**, source filename **03339_E.jpg**: the fifth image in
+item **16426**, **Personal Letters**, IJA **3339**. Verified against the public
+item/media API and visually inspected on 2026-11-03.
+
+- Record: https://ijarchive.org/s/iraqi-jewish-archive/item/16426
+- Source: https://ijarchive.org/files/large/db6314925d1344a203f6d9561937e9cd11064661.jpg
+
+The image and caption both use the local site's item route, so local/beta links
+stay in their own environment. No request to production is needed at page load.
+The previous generic letter caption is ignored for this built-in image, including
+on installations that saved the old default. Uploaded images retain their own
+caption and only get a record link when an uploaded-image item ID is configured.
 
 ## Shipped story image provenance
 
