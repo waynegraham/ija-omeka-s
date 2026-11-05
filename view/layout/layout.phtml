@@ -86,22 +86,27 @@ $userBar = $this->userBar();
 
         <?php echo $this->partial('common/exhibit/viewer'); ?>
 
-        <footer class="mb-footer mt-4 bg-dark text-white">
-          <div class="container py-5">
+        <footer class="site-footer mb-footer mt-4 bg-dark text-white">
+          <div class="container footer-main">
             <p class="footer-brand"><?php echo $this->escapeHtml($site->title()); ?></p>
             <nav class="footer-navigation" aria-label="<?php echo $this->escapeHtmlAttr($translate('Footer')); ?>">
               <?php echo $this->hyperlink($translate('Home'), $site->url()); ?>
               <?php echo $this->hyperlink($translate('Browse the collection'), $this->url('site/resource', ['controller' => 'item', 'action' => 'browse'], true)); ?>
               <?php echo $this->hyperlink($translate('Advanced search'), $this->url('site/resource', ['controller' => 'item', 'action' => 'search'], true)); ?>
             </nav>
-            <div class="footer-content">
-            <?php if ($footerContent = $this->themeSetting('footer')): ?>
-              <?php echo $footerContent; ?>
-            <?php else: ?>
-              <?php echo $this->translate('Powered by Omeka S'); ?>
-            <?php endif; ?>
-
-
+          </div>
+          <div class="footer-credits">
+            <div class="container footer-credits-inner">
+              <div class="footer-clir">
+                <img src="<?php echo $this->escapeHtmlAttr($this->assetUrl('CLIR-logo-bounded-red-hairline.svg')); ?>" width="903" height="464" alt="<?php echo $this->escapeHtmlAttr($translate('CLIR (Council on Library and Information Resources)')); ?>" />
+              </div>
+              <div class="footer-content">
+                <?php if ($footerContent = $this->themeSetting('footer')): ?>
+                  <?php echo $footerContent; ?>
+                <?php else: ?>
+                  <?php echo $this->translate('Powered by Omeka S'); ?>
+                <?php endif; ?>
+              </div>
             </div>
           </div>
         </footer>

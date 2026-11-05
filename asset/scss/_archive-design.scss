@@ -24,7 +24,7 @@
   h1, h2, h3 { font-weight: 400; }
   .site-header { border-bottom: 4px solid var(--archive-navy); }
   .site-header .navbar { padding-block: 1rem; }
-  .site-header .container, .site-shell, footer > .container { max-width: 1200px; }
+  .site-header .container, .site-shell, .site-footer .container { max-width: 1200px; }
   .navbar-brand { font-family: $font-family-serif; font-size: 1.25rem; white-space: normal; max-width: 20rem; }
   .ija-logo { width: auto; max-width: 200px; max-height: 64px; }
   .navbar .nav-link { font-size: 1rem; padding-inline: .75rem; }
@@ -101,14 +101,26 @@
   #ija_metadata { border-top: 0; padding-top: .5rem; }
   #ija_metadata .dl-invert > :is(dt, dd) { padding-block: .75rem; border-bottom: 1px solid var(--archive-rule); line-height: 1.7; font-size: 1rem; }
   #ija_metadata .dl-invert > dt { font-weight: 600; color: var(--archive-muted); }
-  .footer-brand { font-family: $font-family-serif; font-size: 1.35rem; margin-bottom: 1.25rem; }
-  footer .footer-navigation { font-size: 1rem; }
-  footer .footer-content { font-size: .9rem; }
+  .footer-main { display: flex; justify-content: space-between; align-items: baseline; gap: 2rem; padding-block: 2.5rem; }
+  .footer-brand { font-family: $font-family-serif; font-size: 1.35rem; line-height: 1.5; margin: 0; max-width: 25ch; }
+  .site-footer .footer-navigation { font-size: 1rem; margin: 0; gap: .5rem 1.5rem; }
+  .footer-navigation a { display: inline-flex; align-items: center; min-height: 44px; }
+  // A shared white credit strip gives the red CLIR mark sufficient contrast.
+  .footer-credits { background: #fff; color: var(--archive-ink); }
+  .footer-credits-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem 3rem; padding-block: 1.75rem; }
+  .site-footer .footer-content { font-size: .9rem; line-height: 1.6; max-width: 65ch; min-width: 0; overflow-wrap: anywhere; }
+  .footer-content > :last-child { margin-bottom: 0; }
+  .site-footer .footer-credits a { color: var(--archive-navy); }
+  .site-footer .footer-credits a:hover, .site-footer .footer-credits a:focus-visible { color: var(--archive-ink); }
+  .footer-clir { width: 10rem; max-width: 100%; flex-shrink: 0; }
+  .footer-clir img { display: block; width: 100%; height: auto; }
   @media (max-width: 991.98px) {
     .navbar-collapse { padding-top: 1rem; }
     .navbar #search-form { max-width: none; margin-top: .75rem; }
   }
   @media (max-width: 767.98px) {
+    .footer-main, .footer-credits-inner { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+    .footer-main { padding-block: 2rem; }
     .archive-hero { grid-template-columns: 1fr; }
     .archive-hero h1 { font-size: 2rem; max-width: 17ch; }
     .archive-hero-intro { padding: 1.5rem; gap: 1.15rem; }
